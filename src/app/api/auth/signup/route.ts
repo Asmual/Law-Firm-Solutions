@@ -33,8 +33,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const allowedRoles: UserRole[] = ["admin", "partner", "advocate", "associate", "user"];
-    const assignedRole: UserRole = allowedRoles.includes(role) ? role : "user";
+    // Only Advocate and Associate can self-register
+    // Admin accounts must be created manually or promoted by an administrator
+    const allowedSignupRoles: UserRole[] = ["advocate", "associate"];
+    const assignedRole: UserRole = allowedSignupRoles.includes(role)
+      ? role
+      : "associate";
 
     const passwordHash = hashPassword(password);
 

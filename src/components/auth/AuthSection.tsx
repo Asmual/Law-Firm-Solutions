@@ -19,31 +19,16 @@ interface AuthSectionProps {
   onSuccess: (user: unknown) => void;
 }
 
-const ROLES: { value: UserRole; label: string; desc: string }[] = [
-  {
-    value: "admin",
-    label: "Managing Partner (Admin)",
-    desc: "Full administrative access, assignment & role control",
-  },
-  {
-    value: "partner",
-    label: "Senior Partner Advocate",
-    desc: "Case oversight, hearing updates & reporting access",
-  },
+const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string; desc: string }[] = [
   {
     value: "advocate",
-    label: "High Court Advocate",
+    label: "Advocate (High Court / Subordinate Courts)",
     desc: "Manage assigned files, court petitions & hearings",
   },
   {
     value: "associate",
     label: "Associate Advocate",
-    desc: "File updates, cause list tracking & daily hearing entries",
-  },
-  {
-    value: "user",
-    label: "General Practitioner / Client User",
-    desc: "Default access level (can be upgraded by Admin)",
+    desc: "Daily hearing updates, cause list tracking & filing records",
   },
 ];
 
@@ -379,20 +364,17 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                 </div>
               </div>
 
-              {/* Role Selection (All Available Roles) */}
+              {/* Role Selection (Advocate or Associate only) */}
               <div>
                 <label className="block text-xs font-semibold text-[#cca776] mb-1">
-                  Chamber Role (Access Level) *
+                  Chamber Role (Advocate / Associate) *
                 </label>
                 <select
                   value={signupData.role}
                   onChange={(e) => {
-                    const selectedRole = e.target.value as UserRole;
-                    let defaultDesig = "Associate Advocate";
-                    if (selectedRole === "admin") defaultDesig = "Managing Partner & Admin";
-                    if (selectedRole === "partner") defaultDesig = "Senior Partner Advocate";
-                    if (selectedRole === "advocate") defaultDesig = "High Court Advocate";
-                    if (selectedRole === "user") defaultDesig = "Legal Practitioner";
+                    const selectedRole = e.target.value as "advocate" | "associate";
+                    const defaultDesig =
+                      selectedRole === "advocate" ? "Advocate" : "Associate Advocate";
 
                     setSignupData({
                       ...signupData,
@@ -402,12 +384,15 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                   }}
                   className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-[#cca776] focus:outline-none font-medium"
                 >
-                  {ROLES.map((r) => (
+                  {SIGNUP_ROLES.map((r) => (
                     <option key={r.value} value={r.value}>
                       {r.label} — ({r.desc})
                     </option>
                   ))}
                 </select>
+                <p className="mt-1 text-[11px] text-slate-400">
+                  Note: Managing Partner / Admin accounts are assigned manually for chamber security.
+                </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

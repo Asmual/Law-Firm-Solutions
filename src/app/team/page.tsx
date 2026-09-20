@@ -12,35 +12,25 @@ import {
 import { toast } from "sonner";
 import { User, UserRole } from "@/types";
 
-const ROLE_COLORS: Record<UserRole, { bg: string; text: string; label: string }> = {
+const ROLE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
   admin: {
     bg: "bg-[#cca776]/20 border border-[#cca776]/40",
     text: "text-[#cca776]",
-    label: "Managing Partner (Admin)",
-  },
-  partner: {
-    bg: "bg-purple-500/15 border border-purple-500/30",
-    text: "text-purple-400",
-    label: "Senior Partner",
+    label: "Chamber Admin",
   },
   advocate: {
     bg: "bg-blue-500/15 border border-blue-500/30",
     text: "text-blue-400",
-    label: "High Court Advocate",
+    label: "Advocate",
   },
   associate: {
     bg: "bg-emerald-500/15 border border-emerald-500/30",
     text: "text-emerald-400",
-    label: "Associate Advocate",
-  },
-  user: {
-    bg: "bg-slate-700/40 border border-slate-600/30",
-    text: "text-slate-300",
-    label: "General Practitioner / User",
+    label: "Associate",
   },
 };
 
-const ALL_ROLES: UserRole[] = ["admin", "partner", "advocate", "associate", "user"];
+const ALL_ROLES: ("admin" | "advocate" | "associate")[] = ["admin", "advocate", "associate"];
 
 export default function TeamPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -225,7 +215,7 @@ export default function TeamPage() {
 
               {!loading &&
                 filteredUsers.map((user) => {
-                  const roleConfig = ROLE_COLORS[user.role] || ROLE_COLORS.user;
+                  const roleConfig = ROLE_COLORS[user.role] || ROLE_COLORS.associate;
 
                   return (
                     <tr

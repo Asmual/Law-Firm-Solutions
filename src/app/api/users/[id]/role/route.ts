@@ -27,10 +27,10 @@ export async function PUT(req: NextRequest, context: RouteContext) {
     const body = await req.json();
     const { role, chamberDesignation } = body;
 
-    const allowedRoles: UserRole[] = ["admin", "partner", "advocate", "associate", "user"];
+    const allowedRoles: UserRole[] = ["admin", "advocate", "associate"];
     if (!role || !allowedRoles.includes(role)) {
       return NextResponse.json(
-        { success: false, error: "Invalid role specified." },
+        { success: false, error: "Invalid role. Only 'admin', 'advocate', or 'associate' are permitted." },
         { status: 400 }
       );
     }

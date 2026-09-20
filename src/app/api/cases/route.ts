@@ -69,6 +69,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized. Please log in." }, { status: 401 });
     }
 
+    // Role Rule: Admin is for oversight/monitoring only. Only Advocate and Associate create cases.
+    if (user.role === "admin") {
+      return NextResponse.json(
+        {
+          error:
+            "Administrative policy: Administrators hold oversight and management authority. Case file creation is reserved for Advocates and Associates.",
+        },
+        { status: 403 }
+      );
+    }
+
     await connectToDatabase();
     const body = await req.json();
 

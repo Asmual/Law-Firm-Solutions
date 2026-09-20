@@ -17,11 +17,23 @@ export default function CasesRegistryPage() {
   const [cases, setCases] = useState<Case[]>([]);
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
 
   // Filters
   const [selectedInstId, setSelectedInstId] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.authenticated && data?.user) {
+          setCurrentUserRole(data.user.role);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     // Fetch institutions for dropdown
@@ -177,13 +189,15 @@ export default function CasesRegistryPage() {
             <FileSpreadsheet className="h-3.5 w-3.5 text-[#cca776]" />
             <span>Generate Reports</span>
           </Link>
-          <Link
-            href="/cases/new"
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all"
-          >
-            <Plus className="h-4 w-4" />
-            <span>Add New Case File</span>
-          </Link>
+          {currentUserRole !== "admin" && (
+            <Link
+              href="/cases/new"
+              className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all"
+            >
+              <Plus className="h-4 w-4" />
+              <span>Add New Case File</span>
+            </Link>
+          )}
         </div>
       </div>
 
@@ -275,9 +289,15 @@ export default function CasesRegistryPage() {
                   <td colSpan={8} className="py-12 text-center text-slate-500">
                     <Briefcase className="h-10 w-10 text-slate-600 mx-auto mb-2 opacity-50" />
                     <p className="font-semibold text-slate-400">No litigation files match current filters</p>
-                    <p className="text-[11px] mt-1">
-                      Click <Link href="/cases/new" className="text-[#cca776] underline">Add New Case File</Link> to enroll the first case.
-                    </p>
+                    {currentUserRole !== "admin" ? (
+                      <p className="text-[11px] mt-1">
+                        Click <Link href="/cases/new" className="text-[#cca776] underline">Add New Case File</Link> to enroll the first case.
+                      </p>
+                    ) : (
+                      <p className="text-[11px] mt-1 text-slate-400">
+                        Awaiting brief submissions from Chamber Advocates &amp; Associates.
+                      </p>
+                    )}
                   </td>
                 </tr>
               ) : (

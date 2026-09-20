@@ -36,6 +36,7 @@ function CaseFormContent() {
 
   // Advocates list for assignment
   const [advocates, setAdvocates] = useState<User[]>([]);
+  const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
 
   // Form Fields
   const [chamberFileNo, setChamberFileNo] = useState("");
@@ -98,6 +99,21 @@ function CaseFormContent() {
       if (inst.focalPerson.email) setContactEmail(inst.focalPerson.email);
     }
   };
+
+  // Check user role and protect page
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.authenticated && data?.user) {
+          setCurrentUserRole(data.user.role);
+          if (data.user.role === "admin" && !editId) {
+            toast.info("Chamber Admins hold monitoring oversight. Case creation is handled by Advocates & Associates.");
+          }
+        }
+      })
+      .catch(() => {});
+  }, [editId]);
 
   // Load Institutions & Advocates
   useEffect(() => {
@@ -280,6 +296,13 @@ function CaseFormContent() {
 
   // Save handler
   const handleSave = async (andAddNew = false) => {
+    if (!editId && currentUserRole === "admin") {
+      toast.error(
+        "Administrative rule: Administrators maintain oversight and monitoring only. Case file creation is reserved for Advocates and Associates."
+      );
+      return;
+    }
+
     if (!selectedInst) {
       toast.error("Please select an Institution / Client from the left list.");
       return;

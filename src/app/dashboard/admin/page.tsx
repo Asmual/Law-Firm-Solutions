@@ -8,7 +8,6 @@ import {
   Building2,
   CalendarDays,
   CheckCircle2,
-  FilePlus2,
   FileSpreadsheet,
   ArrowUpRight,
   Clock,
@@ -98,18 +97,18 @@ export default function AdminDashboardPage() {
 
           <div className="flex flex-wrap items-center gap-3">
             <Link
-              href="/cases/new"
+              href="/cases"
               className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2.5 text-sm font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all hover:scale-[1.02]"
             >
-              <FilePlus2 className="h-4 w-4" />
-              <span>+ Add New Case File</span>
+              <Briefcase className="h-4 w-4" />
+              <span>Monitor All Cases</span>
             </Link>
             <Link
               href="/team"
               className="inline-flex items-center gap-2 rounded-xl bg-slate-800/90 px-4 py-2.5 text-sm font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 hover:border-[#cca776]/50 transition-all"
             >
               <Users className="h-4 w-4 text-[#cca776]" />
-              <span>Manage Roles & Team</span>
+              <span>Manage Roles &amp; Team</span>
             </Link>
           </div>
         </div>

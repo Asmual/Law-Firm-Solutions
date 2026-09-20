@@ -6,6 +6,8 @@ import {
   ShieldCheck,
   Search,
   Phone,
+  Ban,
+  CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { User, UserRole } from "@/types";
@@ -104,6 +106,36 @@ export default function TeamPage() {
     }
   };
 
+  const handleToggleStatus = async (userId: string, currentStatus: boolean, userName: string) => {
+    const nextStatus = !currentStatus;
+    const confirmMessage = nextStatus
+      ? `Are you sure you want to UNBLOCK "${userName}" and restore their system access?`
+      : `Are you sure you want to BLOCK "${userName}"? They will immediately lose login access.`;
+
+    if (!confirm(confirmMessage)) return;
+
+    setUpdatingId(userId);
+    try {
+      const res = await fetch(`/api/users/${userId}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isActive: nextStatus }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message);
+        refreshUsers();
+      } else {
+        toast.error(data.error || "Failed to change user status");
+      }
+    } catch {
+      toast.error("Network error while updating account status.");
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
   const filteredUsers = users.filter((u) => {
     const q = searchTerm.toLowerCase();
     return (
@@ -169,8 +201,9 @@ export default function TeamPage() {
                 <th className="px-5 py-3">Designation</th>
                 <th className="px-5 py-3">Contact</th>
                 <th className="px-5 py-3">Current Role</th>
+                <th className="px-5 py-3">Account Status</th>
                 <th className="px-5 py-3">Bar Roll No</th>
-                {isAdmin && <th className="px-5 py-3 text-right">Change Role (Admin)</th>}
+                {isAdmin && <th className="px-5 py-3 text-right">Access &amp; Role Control</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
@@ -247,31 +280,85 @@ export default function TeamPage() {
                         </span>
                       </td>
 
+                      {/* Account Status Badge */}
+                      <td className="px-5 py-4">
+                        {user.isActive !== false ? (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/30">
+                            <CheckCircle className="h-3 w-3" />
+                            <span>Active</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-400 border border-rose-500/30">
+                            <Ban className="h-3 w-3" />
+                            <span>Blocked</span>
+                          </span>
+                        )}
+                      </td>
+
                       {/* Bar Roll */}
                       <td className="px-5 py-4 text-slate-500 dark:text-slate-400">
                         {user.barEnrollmentNo || "—"}
                       </td>
 
-                      {/* Admin Role Changer Dropdown */}
+                      {/* Admin Access & Role Control */}
                       {isAdmin && (
                         <td className="px-5 py-4 text-right">
-                          <select
-                            value={user.role}
-                            disabled={updatingId === (user.id || user._id)}
-                            onChange={(e) =>
-                              handleRoleChange(
-                                (user.id || user._id)!,
-                                e.target.value as UserRole
-                              )
-                            }
-                            className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
-                          >
-                            {ALL_ROLES.map((r) => (
-                              <option key={r} value={r}>
-                                Set as {r.toUpperCase()}
-                              </option>
-                            ))}
-                          </select>
+                          <div className="flex items-center justify-end gap-2">
+                            {/* Role Select */}
+                            <select
+                              value={user.role}
+                              disabled={updatingId === (user.id || user._id)}
+                              onChange={(e) =>
+                                handleRoleChange(
+                                  (user.id || user._id)!,
+                                  e.target.value as UserRole
+                                )
+                              }
+                              className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
+                            >
+                              {ALL_ROLES.map((r) => (
+                                <option key={r} value={r}>
+                                  Set as {r.toUpperCase()}
+                                </option>
+                              ))}
+                            </select>
+
+                            {/* Block / Unblock Button */}
+                            {user.id !== currentUser?.id && user._id !== currentUser?.id ? (
+                              <button
+                                type="button"
+                                disabled={updatingId === (user.id || user._id)}
+                                onClick={() =>
+                                  handleToggleStatus(
+                                    (user.id || user._id)!,
+                                    user.isActive !== false,
+                                    user.name
+                                  )
+                                }
+                                className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer disabled:opacity-50 ${
+                                  user.isActive !== false
+                                    ? "bg-rose-950/40 text-rose-400 border border-rose-800/60 hover:bg-rose-900/60"
+                                    : "bg-emerald-950/40 text-emerald-400 border border-emerald-800/60 hover:bg-emerald-900/60"
+                                }`}
+                              >
+                                {user.isActive !== false ? (
+                                  <>
+                                    <Ban className="h-3 w-3" />
+                                    <span>Block</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <CheckCircle className="h-3 w-3" />
+                                    <span>Unblock</span>
+                                  </>
+                                )}
+                              </button>
+                            ) : (
+                              <span className="text-[10px] text-slate-400 px-2 py-1 bg-slate-800 rounded border border-slate-700">
+                                You
+                              </span>
+                            )}
+                          </div>
                         </td>
                       )}
                     </tr>

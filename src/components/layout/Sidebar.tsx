@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -17,12 +17,15 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { UserRole } from "@/types";
 
 interface NavItem {
   label: string;
   href: string;
   icon: React.ElementType;
   badge?: string;
+  adminOnly?: boolean;
+  hideForAdmin?: boolean;
 }
 
 const navItems: NavItem[] = [
@@ -38,7 +41,7 @@ const navItems: NavItem[] = [
     badge: "100+",
   },
   {
-    label: "Case Registry",
+    label: "Case Registry (Monitor)",
     href: "/cases",
     icon: Briefcase,
   },
@@ -46,6 +49,7 @@ const navItems: NavItem[] = [
     label: "New Case Entry",
     href: "/cases/new",
     icon: FilePlus2,
+    hideForAdmin: true, // Admin does not need to enter cases; handles monitoring & oversight
   },
   {
     label: "Daily Cause List",
@@ -58,7 +62,7 @@ const navItems: NavItem[] = [
     icon: FileSpreadsheet,
   },
   {
-    label: "Associates & Team",
+    label: "Team & Role Control",
     href: "/team",
     icon: Users2,
   },
@@ -66,7 +70,19 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.authenticated && data?.user?.role) {
+          setUserRole(data.user.role);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <aside
@@ -102,7 +118,12 @@ export function Sidebar() {
           </p>
         </div>
 
-        {navItems.map((item) => {
+        {navItems
+          .filter((item) => {
+            if (userRole === "admin" && item.hideForAdmin) return false;
+            return true;
+          })
+          .map((item) => {
           const Icon = item.icon;
           const isActive =
             pathname === item.href ||

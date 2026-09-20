@@ -11,7 +11,8 @@ export async function GET() {
     }
 
     await connectToDatabase();
-    const users = await UserModel.find({ isActive: true })
+    // Fetch all users so admin can view active and blocked users
+    const users = await UserModel.find({})
       .select("-passwordHash")
       .sort({ role: 1, name: 1 })
       .lean();

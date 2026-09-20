@@ -3,27 +3,74 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Briefcase,
+  Scale,
+  ShieldCheck,
   Building2,
-  CalendarDays,
-  CheckCircle2,
-  FilePlus2,
+  Briefcase,
   FileSpreadsheet,
-  ArrowUpRight,
-  Clock,
-  Database,
-  ChevronRight,
+  ArrowRight,
+  Lock,
+  Mail,
+  User,
   Gavel,
-  Users,
+  LogOut,
+  Landmark,
+  FileText,
+  Clock,
 } from "lucide-react";
 import { toast } from "sonner";
-import { AuthSection } from "@/components/auth/AuthSection";
-import { User } from "@/types";
 
-export default function DashboardPage() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [checkingAuth, setCheckingAuth] = useState(true);
-  const [isSeeding, setIsSeeding] = useState(false);
+const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string; desc: string }[] = [
+  {
+    value: "advocate",
+    label: "Advocate (High Court / Subordinate Courts)",
+    desc: "Manage assigned files, court petitions & hearings",
+  },
+  {
+    value: "associate",
+    label: "Associate Advocate",
+    desc: "Daily hearing updates, cause list tracking & filing records",
+  },
+];
+
+const PARTNER_BANKS = [
+  "NRB Bank PLC",
+  "BRAC Bank PLC",
+  "City Bank PLC",
+  "Eastern Bank PLC",
+  "Islami Bank Bangladesh PLC",
+  "Dutch-Bangla Bank PLC",
+  "United Commercial Bank PLC",
+  "Pubali Bank PLC",
+  "Standard Bank PLC",
+  "EXIM Bank PLC",
+];
+
+export default function HomePage() {
+  const [currentUser, setCurrentUser] = useState<{
+    name: string;
+    email: string;
+    role: string;
+    chamberDesignation?: string;
+  } | null>(null);
+
+  const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
+  const [loading, setLoading] = useState(false);
+
+  // Sign In Form State
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+
+  // Sign Up Form State
+  const [signupData, setSignupData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "associate" as "advocate" | "associate",
+    chamberDesignation: "Associate Advocate",
+    barEnrollmentNo: "",
+    phone: "",
+  });
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -33,404 +80,707 @@ export default function DashboardPage() {
           setCurrentUser(data.user);
         }
       })
-      .catch(() => {})
-      .finally(() => setCheckingAuth(false));
+      .catch(() => {});
   }, []);
 
-  const handleSeedDatabase = async () => {
-    setIsSeeding(true);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail || !loginPassword) {
+      toast.error("Please enter email and password.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      const res = await fetch("/api/seed");
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+      });
+
       const data = await res.json();
       if (data.success) {
-        toast.success(data.message || "Sample data seeded successfully!");
+        toast.success(`Welcome back, ${data.user.name}!`);
+        setCurrentUser(data.user);
       } else {
-        toast.error(data.error || "Failed to seed sample data");
+        toast.error(data.error || "Invalid credentials.");
       }
     } catch {
-      toast.error("Could not connect to database. Make sure MongoDB is running.");
+      toast.error("Network error. Please try again.");
     } finally {
-      setIsSeeding(false);
+      setLoading(false);
     }
   };
 
-  // If checking authentication
-  if (checkingAuth) {
-    return (
-      <div className="min-h-[70vh] flex items-center justify-center text-xs text-slate-400">
-        Initializing Chamber Litigation Suite...
-      </div>
-    );
-  }
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signupData.name || !signupData.email || !signupData.password) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
 
-  // If NOT authenticated, show Login & Signup Portal
-  if (!currentUser) {
-    return (
-      <AuthSection
-        onSuccess={(user) => {
-          setCurrentUser(user as User);
-        }}
-      />
-    );
-  }
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(signupData),
+      });
 
-  // If authenticated, show Executive Litigation Dashboard with #cca776 gold theme
+      const data = await res.json();
+      if (data.success) {
+        toast.success(`Account created successfully as ${signupData.role}!`);
+        setCurrentUser(data.user);
+      } else {
+        toast.error(data.error || "Registration failed.");
+      }
+    } catch {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      setCurrentUser(null);
+      toast.success("Logged out successfully");
+    } catch {
+      toast.error("Logout failed");
+    }
+  };
+
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-12">
-      {/* Top Banner / Hero */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30">
-              <Gavel className="h-3.5 w-3.5" />
-              <span>Chamber Practice Management Suite</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-              Law Firm Solutions & Litigation Tracker
-            </h1>
-            <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Logged in as <strong className="text-[#cca776]">{currentUser.name}</strong> ({currentUser.role.toUpperCase()} • {currentUser.chamberDesignation}). Real-time bank litigation tracking, High Court & Artha Rin suit management, and corporate letterhead reporting.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/cases/new"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2.5 text-sm font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all hover:scale-[1.02]"
-            >
-              <FilePlus2 className="h-4 w-4" />
-              <span>+ Add New Case File</span>
-            </Link>
-            <Link
-              href="/team"
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-800/90 px-4 py-2.5 text-sm font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 hover:border-[#cca776]/50 transition-all"
-            >
-              <Users className="h-4 w-4 text-[#cca776]" />
-              <span>Manage Roles</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* Ambient glow decoration with #cca776 */}
-        <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
-      </div>
-
-      {/* KPI Metric Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {/* Card 1: Active Cases */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Active Cases
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
-              <Briefcase className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              142
-            </span>
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              +12 this month
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Across High Court & Subordinate Courts
-          </p>
-        </div>
-
-        {/* Card 2: Banks & Clients */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Bank / Corporate Clients
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
-              <Building2 className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              100+
-            </span>
-            <span className="text-xs font-medium text-slate-500">
-              Institutions & Branches
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            NRB Bank, BRAC Bank, EBL, etc.
-          </p>
-        </div>
-
-        {/* Card 3: Hearings This Week */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Hearings This Week
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-50 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400">
-              <CalendarDays className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              18
-            </span>
-            <span className="inline-flex items-center text-xs font-semibold text-[#cca776]">
-              5 fixed today
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            In High Court Division Annexes
-          </p>
-        </div>
-
-        {/* Card 4: Disposed / Concluded */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Disposed & Decreed
-            </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
-              <CheckCircle2 className="h-4 w-4" />
-            </div>
-          </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              47
-            </span>
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              Decreed in favor
-            </span>
-          </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Recorded in Completed Register
-          </p>
-        </div>
-      </div>
-
-      {/* Quick Navigation Cards with #cca776 branding */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Module 1: Image 2 Core Form */}
-        <Link
-          href="/cases/new"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#cca776]/70 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] group-hover:scale-105 transition-transform">
-              <FilePlus2 className="h-5 w-5" />
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-[#cca776]/30 selection:text-[#cca776]">
+      {/* 1. TOP WEBSITE HEADER */}
+      <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+          {/* Logo & Chamber Name */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30 shadow-inner group-hover:scale-105 transition-transform">
+              <Scale className="h-6 w-6" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors">
-                Dynamic Case Entry Form
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Multi-row repeater (Case Nos, Parties, Status)
+              <div className="text-base sm:text-lg font-bold tracking-wider text-white uppercase flex items-center gap-2">
+                <span>Law Firm Legal Solutions</span>
+              </div>
+              <p className="text-[11px] text-[#cca776] font-medium tracking-wide">
+                The Legal Solutions • Bank Litigation Practice
               </p>
             </div>
-          </div>
-          <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Record comprehensive file data, multiple writ/suit numbers, party search lists, and associate assignments in one unified form.
-          </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-[#cca776]">
-            <span>Open Entry Form</span>
-            <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </Link>
-
-        {/* Module 2: Image 1 Client Report */}
-        <Link
-          href="/reports"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-500/50 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500 group-hover:scale-105 transition-transform">
-              <FileSpreadsheet className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
-                Client Monthly Statement
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Bank letterhead: Running vs Disposed
-              </p>
-            </div>
-          </div>
-          <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Generate formal case position reports with letterhead formatting for banks (e.g. NRB Bank, BRAC Bank) with PDF & Excel export.
-          </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400">
-            <span>Generate Client Statement</span>
-            <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </Link>
-
-        {/* Module 3: Image 3 Associate Report */}
-        <Link
-          href="/team"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#cca776]/70 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] group-hover:scale-105 transition-transform">
-              <Users className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors">
-                Chamber Team & Roles
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Partner, Advocate & Associate Role Manager
-              </p>
-            </div>
-          </div>
-          <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Review registered practitioners, assign cases, and update roles with Administrator privileges.
-          </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-[#cca776]">
-            <span>Manage Team Roles</span>
-            <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-          </div>
-        </Link>
-      </div>
-
-      {/* Today's Cause List Preview */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800 gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-                Upcoming Hearing Schedule & Cause List
-              </h2>
-            </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              High Court Division & Special Artha Rin Adalats
-            </p>
-          </div>
-          <Link
-            href="/cause-list"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b8935f]"
-          >
-            <span>View Full Daily Cause List</span>
-            <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
-        </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200 dark:bg-slate-950 dark:text-slate-400 dark:border-slate-800">
-              <tr>
-                <th className="px-5 py-3">Chamber File</th>
-                <th className="px-5 py-3">Case Number(s)</th>
-                <th className="px-5 py-3">Bank / Institution</th>
-                <th className="px-5 py-3">Court / Bench</th>
-                <th className="px-5 py-3">Assigned Advocate</th>
-                <th className="px-5 py-3">Status</th>
-                <th className="px-5 py-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              <tr className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
-                <td className="px-5 py-3.5 font-semibold text-slate-900 dark:text-white">
-                  CF-2024/001
-                </td>
-                <td className="px-5 py-3.5">
-                  <div className="font-medium text-slate-900 dark:text-white">
-                    Writ Petition No. 5821/2024
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    Artha Rin Suit No. 142/2023
-                  </div>
-                </td>
-                <td className="px-5 py-3.5 font-medium">
-                  NRB Bank PLC
-                </td>
-                <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400">
-                  High Court Division (Annex 14)
-                </td>
-                <td className="px-5 py-3.5">
-                  Advocate Anisur Rahman
-                </td>
-                <td className="px-5 py-3.5">
-                  <span className="inline-flex items-center rounded-full bg-[#cca776]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#cca776] ring-1 ring-[#cca776]/30">
-                    Stay Extension Fixed
-                  </span>
-                </td>
-                <td className="px-5 py-3.5 text-right">
-                  <Link
-                    href="/cases/CF-2024-001"
-                    className="font-medium text-[#cca776] hover:underline"
-                  >
-                    View File
-                  </Link>
-                </td>
-              </tr>
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-6 text-xs font-semibold text-slate-300">
+            <a href="#practice-areas" className="hover:text-[#cca776] transition-colors">
+              Practice Areas
+            </a>
+            <a href="#flow-chart" className="hover:text-[#cca776] transition-colors">
+              Case Workflow
+            </a>
+            <a href="#banking-clients" className="hover:text-[#cca776] transition-colors">
+              Banking Clients
+            </a>
+            <Link href="/institutions" className="hover:text-[#cca776] transition-colors">
+              100+ Banks Directory
+            </Link>
+          </nav>
 
-              <tr className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
-                <td className="px-5 py-3.5 font-semibold text-slate-900 dark:text-white">
-                  CF-2023/118
-                </td>
-                <td className="px-5 py-3.5">
-                  <div className="font-medium text-slate-900 dark:text-white">
-                    C.R. Case No. 982/2023
-                  </div>
-                  <div className="text-[11px] text-slate-500">
-                    NI Act Section 138
-                  </div>
-                </td>
-                <td className="px-5 py-3.5 font-medium">
-                  BRAC Bank PLC
-                </td>
-                <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400">
-                  Metropolitan Sessions Judge Court, Dhaka
-                </td>
-                <td className="px-5 py-3.5">
-                  Advocate Farhana Kabir
-                </td>
-                <td className="px-5 py-3.5">
-                  <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-950/60 dark:text-emerald-300">
-                    Disposed / Decreed
-                  </span>
-                </td>
-                <td className="px-5 py-3.5 text-right">
-                  <Link
-                    href="/cases/CF-2023-118"
-                    className="font-medium text-[#cca776] hover:underline"
-                  >
-                    View File
-                  </Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Database Connection & Seed Helper Box */}
-      <div className="rounded-xl border border-slate-200 bg-slate-100/70 p-5 dark:border-slate-800 dark:bg-slate-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
-            <Database className="h-4 w-4" />
+          {/* Top Right Action */}
+          <div className="flex items-center gap-3">
+            {currentUser ? (
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2 text-xs font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all"
+                >
+                  <Briefcase className="h-4 w-4" />
+                  <span>Go to Dashboard</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  title="Sign Out"
+                  className="p-2 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-red-400 hover:border-red-400/30 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </div>
+            ) : (
+              <a
+                href="#portal"
+                className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2 text-xs font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all"
+              >
+                <Lock className="h-3.5 w-3.5" />
+                <span>Chamber Portal Access</span>
+              </a>
+            )}
           </div>
-          <div>
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-              Database Seed & Initialization
-            </h4>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Populate demo financial institutions (NRB Bank, BRAC Bank, EBL), advocates, and sample case files for testing.
+        </div>
+      </header>
+
+      {/* 2. HERO SECTION WITH EMBEDDED PORTAL */}
+      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-16 lg:pb-28">
+        {/* Ambient Glows */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#cca776]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-10 right-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Content (7 Cols) */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2.5 rounded-full bg-[#cca776]/10 px-4 py-1.5 text-xs font-semibold text-[#cca776] border border-[#cca776]/30">
+                <Gavel className="h-4 w-4" />
+                <span>Supreme Court of Bangladesh & Bank Litigation Chamber</span>
+              </div>
+
+              <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                LAW FIRM <span className="text-[#cca776]">LEGAL SOLUTIONS</span>
+              </h1>
+
+              <p className="text-base sm:text-lg text-slate-300 font-light leading-relaxed max-w-2xl">
+                The comprehensive legal management suite for high-volume banking litigation, High Court writ petitions, Artha Rin recovery suits, and automated corporate letterhead reporting.
+              </p>
+
+              {/* Feature Highlights Bullets */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
+                <div className="flex items-start gap-3 rounded-xl border border-slate-800/80 bg-slate-900/60 p-3.5">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+                    <Building2 className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-xs font-bold text-white">100+ Banking Institutions</h2>
+                    <p className="text-[11px] text-slate-400 mt-0.5">NRB Bank, BRAC Bank, EBL & Islamic Banks</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 rounded-xl border border-slate-800/80 bg-slate-900/60 p-3.5">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+                    <FileSpreadsheet className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-xs font-bold text-white">Automated Letterhead Reports</h2>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Instant monthly PDF status for bank SAMDs</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 rounded-xl border border-slate-800/80 bg-slate-900/60 p-3.5">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+                    <Clock className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-xs font-bold text-white">Daily Cause List & Hearing Diary</h2>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Never miss an order date or limitation period</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3 rounded-xl border border-slate-800/80 bg-slate-900/60 p-3.5">
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+                    <ShieldCheck className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h2 className="text-xs font-bold text-white">Chamber Access Control</h2>
+                    <p className="text-[11px] text-slate-400 mt-0.5">Role-based privileges: Admin, Advocate, Associate</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust Counters */}
+              <div className="pt-4 flex flex-wrap items-center gap-8 border-t border-slate-800/80 text-xs">
+                <div>
+                  <span className="text-2xl font-bold text-[#cca776]">100+</span>
+                  <p className="text-[11px] text-slate-400">Institutional Clients</p>
+                </div>
+                <div className="h-8 w-px bg-slate-800" />
+                <div>
+                  <span className="text-2xl font-bold text-white">1,500+</span>
+                  <p className="text-[11px] text-slate-400">Active Litigations</p>
+                </div>
+                <div className="h-8 w-px bg-slate-800" />
+                <div>
+                  <span className="text-2xl font-bold text-emerald-400">96.4%</span>
+                  <p className="text-[11px] text-slate-400">Recovery Decree Rate</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: EMBEDDED LOGIN & SIGNUP PORTAL (5 Cols) */}
+            <div id="portal" className="lg:col-span-5">
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/90 shadow-2xl backdrop-blur-xl p-6 sm:p-8">
+                {currentUser ? (
+                  /* ALREADY LOGGED IN STATE */
+                  <div className="space-y-6 text-center py-4 animate-in fade-in">
+                    <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30">
+                      <Gavel className="h-8 w-8" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <span className="inline-flex rounded-full bg-[#cca776]/20 px-3 py-1 text-[11px] font-bold text-[#cca776] uppercase tracking-wider">
+                        Active Chamber Session
+                      </span>
+                      <h2 className="text-xl font-bold text-white">
+                        Welcome, {currentUser.name}
+                      </h2>
+                      <p className="text-xs text-slate-400">
+                        {currentUser.role.toUpperCase()} • {currentUser.chamberDesignation || "Practitioner"}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 space-y-3">
+                      <Link
+                        href="/dashboard"
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-3 text-xs font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all hover:scale-[1.01]"
+                      >
+                        <Briefcase className="h-4 w-4" />
+                        <span>Enter Chamber Dashboard</span>
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+
+                      <Link
+                        href="/cases/new"
+                        className="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-800/80 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition-colors"
+                      >
+                        <span>+ Add New Case File</span>
+                      </Link>
+
+                      <button
+                        onClick={handleLogout}
+                        className="text-xs text-slate-500 hover:text-red-400 transition-colors pt-2"
+                      >
+                        Sign Out from Chamber
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  /* LOGIN & SIGNUP FORMS */
+                  <div>
+                    {/* Tab Navigation */}
+                    <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800 mb-6">
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab("signin")}
+                        className={`flex-1 rounded-lg py-2.5 text-xs font-semibold transition-all ${
+                          activeTab === "signin"
+                            ? "bg-[#cca776] text-slate-950 shadow-md font-bold"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        Sign In
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab("signup")}
+                        className={`flex-1 rounded-lg py-2.5 text-xs font-semibold transition-all ${
+                          activeTab === "signup"
+                            ? "bg-[#cca776] text-slate-950 shadow-md font-bold"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        Register Account
+                      </button>
+                    </div>
+
+                    {/* SIGN IN FORM */}
+                    {activeTab === "signin" && (
+                      <form onSubmit={handleLogin} className="space-y-4 animate-in fade-in">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">
+                            Official Email Address
+                          </label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+                            <input
+                              type="email"
+                              required
+                              value={loginEmail}
+                              onChange={(e) => setLoginEmail(e.target.value)}
+                              placeholder="advocate@chamber.com"
+                              className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">
+                            Chamber Password
+                          </label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+                            <input
+                              type="password"
+                              required
+                              value={loginPassword}
+                              onChange={(e) => setLoginPassword(e.target.value)}
+                              placeholder="••••••••"
+                              className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-9 pr-3 py-2.5 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-3 text-xs font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all disabled:opacity-50 mt-2"
+                        >
+                          <span>{loading ? "Authenticating..." : "Sign In to Chamber Portal"}</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </button>
+
+                        <div className="relative my-4 flex items-center justify-center">
+                          <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-slate-800" />
+                          </div>
+                          <span className="relative bg-slate-900 px-3 text-[10px] uppercase font-bold text-slate-500">
+                            Or continue with
+                          </span>
+                        </div>
+
+                        <a
+                          href="/api/auth/google"
+                          className="w-full flex items-center justify-center gap-2.5 rounded-xl border border-slate-700 bg-slate-950 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 hover:border-slate-600 transition-colors"
+                        >
+                          <svg className="h-4 w-4" viewBox="0 0 24 24">
+                            <path
+                              fill="#4285F4"
+                              d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"
+                            />
+                            <path
+                              fill="#34A853"
+                              d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.35 24 12 24z"
+                            />
+                            <path
+                              fill="#FBBC05"
+                              d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.16 0 9.98 0 12s.45 3.84 1.25 5.42l4.03-3.15z"
+                            />
+                            <path
+                              fill="#EA4335"
+                              d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
+                            />
+                          </svg>
+                          <span>Continue with Google (Gmail)</span>
+                        </a>
+                      </form>
+                    )}
+
+                    {/* SIGN UP FORM (Advocate / Associate only) */}
+                    {activeTab === "signup" && (
+                      <form onSubmit={handleSignup} className="space-y-3 animate-in fade-in">
+                        <div>
+                          <label className="block text-xs font-medium text-slate-300 mb-1">
+                            Full Legal Name *
+                          </label>
+                          <div className="relative">
+                            <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
+                            <input
+                              type="text"
+                              required
+                              value={signupData.name}
+                              onChange={(e) =>
+                                setSignupData({ ...signupData, name: e.target.value })
+                              }
+                              placeholder="Advocate / Associate Name"
+                              className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-medium text-slate-300 mb-1">
+                              Email Address *
+                            </label>
+                            <input
+                              type="email"
+                              required
+                              value={signupData.email}
+                              onChange={(e) =>
+                                setSignupData({ ...signupData, email: e.target.value })
+                              }
+                              placeholder="name@chamber.com"
+                              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium text-slate-300 mb-1">
+                              Password (Min 6 chars) *
+                            </label>
+                            <input
+                              type="password"
+                              required
+                              minLength={6}
+                              value={signupData.password}
+                              onChange={(e) =>
+                                setSignupData({ ...signupData, password: e.target.value })
+                              }
+                              placeholder="••••••••"
+                              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Chamber Role Selection */}
+                        <div>
+                          <label className="block text-xs font-semibold text-[#cca776] mb-1">
+                            Chamber Role *
+                          </label>
+                          <select
+                            value={signupData.role}
+                            onChange={(e) => {
+                              const selectedRole = e.target.value as "advocate" | "associate";
+                              setSignupData({
+                                ...signupData,
+                                role: selectedRole,
+                                chamberDesignation:
+                                  selectedRole === "advocate" ? "Advocate" : "Associate Advocate",
+                              });
+                            }}
+                            className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-[#cca776] focus:outline-none font-medium"
+                          >
+                            {SIGNUP_ROLES.map((r) => (
+                              <option key={r.value} value={r.value}>
+                                {r.label}
+                              </option>
+                            ))}
+                          </select>
+                          <p className="mt-0.5 text-[10px] text-slate-500">
+                            Admin accounts are configured manually by Managing Partners.
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-xs font-medium text-slate-300 mb-1">
+                              Designation
+                            </label>
+                            <input
+                              type="text"
+                              value={signupData.chamberDesignation}
+                              onChange={(e) =>
+                                setSignupData({
+                                  ...signupData,
+                                  chamberDesignation: e.target.value,
+                                })
+                              }
+                              placeholder="Associate Advocate"
+                              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-xs font-medium text-slate-300 mb-1">
+                              Bar Roll No (Optional)
+                            </label>
+                            <input
+                              type="text"
+                              value={signupData.barEnrollmentNo}
+                              onChange={(e) =>
+                                setSignupData({
+                                  ...signupData,
+                                  barEnrollmentNo: e.target.value,
+                                })
+                              }
+                              placeholder="e.g. SC-1234/2015"
+                              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        <button
+                          type="submit"
+                          disabled={loading}
+                          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-3 text-xs font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all disabled:opacity-50 mt-1"
+                        >
+                          <span>{loading ? "Registering..." : "Create Account & Enter Chamber"}</span>
+                          <ArrowRight className="h-4 w-4" />
+                        </button>
+
+                        <a
+                          href="/api/auth/google"
+                          className="w-full flex items-center justify-center gap-2.5 rounded-xl border border-slate-700 bg-slate-950 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 hover:border-slate-600 transition-colors"
+                        >
+                          <span>Sign up with Google</span>
+                        </a>
+                      </form>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. CASE DATABASE FLOW CHART (Directly Showcasing Image 2 Architecture) */}
+      <section id="flow-chart" className="py-16 border-t border-slate-800/80 bg-slate-900/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#cca776]">
+              System Workflow & Architecture
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+              Case Database Flow Chart
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              The standardized litigation lifecycle connecting chamber practitioners with institutional banking clients.
             </p>
           </div>
-        </div>
 
-        <button
-          onClick={handleSeedDatabase}
-          disabled={isSeeding}
-          className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 transition-colors disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
-        >
-          {isSeeding ? "Seeding Data..." : "Seed Sample Data"}
-        </button>
-      </div>
+          {/* Flow Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 text-center space-y-2 relative">
+              <div className="flex h-10 w-10 mx-auto items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+                <Lock className="h-5 w-5" />
+              </div>
+              <h3 className="text-xs font-bold text-white">1. Login</h3>
+              <p className="text-[11px] text-slate-400">Admin, Advocate & Associate Role Access</p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 text-center space-y-2 relative">
+              <div className="flex h-10 w-10 mx-auto items-center justify-center rounded-lg bg-blue-500/15 text-blue-400">
+                <Briefcase className="h-5 w-5" />
+              </div>
+              <h3 className="text-xs font-bold text-white">2. Dashboard</h3>
+              <p className="text-[11px] text-slate-400">Cause List, Hearings & Case Analytics</p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 text-center space-y-2 relative">
+              <div className="flex h-10 w-10 mx-auto items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <h3 className="text-xs font-bold text-white">3. Institution / Client</h3>
+              <p className="text-[11px] text-slate-400">100+ Banks (NRB, BRAC, City, EBL)</p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 text-center space-y-2 relative">
+              <div className="flex h-10 w-10 mx-auto items-center justify-center rounded-lg bg-purple-500/15 text-purple-400">
+                <FileText className="h-5 w-5" />
+              </div>
+              <h3 className="text-xs font-bold text-white">4. Case Database</h3>
+              <p className="text-[11px] text-slate-400">Multi-Row Numbers, Parties & Notes</p>
+            </div>
+
+            <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 text-center space-y-2 relative">
+              <div className="flex h-10 w-10 mx-auto items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">
+                <FileSpreadsheet className="h-5 w-5" />
+              </div>
+              <h3 className="text-xs font-bold text-white">5. Case List & Reports</h3>
+              <p className="text-[11px] text-slate-400">Running vs Disposed Monthly Statements</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. PRACTICE AREAS */}
+      <section id="practice-areas" className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+          <div className="text-center space-y-3 max-w-3xl mx-auto">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#cca776]">
+              Litigation Expertise
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+              Banking & Corporate Practice Areas
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400">
+              Specialized representation before the Supreme Court of Bangladesh, Artha Rin Adalats, and Special Tribunals.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3 hover:border-[#cca776]/50 transition-colors">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/15 text-[#cca776]">
+                <Landmark className="h-5 w-5" />
+              </div>
+              <h3 className="text-base font-bold text-white">Artha Rin Suits & Section 33(7)</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Aggressive recovery litigation under the Artha Rin Adalat Ain, 2003, auction notice defense, and possession delivery execution proceedings.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3 hover:border-[#cca776]/50 transition-colors">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/15 text-[#cca776]">
+                <Scale className="h-5 w-5" />
+              </div>
+              <h3 className="text-base font-bold text-white">High Court Writ Petitions</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Appearing in Rule Nisi hearings, vacating illegal ad-interim stay orders obtained by defaulting borrowers, and appellate division civil petitions.
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-6 space-y-3 hover:border-[#cca776]/50 transition-colors">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/15 text-[#cca776]">
+                <FileText className="h-5 w-5" />
+              </div>
+              <h3 className="text-base font-bold text-white">Cheque Dishonour (NI Act 138)</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Expeditious criminal complaint prosecution under Section 138 of the Negotiable Instruments Act for bank loan cheque bounces and recovery decrees.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. TRUSTED FINANCIAL INSTITUTIONS */}
+      <section id="banking-clients" className="py-14 border-t border-slate-800/80 bg-slate-900/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="text-center space-y-2">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#cca776]">
+              Clients & Financial Institutions
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold text-white">
+              Trusted by 100+ Commercial & Islamic Banks
+            </h2>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {PARTNER_BANKS.map((bank) => (
+              <div
+                key={bank}
+                className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950 px-4 py-2.5 text-xs font-semibold text-slate-300 hover:border-[#cca776]/50 hover:text-white transition-colors"
+              >
+                <Building2 className="h-3.5 w-3.5 text-[#cca776]" />
+                <span>{bank}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. PRESTIGIOUS LEGAL FOOTER */}
+      <footer className="border-t border-slate-800/80 bg-slate-950 py-12 text-slate-400 text-xs">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+              <Scale className="h-5 w-5" />
+            </div>
+            <div>
+              <span className="font-bold text-white uppercase tracking-wider">
+                Law Firm Legal Solutions
+              </span>
+              <p className="text-[11px] text-slate-500">
+                Supreme Court Bar Association Building, Ramna, Dhaka-1000
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-6 text-xs text-slate-400">
+            <Link href="/institutions" className="hover:text-[#cca776]">
+              Bank Directory
+            </Link>
+            <Link href="/dashboard" className="hover:text-[#cca776]">
+              Practice Dashboard
+            </Link>
+            <a href="#portal" className="hover:text-[#cca776]">
+              Chamber Login
+            </a>
+          </div>
+
+          <p className="text-[11px] text-slate-600">
+            © {new Date().getFullYear()} Law Firm Legal Solutions. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

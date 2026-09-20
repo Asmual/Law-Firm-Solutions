@@ -20,17 +20,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string; desc: string }[] = [
-  {
-    value: "advocate",
-    label: "Advocate (High Court / Subordinate Courts)",
-    desc: "Manage assigned files, court petitions & hearings",
-  },
-  {
-    value: "associate",
-    label: "Associate Advocate",
-    desc: "Daily hearing updates, cause list tracking & filing records",
-  },
+const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string }[] = [
+  { value: "advocate", label: "Advocate" },
+  { value: "associate", label: "Associate" },
 ];
 
 const PARTNER_BANKS = [
@@ -544,9 +536,6 @@ export default function HomePage() {
                               </option>
                             ))}
                           </select>
-                          <p className="mt-0.5 text-[10px] text-slate-500">
-                            Admin accounts are configured manually by Managing Partners.
-                          </p>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

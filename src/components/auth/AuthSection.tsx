@@ -19,17 +19,9 @@ interface AuthSectionProps {
   onSuccess: (user: unknown) => void;
 }
 
-const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string; desc: string }[] = [
-  {
-    value: "advocate",
-    label: "Advocate (High Court / Subordinate Courts)",
-    desc: "Manage assigned files, court petitions & hearings",
-  },
-  {
-    value: "associate",
-    label: "Associate Advocate",
-    desc: "Daily hearing updates, cause list tracking & filing records",
-  },
+const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string }[] = [
+  { value: "advocate", label: "Advocate" },
+  { value: "associate", label: "Associate" },
 ];
 
 export function AuthSection({ onSuccess }: AuthSectionProps) {
@@ -386,13 +378,10 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                 >
                   {SIGNUP_ROLES.map((r) => (
                     <option key={r.value} value={r.value}>
-                      {r.label} — ({r.desc})
+                      {r.label}
                     </option>
                   ))}
                 </select>
-                <p className="mt-1 text-[11px] text-slate-400">
-                  Note: Managing Partner / Admin accounts are assigned manually for chamber security.
-                </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

@@ -76,3 +76,5 @@ export async function getSessionUser(): Promise<SessionPayload | null> {
   if (!token) return null;
   return verifySessionToken(token);
 }
+
+export const getCurrentUserFromSession = getSessionUser;

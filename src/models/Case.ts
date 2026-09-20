@@ -1,0 +1,178 @@
+import mongoose, { Schema, Document, Model } from "mongoose";
+
+export interface ICaseDocument extends Document {
+  chamberFileNo: string;
+  institutionId: mongoose.Types.ObjectId;
+  institutionName: string;
+  matter: string;
+  branch?: string;
+  focalPerson: {
+    name: string;
+    designation: string;
+    phone: string;
+    email?: string;
+  };
+  caseNumbers: Array<{
+    caseNumber: string;
+    caseType: string;
+    year: string;
+    courtDivision: string;
+    remarks?: string;
+  }>;
+  parties: Array<{
+    partyNo: number;
+    partyNameDetails: string;
+    caseReceivedDate?: string;
+    searchListEntry?: string;
+  }>;
+  specialNotes: {
+    wokalatnamaNote?: string;
+    mainPetitionNote?: string;
+    extensionNote?: string;
+    generalRemarks?: string;
+  };
+  assignedAdvocate: {
+    advocateId?: mongoose.Types.ObjectId;
+    advocateName: string;
+    dateAssigned?: string;
+    internalRemarks?: string;
+  };
+  statusUpdates: Array<{
+    updateDate: string;
+    statusRemarks: string;
+    orderDetails?: string;
+    nextHearingDate?: string;
+    courtName?: string;
+    enteredBy?: string;
+    createdAt?: Date;
+  }>;
+  status: "running" | "stay_granted" | "adjourned" | "disposed" | "decreed";
+  disposalDetails?: {
+    disposalDate?: string;
+    outcomeRemarks?: string;
+    decreeSummary?: string;
+  };
+  documents?: Array<{
+    title: string;
+    fileUrl: string;
+    fileType?: string;
+    uploadedAt?: Date;
+  }>;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const CaseSchema = new Schema<ICaseDocument>(
+  {
+    chamberFileNo: {
+      type: String,
+      required: [true, "Chamber File Number is required"],
+      unique: true,
+      trim: true,
+      index: true,
+    },
+    institutionId: {
+      type: Schema.Types.ObjectId,
+      ref: "Institution",
+      required: true,
+      index: true,
+    },
+    institutionName: {
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
+    },
+    matter: {
+      type: String,
+      required: [true, "Matter/Subject is required"],
+      trim: true,
+      index: true,
+    },
+    branch: {
+      type: String,
+      trim: true,
+    },
+    focalPerson: {
+      name: { type: String, default: "" },
+      designation: { type: String, default: "" },
+      phone: { type: String, default: "" },
+      email: { type: String, default: "" },
+    },
+    caseNumbers: [
+      {
+        caseNumber: { type: String, required: true, trim: true },
+        caseType: { type: String, required: true, trim: true },
+        year: { type: String, required: true, trim: true },
+        courtDivision: { type: String, required: true, trim: true },
+        remarks: { type: String, default: "" },
+      },
+    ],
+    parties: [
+      {
+        partyNo: { type: Number, default: 1 },
+        partyNameDetails: { type: String, required: true, trim: true },
+        caseReceivedDate: { type: String, default: "" },
+        searchListEntry: { type: String, default: "" },
+      },
+    ],
+    specialNotes: {
+      wokalatnamaNote: { type: String, default: "" },
+      mainPetitionNote: { type: String, default: "" },
+      extensionNote: { type: String, default: "" },
+      generalRemarks: { type: String, default: "" },
+    },
+    assignedAdvocate: {
+      advocateId: { type: Schema.Types.ObjectId, ref: "User" },
+      advocateName: { type: String, default: "Unassigned", trim: true },
+      dateAssigned: { type: String, default: "" },
+      internalRemarks: { type: String, default: "" },
+    },
+    statusUpdates: [
+      {
+        updateDate: { type: String, required: true },
+        statusRemarks: { type: String, required: true },
+        orderDetails: { type: String, default: "" },
+        nextHearingDate: { type: String, default: "" },
+        courtName: { type: String, default: "" },
+        enteredBy: { type: String, default: "" },
+        createdAt: { type: Date, default: Date.now },
+      },
+    ],
+    status: {
+      type: String,
+      enum: ["running", "stay_granted", "adjourned", "disposed", "decreed"],
+      default: "running",
+      index: true,
+    },
+    disposalDetails: {
+      disposalDate: { type: String, default: "" },
+      outcomeRemarks: { type: String, default: "" },
+      decreeSummary: { type: String, default: "" },
+    },
+    documents: [
+      {
+        title: { type: String, required: true },
+        fileUrl: { type: String, required: true },
+        fileType: { type: String, default: "pdf" },
+        uploadedAt: { type: Date, default: Date.now },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
+
+// Compound text index for global search
+CaseSchema.index({
+  chamberFileNo: "text",
+  institutionName: "text",
+  matter: "text",
+  "caseNumbers.caseNumber": "text",
+  "parties.partyNameDetails": "text",
+  "assignedAdvocate.advocateName": "text",
+});
+
+export const CaseModel: Model<ICaseDocument> =
+  mongoose.models.Case || mongoose.model<ICaseDocument>("Case", CaseSchema);

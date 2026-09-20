@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Briefcase,
@@ -14,11 +14,28 @@ import {
   Database,
   ChevronRight,
   Gavel,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
+import { AuthSection } from "@/components/auth/AuthSection";
+import { User } from "@/types";
 
 export default function DashboardPage() {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [isSeeding, setIsSeeding] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated && data.user) {
+          setCurrentUser(data.user);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setCheckingAuth(false));
+  }, []);
 
   const handleSeedDatabase = async () => {
     setIsSeeding(true);
@@ -37,13 +54,34 @@ export default function DashboardPage() {
     }
   };
 
+  // If checking authentication
+  if (checkingAuth) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center text-xs text-slate-400">
+        Initializing Chamber Litigation Suite...
+      </div>
+    );
+  }
+
+  // If NOT authenticated, show Login & Signup Portal
+  if (!currentUser) {
+    return (
+      <AuthSection
+        onSuccess={(user) => {
+          setCurrentUser(user as User);
+        }}
+      />
+    );
+  }
+
+  // If authenticated, show Executive Litigation Dashboard with #cca776 gold theme
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-12">
       {/* Top Banner / Hero */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 p-6 sm:p-8 text-white shadow-xl border border-slate-700/50">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-400 border border-amber-500/20">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30">
               <Gavel className="h-3.5 w-3.5" />
               <span>Chamber Practice Management Suite</span>
             </div>
@@ -51,30 +89,30 @@ export default function DashboardPage() {
               Law Firm Solutions & Litigation Tracker
             </h1>
             <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
-              Real-time bank litigation tracking, High Court & Artha Rin suit management, dynamic multi-party case files, and automated corporate letterhead reporting.
+              Logged in as <strong className="text-[#cca776]">{currentUser.name}</strong> ({currentUser.role.toUpperCase()} • {currentUser.chamberDesignation}). Real-time bank litigation tracking, High Court & Artha Rin suit management, and corporate letterhead reporting.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/cases/new"
-              className="inline-flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-md hover:bg-amber-400 transition-all hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2.5 text-sm font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all hover:scale-[1.02]"
             >
               <FilePlus2 className="h-4 w-4" />
               <span>+ Add New Case File</span>
             </Link>
             <Link
-              href="/reports"
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-800/80 px-4 py-2.5 text-sm font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 transition-all"
+              href="/team"
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-800/90 px-4 py-2.5 text-sm font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 hover:border-[#cca776]/50 transition-all"
             >
-              <FileSpreadsheet className="h-4 w-4 text-amber-400" />
-              <span>Generate Reports</span>
+              <Users className="h-4 w-4 text-[#cca776]" />
+              <span>Manage Roles</span>
             </Link>
           </div>
         </div>
 
-        {/* Ambient glow decoration */}
-        <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl" />
+        {/* Ambient glow decoration with #cca776 */}
+        <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
       </div>
 
       {/* KPI Metric Cards */}
@@ -108,7 +146,7 @@ export default function DashboardPage() {
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               Bank / Corporate Clients
             </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
               <Building2 className="h-4 w-4" />
             </div>
           </div>
@@ -139,7 +177,7 @@ export default function DashboardPage() {
             <span className="text-2xl font-bold text-slate-900 dark:text-white">
               18
             </span>
-            <span className="inline-flex items-center text-xs font-semibold text-amber-600 dark:text-amber-400">
+            <span className="inline-flex items-center text-xs font-semibold text-[#cca776]">
               5 fixed today
             </span>
           </div>
@@ -172,19 +210,19 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Quick Navigation Cards */}
+      {/* Quick Navigation Cards with #cca776 branding */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {/* Module 1: Image 2 Core Form */}
         <Link
           href="/cases/new"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-amber-500/50 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
+          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#cca776]/70 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 group-hover:scale-105 transition-transform">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] group-hover:scale-105 transition-transform">
               <FilePlus2 className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors">
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors">
                 Dynamic Case Entry Form
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -195,7 +233,7 @@ export default function DashboardPage() {
           <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
             Record comprehensive file data, multiple writ/suit numbers, party search lists, and associate assignments in one unified form.
           </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-amber-600 dark:text-amber-400">
+          <div className="mt-4 flex items-center text-xs font-semibold text-[#cca776]">
             <span>Open Entry Form</span>
             <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
@@ -230,27 +268,27 @@ export default function DashboardPage() {
 
         {/* Module 3: Image 3 Associate Report */}
         <Link
-          href="/reports?type=associate"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-emerald-500/50 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
+          href="/team"
+          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#cca776]/70 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
         >
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500 group-hover:scale-105 transition-transform">
-              <Briefcase className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] group-hover:scale-105 transition-transform">
+              <Users className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                Associate Workload Report
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors">
+                Chamber Team & Roles
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Partner oversight & assignment tracking
+                Partner, Advocate & Associate Role Manager
               </p>
             </div>
           </div>
           <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Review case distribution by associate advocate, monitor pending deadlines, and track internal progress remarks.
+            Review registered practitioners, assign cases, and update roles with Administrator privileges.
           </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-            <span>View Associate Metrics</span>
+          <div className="mt-4 flex items-center text-xs font-semibold text-[#cca776]">
+            <span>Manage Team Roles</span>
             <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </Link>
@@ -261,7 +299,7 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800 gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-amber-500" />
+              <Clock className="h-4 w-4 text-[#cca776]" />
               <h2 className="text-sm font-bold text-slate-900 dark:text-white">
                 Upcoming Hearing Schedule & Cause List
               </h2>
@@ -272,7 +310,7 @@ export default function DashboardPage() {
           </div>
           <Link
             href="/cause-list"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 hover:text-amber-500 dark:text-amber-400"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b8935f]"
           >
             <span>View Full Daily Cause List</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
@@ -315,14 +353,14 @@ export default function DashboardPage() {
                   Advocate Anisur Rahman
                 </td>
                 <td className="px-5 py-3.5">
-                  <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-950/60 dark:text-amber-300">
+                  <span className="inline-flex items-center rounded-full bg-[#cca776]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#cca776] ring-1 ring-[#cca776]/30">
                     Stay Extension Fixed
                   </span>
                 </td>
                 <td className="px-5 py-3.5 text-right">
                   <Link
                     href="/cases/CF-2024-001"
-                    className="font-medium text-amber-600 hover:text-amber-500 dark:text-amber-400"
+                    className="font-medium text-[#cca776] hover:underline"
                   >
                     View File
                   </Link>
@@ -358,7 +396,7 @@ export default function DashboardPage() {
                 <td className="px-5 py-3.5 text-right">
                   <Link
                     href="/cases/CF-2023-118"
-                    className="font-medium text-amber-600 hover:text-amber-500 dark:text-amber-400"
+                    className="font-medium text-[#cca776] hover:underline"
                   >
                     View File
                   </Link>

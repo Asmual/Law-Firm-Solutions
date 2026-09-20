@@ -3,11 +3,21 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --gold: #cca776;
+  --gold-hover: #b8935f;
+  --gold-dark: #8b6e40;
+  --gold-light: #f6eedf;
+  --gold-muted: rgba(204, 167, 118, 0.15);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-gold: #cca776;
+  --color-gold-hover: #b8935f;
+  --color-gold-dark: #8b6e40;
+  --color-gold-light: #f6eedf;
+  --color-gold-muted: rgba(204, 167, 118, 0.15);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -23,4 +33,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Custom Legal Gold Utility Classes */
+.text-gold {
+  color: #cca776;
+}
+.bg-gold {
+  background-color: #cca776;
+}
+.border-gold {
+  border-color: #cca776;
+}
+.ring-gold {
+  --tw-ring-color: rgba(204, 167, 118, 0.35);
 }

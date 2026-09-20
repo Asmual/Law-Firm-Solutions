@@ -1,13 +1,16 @@
-export type UserRole = "admin" | "partner" | "advocate" | "associate";
+export type UserRole = "admin" | "partner" | "advocate" | "associate" | "user";
 
 export interface User {
   id: string;
+  _id?: string;
   name: string;
   email: string;
   phone?: string;
   role: UserRole;
   chamberDesignation: string;
   barEnrollmentNo?: string;
+  avatarUrl?: string;
+  authProvider?: "credentials" | "google";
   isActive: boolean;
   createdAt?: string;
 }

@@ -79,7 +79,7 @@ export default function InstitutionsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
               <Building2 className="h-4 w-4" />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -93,7 +93,7 @@ export default function InstitutionsPage() {
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500 px-4 py-2.5 text-xs font-semibold text-slate-950 shadow-sm hover:bg-amber-400 transition-all"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-[#cca776] px-4 py-2.5 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] transition-all"
         >
           <Plus className="h-4 w-4" />
           <span>+ Register New Institution</span>
@@ -149,7 +149,7 @@ export default function InstitutionsPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search bank by name, code (e.g. NRB), branch, or focal person..."
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-1.5 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+            className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-1.5 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
           />
         </div>
 
@@ -160,7 +160,7 @@ export default function InstitutionsPage() {
             aria-label="Grid View"
             className={`p-1.5 rounded-md ${
               viewMode === "grid"
-                ? "bg-amber-500/15 text-amber-600 dark:text-amber-400"
+                ? "bg-[#cca776]/15 text-[#cca776]"
                 : "text-slate-400 hover:text-slate-600"
             }`}
           >
@@ -171,7 +171,7 @@ export default function InstitutionsPage() {
             aria-label="Table View"
             className={`p-1.5 rounded-md ${
               viewMode === "table"
-                ? "bg-amber-500/15 text-amber-600 dark:text-amber-400"
+                ? "bg-[#cca776]/15 text-[#cca776]"
                 : "text-slate-400 hover:text-slate-600"
             }`}
           >
@@ -188,7 +188,7 @@ export default function InstitutionsPage() {
             onClick={() => setSelectedCategory(cat)}
             className={`whitespace-nowrap rounded-lg px-3 py-1.5 font-medium transition-colors ${
               selectedCategory === cat
-                ? "bg-slate-900 text-white dark:bg-amber-500 dark:text-slate-950 font-semibold"
+                ? "bg-[#cca776] text-slate-950 font-bold"
                 : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
             }`}
           >
@@ -216,7 +216,7 @@ export default function InstitutionsPage() {
           </p>
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3.5 py-1.5 text-xs font-semibold text-slate-950 hover:bg-amber-400"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-3.5 py-1.5 text-xs font-bold text-slate-950 hover:bg-[#b8935f]"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Institution</span>
@@ -230,7 +230,7 @@ export default function InstitutionsPage() {
           {institutions.map((inst) => (
             <div
               key={inst.id || inst._id}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-amber-400/60 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
+              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-[#cca776]/60 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
             >
               <div>
                 {/* Header: Short Code & Category */}
@@ -238,7 +238,7 @@ export default function InstitutionsPage() {
                   <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-bold tracking-wider text-slate-800 dark:bg-slate-800 dark:text-slate-200">
                     {inst.shortCode}
                   </span>
-                  <span className="inline-flex items-center rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] font-medium text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-950/50 dark:text-amber-300">
+                  <span className="inline-flex items-center rounded-full bg-[#cca776]/15 px-2.5 py-0.5 text-[10px] font-semibold text-[#cca776] ring-1 ring-[#cca776]/30">
                     {inst.category}
                   </span>
                 </div>
@@ -268,7 +268,7 @@ export default function InstitutionsPage() {
                 {inst.focalPerson?.name && (
                   <div className="mt-4 rounded-lg bg-slate-50 p-3 text-[11px] dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-1.5 font-semibold text-slate-800 dark:text-slate-200">
-                      <Users className="h-3 w-3 text-amber-500" />
+                      <Users className="h-3 w-3 text-[#cca776]" />
                       <span>{inst.focalPerson.name}</span>
                     </div>
                     <p className="text-[10px] text-slate-500 dark:text-slate-400 ml-4.5">
@@ -278,7 +278,7 @@ export default function InstitutionsPage() {
                       {inst.focalPerson.phone && (
                         <a
                           href={`tel:${inst.focalPerson.phone}`}
-                          className="flex items-center gap-1 hover:text-amber-500"
+                          className="flex items-center gap-1 hover:text-[#cca776]"
                         >
                           <Phone className="h-2.5 w-2.5" />
                           <span>{inst.focalPerson.phone}</span>
@@ -287,7 +287,7 @@ export default function InstitutionsPage() {
                       {inst.focalPerson.email && (
                         <a
                           href={`mailto:${inst.focalPerson.email}`}
-                          className="flex items-center gap-1 hover:text-amber-500"
+                          className="flex items-center gap-1 hover:text-[#cca776]"
                         >
                           <Mail className="h-2.5 w-2.5" />
                           <span className="truncate max-w-[140px]">
@@ -318,7 +318,7 @@ export default function InstitutionsPage() {
                   href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
                     inst.name
                   )}`}
-                  className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-amber-500 hover:text-slate-950 transition-colors dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-amber-500 dark:hover:text-slate-950"
+                  className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-[#cca776] hover:text-slate-950 transition-colors dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-[#cca776] dark:hover:text-slate-950"
                   title="Add new case file for this institution"
                 >
                   <FilePlus2 className="h-3 w-3" />
@@ -392,7 +392,7 @@ export default function InstitutionsPage() {
                         href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
                           inst.name
                         )}`}
-                        className="font-medium text-amber-600 hover:text-amber-500 dark:text-amber-400"
+                        className="font-medium text-[#cca776] hover:underline"
                       >
                         + New Case
                       </Link>

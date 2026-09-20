@@ -78,7 +78,7 @@ export function Sidebar() {
       {/* Brand Header */}
       <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800">
         <Link href="/" className="flex items-center gap-3 overflow-hidden">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-400 ring-1 ring-amber-400/20 shadow-inner">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30 shadow-inner">
             <Scale className="h-5 w-5" />
           </div>
           {!collapsed && (
@@ -86,7 +86,7 @@ export function Sidebar() {
               <span className="text-sm font-semibold tracking-wide text-slate-100 uppercase">
                 Law Firm Solutions
               </span>
-              <span className="text-[11px] text-amber-400/90 font-medium">
+              <span className="text-[11px] text-[#cca776] font-medium">
                 Litigation Practice Suite
               </span>
             </div>
@@ -116,21 +116,21 @@ export function Sidebar() {
               className={cn(
                 "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-amber-500/15 text-amber-400 font-semibold shadow-sm ring-1 ring-amber-500/30"
+                  ? "bg-[#cca776]/15 text-[#cca776] font-semibold shadow-sm ring-1 ring-[#cca776]/30"
                   : "text-slate-400 hover:bg-slate-900 hover:text-slate-100"
               )}
             >
               <Icon
                 className={cn(
                   "h-5 w-5 shrink-0 transition-transform group-hover:scale-105",
-                  isActive ? "text-amber-400" : "text-slate-400 group-hover:text-slate-200"
+                  isActive ? "text-[#cca776]" : "text-slate-400 group-hover:text-slate-200"
                 )}
               />
               {!collapsed && (
                 <div className="flex flex-1 items-center justify-between truncate">
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="ml-auto rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-amber-400 border border-amber-500/20">
+                    <span className="ml-auto rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-[#cca776] border border-[#cca776]/30">
                       {item.badge}
                     </span>
                   )}

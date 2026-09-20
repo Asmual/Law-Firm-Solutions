@@ -88,7 +88,7 @@ export function AddInstitutionModal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
               <Building2 className="h-5 w-5" />
             </div>
             <div>
@@ -112,7 +112,7 @@ export function AddInstitutionModal({
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           {/* Section 1: Institution Details */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#cca776]">
               1. Institutional Details
             </h3>
 
@@ -129,7 +129,7 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, name: e.target.value })
                   }
                   placeholder="e.g. NRB Bank PLC"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
 
@@ -145,7 +145,7 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, shortCode: e.target.value.toUpperCase() })
                   }
                   placeholder="e.g. NRB"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none uppercase dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none uppercase dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
             </div>
@@ -163,7 +163,7 @@ export function AddInstitutionModal({
                       category: e.target.value as InstitutionCategory,
                     })
                   }
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 >
                   {CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -184,7 +184,7 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, branch: e.target.value })
                   }
                   placeholder="e.g. Principal Branch / SAMD Division"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
             </div>
@@ -202,7 +202,7 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, address: e.target.value })
                   }
                   placeholder="e.g. 89 Gulshan Avenue, Dhaka-1212"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
             </div>
@@ -210,7 +210,7 @@ export function AddInstitutionModal({
 
           {/* Section 2: Focal Person */}
           <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#cca776]">
               2. Bank Focal Person / Legal Officer
             </h3>
 
@@ -231,7 +231,7 @@ export function AddInstitutionModal({
                       })
                     }
                     placeholder="e.g. Mr. Mahbubul Alam"
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
               </div>
@@ -250,7 +250,7 @@ export function AddInstitutionModal({
                     })
                   }
                   placeholder="e.g. Head of SAMD / Legal Advisor"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
             </div>
@@ -272,7 +272,7 @@ export function AddInstitutionModal({
                       })
                     }
                     placeholder="+88017XXXXXXXX"
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
               </div>
@@ -293,7 +293,7 @@ export function AddInstitutionModal({
                       })
                     }
                     placeholder="legal@bank.com"
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-amber-500 focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:bg-white focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   />
                 </div>
               </div>
@@ -312,7 +312,7 @@ export function AddInstitutionModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-xs font-semibold text-slate-950 shadow-sm hover:bg-amber-400 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-4 py-2 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] disabled:opacity-50 transition-colors"
             >
               <Check className="h-3.5 w-3.5" />
               <span>{isSubmitting ? "Saving..." : "Save Institution"}</span>

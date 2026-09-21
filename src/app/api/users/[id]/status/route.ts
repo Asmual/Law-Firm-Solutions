@@ -17,7 +17,7 @@ export async function PUT(req: NextRequest, context: RouteContext) {
     // Role check: Only admin can block/unblock users
     if (session.role !== "admin") {
       return NextResponse.json(
-        { success: false, error: "Access denied. Only Senior Lawyer / Chamber Admin can modify user status." },
+        { success: false, error: "Access denied. Only Admin can modify user status." },
         { status: 403 }
       );
     }

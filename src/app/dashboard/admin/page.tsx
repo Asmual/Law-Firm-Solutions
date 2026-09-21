@@ -94,8 +94,14 @@ export default function AdminDashboardPage() {
 
   if (isChecking || !currentUser) {
     return (
-      <div className="min-h-[70vh] flex items-center justify-center text-xs text-slate-400">
-        Authenticating Chamber Administrator access...
+      <div className="space-y-6 max-w-7xl mx-auto p-4 animate-pulse">
+        <div className="h-32 rounded-2xl bg-slate-900/80 border border-slate-800" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="h-24 rounded-xl bg-slate-900/80 border border-slate-800" />
+          <div className="h-24 rounded-xl bg-slate-900/80 border border-slate-800" />
+          <div className="h-24 rounded-xl bg-slate-900/80 border border-slate-800" />
+          <div className="h-24 rounded-xl bg-slate-900/80 border border-slate-800" />
+        </div>
       </div>
     );
   }
@@ -119,7 +125,7 @@ export default function AdminDashboardPage() {
           <div className="space-y-1.5 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30 whitespace-nowrap">
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Chamber Administrator &amp; Managing Partner Hub</span>
+              <span>Admin &amp; Managing Partner Hub</span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white whitespace-nowrap truncate">
               Executive Chamber Overview

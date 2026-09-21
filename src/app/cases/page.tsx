@@ -9,10 +9,12 @@ import {
   FileSpreadsheet,
   Edit,
   Trash2,
+  Eye,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Case, Institution } from "@/types";
 import { ConfirmationModal } from "@/components/common/ConfirmationModal";
+import { TableSkeleton } from "@/components/common/Skeleton";
 
 export default function CasesRegistryPage() {
   const [cases, setCases] = useState<Case[]>([]);
@@ -327,9 +329,8 @@ export default function CasesRegistryPage() {
             <tbody className="divide-y divide-slate-800/60">
               {isLoading ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-400">
-                    <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-solid border-[#cca776] border-r-transparent mb-2"></div>
-                    <p>Loading Case Registry...</p>
+                  <td colSpan={8} className="p-0">
+                    <TableSkeleton rows={7} cols={8} />
                   </td>
                 </tr>
               ) : cases.length === 0 ? (
@@ -355,7 +356,7 @@ export default function CasesRegistryPage() {
                     <tr key={caseId} className="hover:bg-slate-800/40 transition-colors group">
                       {/* Chamber File No */}
                       <td className="py-3 px-3 font-mono font-bold text-[#cca776] whitespace-nowrap">
-                        <Link href={`/cases/new?id=${caseId}`} className="hover:underline">
+                        <Link href={`/cases/${caseId}`} className="hover:underline" title="View Case Dossier">
                           {c.chamberFileNo}
                         </Link>
                       </td>
@@ -438,6 +439,13 @@ export default function CasesRegistryPage() {
                       {/* Action buttons */}
                       <td className="py-3 px-3 text-right whitespace-nowrap">
                         <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={`/cases/${caseId}`}
+                            title="View Case Dossier"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Link>
                           <Link
                             href={`/cases/new?id=${caseId}`}
                             title="Edit Case File"

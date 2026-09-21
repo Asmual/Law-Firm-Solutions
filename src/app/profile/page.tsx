@@ -960,7 +960,7 @@ export default function ProfilePage() {
               <p className="font-semibold text-white">No assigned cases found</p>
               <p className="text-xs text-slate-500 mt-1">
                 {profileData.role === "admin"
-                  ? "As Chamber Admin, you monitor all chamber cases from the Cases and Team pages."
+                  ? "As Admin, you monitor all chamber cases from the Cases and Team pages."
                   : "You currently have no litigation briefs assigned to your docket."}
               </p>
             </div>

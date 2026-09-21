@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     // Only Admin can assign/reassign cases
     if (user.role !== "admin") {
       return NextResponse.json(
-        { error: "Forbidden. Case assignment is restricted to Chamber Admins." },
+        { error: "Forbidden. Case assignment is restricted to Admins." },
         { status: 403 }
       );
     }
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
             advocateId: advUser._id,
             advocateName: advUser.name,
             dateAssigned: new Date().toISOString().split("T")[0],
-            internalRemarks: remarks || "Assigned by Chamber Admin",
+            internalRemarks: remarks || "Assigned by Admin",
           };
           descDetails += ` Advocate: ${advUser.name};`;
         }
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
             associateId: ascUser._id,
             associateName: ascUser.name,
             dateAssigned: new Date().toISOString().split("T")[0],
-            internalRemarks: remarks || "Assigned by Chamber Admin",
+            internalRemarks: remarks || "Assigned by Admin",
           };
           descDetails += ` Associate: ${ascUser.name};`;
         }

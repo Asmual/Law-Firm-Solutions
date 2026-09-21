@@ -79,11 +79,11 @@ export async function GET(req: NextRequest) {
       },
       {
         name: "Nurul Amin",
-        email: "viewer@chamber.com",
+        email: "clerk@chamber.com",
         phone: "+8801811000005",
         passwordHash: defaultPasswordHash,
-        role: "viewer",
-        chamberDesignation: "Chamber Records Clerk",
+        role: "associate",
+        chamberDesignation: "Chamber Records Associate",
         isActive: true,
       },
     ]);

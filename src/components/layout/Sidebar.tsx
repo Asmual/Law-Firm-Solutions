@@ -15,7 +15,6 @@ import {
   ChevronRight,
   ShieldCheck,
   History,
-  Settings,
   UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -63,7 +62,7 @@ const navItems: NavItem[] = [
     icon: UserCircle,
   },
   {
-    label: "Team & Role Control",
+    label: "Advocates & Associates",
     href: "/team",
     icon: Users2,
     adminOnly: true,
@@ -72,12 +71,6 @@ const navItems: NavItem[] = [
     label: "Activity Audit Log",
     href: "/activity-logs",
     icon: History,
-    adminOnly: true,
-  },
-  {
-    label: "Chamber Settings",
-    href: "/settings",
-    icon: Settings,
     adminOnly: true,
   },
 ];

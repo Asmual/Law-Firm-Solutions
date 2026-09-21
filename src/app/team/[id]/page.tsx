@@ -76,7 +76,7 @@ export default function MemberProfileMonitoringPage({
 
         // Security check: only admin or the user themselves can view this monitoring page
         if (authData.user.role !== "admin" && (authData.user.id || authData.user._id) !== memberId) {
-          toast.error("Access restricted. Only Chamber Admins can monitor member portfolios.");
+          toast.error("Access restricted. Only Admins can monitor member portfolios.");
           router.replace("/dashboard");
           return;
         }

@@ -62,7 +62,7 @@ export async function PUT(
       return NextResponse.json(
         {
           error:
-            "Permission denied. You can only edit litigation cases assigned to you. Contact the Chamber Admin for reassignment.",
+            "Permission denied. You can only edit litigation cases assigned to you. Contact the Admin for reassignment.",
         },
         { status: 403 }
       );
@@ -82,7 +82,7 @@ export async function PUT(
     if (body.chamberFileNo && body.chamberFileNo.trim() !== existing.chamberFileNo) {
       if (user.role !== "admin") {
         return NextResponse.json(
-          { error: "Only Chamber Admin can modify Chamber File Number." },
+          { error: "Only Admin can modify Chamber File Number." },
           { status: 403 }
         );
       }

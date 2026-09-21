@@ -18,7 +18,7 @@ export async function PUT(req: NextRequest, context: RouteContext) {
     // Role check: Only admin can change roles
     if (session.role !== "admin") {
       return NextResponse.json(
-        { success: false, error: "Access denied. Only Senior Lawyer / Chamber Admin can change user roles." },
+        { success: false, error: "Access denied. Only Admin can change user roles." },
         { status: 403 }
       );
     }

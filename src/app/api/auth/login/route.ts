@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     if (!user.isActive) {
       return NextResponse.json(
-        { success: false, error: "Your account is deactivated. Contact Chamber Admin." },
+        { success: false, error: "Your account is deactivated. Contact Admin." },
         { status: 403 }
       );
     }

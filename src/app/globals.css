@@ -3,11 +3,30 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Primary Legal Gold Tokens */
   --gold: #cca776;
   --gold-hover: #b8935f;
   --gold-dark: #8b6e40;
   --gold-light: #f6eedf;
   --gold-muted: rgba(204, 167, 118, 0.15);
+  --gold-ring: rgba(204, 167, 118, 0.35);
+
+  /* Obsidian & Slate Surfaces */
+  --surface-base: #020617;
+  --surface-card: #0f172a;
+  --surface-border: #1e293b;
+  --surface-border-subtle: #334155;
+
+  /* Harmonized Semantic Tokens */
+  --semantic-success: #34d399;
+  --semantic-success-muted: rgba(52, 211, 153, 0.15);
+  --semantic-info: #60a5fa;
+  --semantic-info-muted: rgba(96, 165, 250, 0.15);
+  --semantic-warning: #fbbf24;
+  --semantic-warning-muted: rgba(251, 191, 36, 0.15);
+  --semantic-danger: #f87171;
+  --semantic-danger-muted: rgba(248, 113, 113, 0.15);
 }
 
 @theme inline {
@@ -18,13 +37,15 @@
   --color-gold-dark: #8b6e40;
   --color-gold-light: #f6eedf;
   --color-gold-muted: rgba(204, 167, 118, 0.15);
+  --color-gold-ring: rgba(204, 167, 118, 0.35);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #020617;
     --foreground: #ededed;
   }
 }
@@ -32,7 +53,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
 /* Custom Legal Gold Utility Classes */

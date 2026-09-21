@@ -35,10 +35,8 @@ export async function POST(req: NextRequest) {
 
     // Only Advocate and Associate can self-register
     // Admin accounts must be created manually or promoted by an administrator
-    const allowedSignupRoles: UserRole[] = ["advocate", "associate"];
-    const assignedRole: UserRole = allowedSignupRoles.includes(role)
-      ? role
-      : "associate";
+    const assignedRole: "advocate" | "associate" =
+      role === "advocate" ? "advocate" : "associate";
 
     const passwordHash = hashPassword(password);
 

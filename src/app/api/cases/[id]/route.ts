@@ -113,9 +113,9 @@ export async function DELETE(
 ) {
   try {
     const user = await getCurrentUserFromSession();
-    if (!user || (user.role !== "admin" && user.role !== "partner")) {
+    if (!user || user.role !== "admin") {
       return NextResponse.json(
-        { error: "Forbidden. Only Admin or Senior Partner can delete case files." },
+        { error: "Forbidden. Only Senior Lawyer / Admin can delete case files." },
         { status: 403 }
       );
     }

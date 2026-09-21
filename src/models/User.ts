@@ -1,15 +1,23 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
+export type UserRole = "admin" | "advocate" | "associate" | "viewer";
+
 export interface IUserDocument extends Document {
   name: string;
   email: string;
   passwordHash?: string;
   phone?: string;
-  role: "admin" | "partner" | "advocate" | "associate" | "user";
+  role: UserRole;
   chamberDesignation: string;
   barEnrollmentNo?: string;
   avatarUrl?: string;
   authProvider: "credentials" | "google";
+  allowedInstitutions?: mongoose.Types.ObjectId[];
+  twoFactorEnabled?: boolean;
+  twoFactorSecret?: string;
+  resetPasswordToken?: string;
+  resetPasswordExpires?: Date;
+  lastActiveAt?: Date;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -23,14 +31,26 @@ const UserSchema = new Schema<IUserDocument>(
     phone: { type: String, default: "" },
     role: {
       type: String,
-      enum: ["admin", "partner", "advocate", "associate", "user"],
-      default: "user",
+      enum: ["admin", "advocate", "associate", "viewer"],
+      default: "associate",
+      index: true,
     },
     chamberDesignation: { type: String, default: "Legal Practitioner" },
     barEnrollmentNo: { type: String, default: "" },
     avatarUrl: { type: String, default: "" },
     authProvider: { type: String, enum: ["credentials", "google"], default: "credentials" },
-    isActive: { type: Boolean, default: true },
+    allowedInstitutions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Institution",
+      },
+    ],
+    twoFactorEnabled: { type: Boolean, default: false },
+    twoFactorSecret: { type: String, select: false },
+    resetPasswordToken: { type: String, select: false },
+    resetPasswordExpires: { type: Date, select: false },
+    lastActiveAt: { type: Date, default: Date.now },
+    isActive: { type: Boolean, default: true, index: true },
   },
   {
     timestamps: true,

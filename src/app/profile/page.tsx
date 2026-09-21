@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Case, ActivityLog } from "@/types";
+import { ConfirmationModal } from "@/components/common/ConfirmationModal";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"profile" | "cases" | "worklog" | "security">("profile");
 
   // User details
@@ -137,15 +139,36 @@ export default function ProfilePage() {
     }
   }, [activeTab, currentUserId]);
 
-  // Fetch Work Log when clicking the worklog tab
+  // Fetch Work Log when clicking the worklog tab (Exclusively case-management activities)
   useEffect(() => {
     if (activeTab === "worklog" && currentUserId) {
       let isMounted = true;
-      fetch(`/api/activity-logs?userId=${currentUserId}&limit=50`)
+      fetch(`/api/activity-logs?userId=${currentUserId}&limit=100`)
         .then((res) => res.json())
         .then((data) => {
           if (isMounted && data.logs) {
-            setMyLogs(data.logs);
+            // Filter out internal administrative and authentication events
+            const caseOnlyLogs = data.logs.filter((log: ActivityLog) => {
+              const act = (log.action || "").toLowerCase();
+              const ent = (log.entityType || "").toLowerCase();
+              const isAuthOrAdmin =
+                act.startsWith("auth:") ||
+                act.startsWith("user:") ||
+                ent === "user" ||
+                act.includes("login") ||
+                act.includes("logout") ||
+                act.includes("password");
+              const isCaseActivity =
+                ent === "case" ||
+                act.startsWith("case:") ||
+                act.includes("hearing") ||
+                act.includes("decree") ||
+                act.includes("dispos") ||
+                act.includes("brief") ||
+                act.includes("assign");
+              return isCaseActivity && !isAuthOrAdmin;
+            });
+            setMyLogs(caseOnlyLogs);
           }
         })
         .catch(() => {
@@ -217,10 +240,9 @@ export default function ProfilePage() {
     }
   };
 
-  // Remove Photo handler
-  const handleRemovePhoto = async () => {
+  // Remove Photo handler with custom confirmation modal
+  const handleConfirmRemovePhoto = async () => {
     if (!profileData.avatarUrl) return;
-    if (!confirm("Are you sure you want to remove your profile photo?")) return;
 
     setUploadingImage(true);
     try {
@@ -232,6 +254,7 @@ export default function ProfilePage() {
       if (!res.ok) throw new Error("Failed to remove avatar");
       setProfileData((prev) => ({ ...prev, avatarUrl: "" }));
       toast.success("Profile photo removed.");
+      setConfirmRemoveOpen(false);
     } catch {
       toast.error("Could not remove photo.");
     } finally {
@@ -533,40 +556,38 @@ export default function ProfilePage() {
       {/* 1. Header Banner & Profile Snapshot - Compact, Modern & Snug */}
       <div className="relative overflow-hidden rounded-xl bg-slate-900/90 p-4 sm:p-5 text-white shadow-lg border border-slate-800">
         <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
-          {/* Circular Avatar Container with Integrated Camera & Remove */}
+          {/* Circular Avatar Container with Center Hover Camera Trigger & Remove */}
           <div className="flex flex-col items-center shrink-0">
-            <div className="relative group">
+            <div
+              className="relative group h-20 w-20 sm:h-24 sm:w-24 rounded-full overflow-hidden cursor-pointer shadow-md ring-2 ring-[#cca776] bg-slate-950 shrink-0"
+              onClick={() => fileInputRef.current?.click()}
+              title="Click to update photo"
+            >
               {profileData.avatarUrl ? (
                 <img
                   src={profileData.avatarUrl}
                   alt={profileData.name}
-                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover ring-2 ring-[#cca776] shadow-md cursor-pointer hover:opacity-95 transition-opacity"
-                  onClick={() => fileInputRef.current?.click()}
+                  className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-200"
                 />
               ) : (
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-2 ring-[#cca776]/40 font-bold text-2xl sm:text-3xl shadow-md cursor-pointer hover:bg-[#cca776]/20 transition-colors"
-                >
+                <div className="flex h-full w-full items-center justify-center bg-[#cca776]/15 text-[#cca776] font-bold text-2xl sm:text-3xl">
                   {profileData.name ? profileData.name.charAt(0).toUpperCase() : "U"}
                 </div>
               )}
 
-              {/* Pinned Camera Badge Button on the bottom-right of avatar circle */}
-              <button
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploadingImage}
-                title="Upload or Change Photo"
-                aria-label="Upload photo"
-                className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 hover:scale-110 transition-transform shadow-md cursor-pointer disabled:opacity-50"
-              >
+              {/* Photo update/edit icon directly in the center, hidden by default, visible only on hover */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-white">
                 {uploadingImage ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-5 w-5 animate-spin text-[#cca776]" />
                 ) : (
-                  <Camera className="h-3.5 w-3.5" />
+                  <>
+                    <Camera className="h-5 w-5 text-[#cca776]" />
+                    <span className="text-[9px] font-bold text-slate-200 mt-0.5 uppercase tracking-wide">
+                      Update
+                    </span>
+                  </>
                 )}
-              </button>
+              </div>
 
               <input
                 ref={fileInputRef}
@@ -581,7 +602,7 @@ export default function ProfilePage() {
             {profileData.avatarUrl && (
               <button
                 type="button"
-                onClick={handleRemovePhoto}
+                onClick={() => setConfirmRemoveOpen(true)}
                 disabled={uploadingImage}
                 className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer disabled:opacity-50 hover:underline"
               >
@@ -1273,6 +1294,19 @@ export default function ProfilePage() {
           </div>
         </form>
       )}
+
+      {/* Remove Photo Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmRemoveOpen}
+        onClose={() => setConfirmRemoveOpen(false)}
+        onConfirm={handleConfirmRemovePhoto}
+        title="Remove Profile Photo"
+        message="Are you sure you want to remove your chamber profile photo? Your avatar will revert to your name initial."
+        confirmText="Remove Photo"
+        cancelText="Keep Photo"
+        variant="danger"
+        isLoading={uploadingImage}
+      />
     </div>
   );
 }

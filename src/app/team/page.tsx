@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { User, UserRole } from "@/types";
+import { ConfirmationModal } from "@/components/common/ConfirmationModal";
 
 const ROLE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
   admin: {
@@ -40,6 +41,19 @@ export default function TeamPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [statusModal, setStatusModal] = useState<{
+    isOpen: boolean;
+    userId: string;
+    nextStatus: boolean;
+    userName: string;
+    isProcessing: boolean;
+  }>({
+    isOpen: false,
+    userId: "",
+    nextStatus: false,
+    userName: "",
+    isProcessing: false,
+  });
 
   const refreshUsers = useCallback(async () => {
     try {
@@ -98,14 +112,21 @@ export default function TeamPage() {
     }
   };
 
-  const handleToggleStatus = async (userId: string, currentStatus: boolean, userName: string) => {
-    const nextStatus = !currentStatus;
-    const confirmMessage = nextStatus
-      ? `Are you sure you want to UNBLOCK "${userName}" and restore their system access?`
-      : `Are you sure you want to BLOCK "${userName}"? They will immediately lose login access.`;
+  const openStatusModal = (userId: string, currentStatus: boolean, userName: string) => {
+    setStatusModal({
+      isOpen: true,
+      userId,
+      nextStatus: !currentStatus,
+      userName,
+      isProcessing: false,
+    });
+  };
 
-    if (!confirm(confirmMessage)) return;
+  const handleConfirmToggleStatus = async () => {
+    const { userId, nextStatus } = statusModal;
+    if (!userId) return;
 
+    setStatusModal((prev) => ({ ...prev, isProcessing: true }));
     setUpdatingId(userId);
     try {
       const res = await fetch(`/api/users/${userId}/status`, {
@@ -118,11 +139,14 @@ export default function TeamPage() {
       if (data.success) {
         toast.success(data.message);
         refreshUsers();
+        setStatusModal({ isOpen: false, userId: "", nextStatus: false, userName: "", isProcessing: false });
       } else {
         toast.error(data.error || "Failed to change user status");
+        setStatusModal((prev) => ({ ...prev, isProcessing: false }));
       }
     } catch {
       toast.error("Network error while updating account status.");
+      setStatusModal((prev) => ({ ...prev, isProcessing: false }));
     } finally {
       setUpdatingId(null);
     }
@@ -224,16 +248,16 @@ export default function TeamPage() {
                       className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     >
                       {/* Name & Email */}
-                      <td className="px-5 py-4">
+                      <td className="px-5 py-4 whitespace-nowrap">
                         <Link
                           href={`/team/${user.id || user._id}`}
                           className="flex items-center gap-3 group"
                         >
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 group-hover:border-[#cca776] transition-colors">
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 group-hover:border-[#cca776] transition-colors shrink-0">
                             {user.name.charAt(0).toUpperCase()}
                           </div>
-                          <div>
-                            <div className="font-semibold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5">
+                          <div className="min-w-0">
+                            <div className="font-semibold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                               <span>{user.name}</span>
                               {user.authProvider === "google" && (
                                 <span className="rounded bg-blue-500/10 px-1.5 py-0.2 text-[9px] font-medium text-blue-400 border border-blue-500/20">
@@ -241,7 +265,7 @@ export default function TeamPage() {
                                 </span>
                               )}
                             </div>
-                            <span className="text-[11px] text-slate-400">
+                            <span className="text-[11px] text-slate-400 whitespace-nowrap block">
                               {user.email}
                             </span>
                           </div>
@@ -249,14 +273,14 @@ export default function TeamPage() {
                       </td>
 
                       {/* Designation */}
-                      <td className="px-5 py-4 font-medium text-slate-800 dark:text-slate-200">
+                      <td className="px-5 py-4 font-medium text-slate-800 dark:text-slate-200 whitespace-nowrap">
                         {user.chamberDesignation || "Legal Practitioner"}
                       </td>
 
                       {/* Contact */}
-                      <td className="px-5 py-4 text-slate-500 dark:text-slate-400">
+                      <td className="px-5 py-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">
                         {user.phone ? (
-                          <div className="flex items-center gap-1 text-[11px]">
+                          <div className="flex items-center gap-1 text-[11px] whitespace-nowrap">
                             <Phone className="h-3 w-3 text-slate-400" />
                             <span>{user.phone}</span>
                           </div>
@@ -266,23 +290,23 @@ export default function TeamPage() {
                       </td>
 
                       {/* Role Badge */}
-                      <td className="px-5 py-4">
+                      <td className="px-5 py-4 whitespace-nowrap">
                         <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${roleConfig.bg} ${roleConfig.text}`}
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold whitespace-nowrap ${roleConfig.bg} ${roleConfig.text}`}
                         >
                           {roleConfig.label}
                         </span>
                       </td>
 
                       {/* Account Status Badge */}
-                      <td className="px-5 py-4">
+                      <td className="px-5 py-4 whitespace-nowrap">
                         {user.isActive !== false ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/30">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
                             <CheckCircle className="h-3 w-3" />
                             <span>Active</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-400 border border-rose-500/30">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-400 border border-rose-500/30 whitespace-nowrap">
                             <Ban className="h-3 w-3" />
                             <span>Blocked</span>
                           </span>
@@ -290,17 +314,17 @@ export default function TeamPage() {
                       </td>
 
                       {/* Bar Roll */}
-                      <td className="px-5 py-4 text-slate-500 dark:text-slate-400">
+                      <td className="px-5 py-4 text-slate-500 dark:text-slate-400 whitespace-nowrap font-mono">
                         {user.barEnrollmentNo || "—"}
                       </td>
 
                       {/* Admin Access & Role Control */}
-                      <td className="px-5 py-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="px-5 py-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-2 whitespace-nowrap">
                           {/* View Profile & Cases Dossier */}
                           <Link
                             href={`/team/${user.id || user._id}`}
-                            className="inline-flex items-center gap-1 rounded-lg border border-[#cca776]/40 bg-[#cca776]/10 px-2.5 py-1 text-xs font-semibold text-[#cca776] hover:bg-[#cca776]/20 transition-colors"
+                            className="inline-flex items-center gap-1 rounded-lg border border-[#cca776]/40 bg-[#cca776]/10 px-2.5 py-1 text-xs font-semibold text-[#cca776] hover:bg-[#cca776]/20 transition-colors whitespace-nowrap"
                             title="Inspect assigned cases, work log, and generate report"
                           >
                             <Briefcase className="h-3.5 w-3.5" />
@@ -319,7 +343,7 @@ export default function TeamPage() {
                                     e.target.value as UserRole
                                   )
                                 }
-                                className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
+                                className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer whitespace-nowrap"
                               >
                                 {ALL_ROLES.map((r) => (
                                   <option key={r} value={r}>
@@ -334,13 +358,13 @@ export default function TeamPage() {
                                   type="button"
                                   disabled={updatingId === (user.id || user._id)}
                                   onClick={() =>
-                                    handleToggleStatus(
+                                    openStatusModal(
                                       (user.id || user._id)!,
                                       user.isActive !== false,
                                       user.name
                                     )
                                   }
-                                  className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer disabled:opacity-50 ${
+                                  className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer disabled:opacity-50 whitespace-nowrap ${
                                     user.isActive !== false
                                       ? "bg-rose-950/40 text-rose-400 border border-rose-800/60 hover:bg-rose-900/60"
                                       : "bg-emerald-950/40 text-emerald-400 border border-emerald-800/60 hover:bg-emerald-900/60"
@@ -359,7 +383,7 @@ export default function TeamPage() {
                                   )}
                                 </button>
                               ) : (
-                                <span className="text-[10px] text-slate-400 px-2 py-1 bg-slate-800 rounded border border-slate-700">
+                                <span className="text-[10px] text-slate-400 px-2 py-1 bg-slate-800 rounded border border-slate-700 whitespace-nowrap">
                                   You
                                 </span>
                               )}
@@ -374,6 +398,25 @@ export default function TeamPage() {
           </table>
         </div>
       </div>
+
+      {/* User Status Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={statusModal.isOpen}
+        onClose={() =>
+          setStatusModal({ isOpen: false, userId: "", nextStatus: false, userName: "", isProcessing: false })
+        }
+        onConfirm={handleConfirmToggleStatus}
+        title={statusModal.nextStatus ? "Reactivate Chamber Member" : "Suspend Chamber Access"}
+        message={
+          statusModal.nextStatus
+            ? `Are you sure you want to reactivate "${statusModal.userName}"? Their chamber login access will be restored immediately.`
+            : `Are you sure you want to suspend "${statusModal.userName}"? They will immediately lose login access and be blocked from accessing case files.`
+        }
+        confirmText={statusModal.nextStatus ? "Reactivate Access" : "Block Member"}
+        cancelText="Cancel"
+        variant={statusModal.nextStatus ? "gold" : "danger"}
+        isLoading={statusModal.isProcessing}
+      />
     </div>
   );
 }

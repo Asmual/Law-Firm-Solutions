@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Case, Institution } from "@/types";
+import { ConfirmationModal } from "@/components/common/ConfirmationModal";
 
 export default function CasesRegistryPage() {
   const [cases, setCases] = useState<Case[]>([]);
@@ -25,6 +26,17 @@ export default function CasesRegistryPage() {
   const [selectedInstId, setSelectedInstId] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [deleteModalState, setDeleteModalState] = useState<{
+    isOpen: boolean;
+    caseId: string;
+    fileNo: string;
+    isDeleting: boolean;
+  }>({
+    isOpen: false,
+    caseId: "",
+    fileNo: "",
+    isDeleting: false,
+  });
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -108,22 +120,24 @@ export default function CasesRegistryPage() {
       .finally(() => setIsLoading(false));
   };
 
-  const handleDeleteCase = async (id: string, fileNo: string) => {
-    if (!confirm(`Are you sure you want to delete Case File "${fileNo}"? This action cannot be undone.`)) {
-      return;
-    }
+  const handleConfirmDelete = async () => {
+    const { caseId } = deleteModalState;
+    if (!caseId) return;
 
+    setDeleteModalState((prev) => ({ ...prev, isDeleting: true }));
     try {
-      const res = await fetch(`/api/cases/${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/cases/${caseId}`, { method: "DELETE" });
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Failed to delete case file");
       }
       toast.success("Case file deleted successfully");
-      setCases((prev) => prev.filter((c) => (c._id || c.id) !== id));
+      setCases((prev) => prev.filter((c) => (c._id || c.id) !== caseId));
+      setDeleteModalState({ isOpen: false, caseId: "", fileNo: "", isDeleting: false });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error deleting case";
       toast.error(msg);
+      setDeleteModalState((prev) => ({ ...prev, isDeleting: false }));
     }
   };
 
@@ -298,15 +312,16 @@ export default function CasesRegistryPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/60 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
-                <th className="py-3 px-4 w-28">File No.</th>
-                <th className="py-3 px-4">Client / Institution</th>
-                <th className="py-3 px-4">Case Number(s) & Courts</th>
-                <th className="py-3 px-4">Primary Parties</th>
-                <th className="py-3 px-4">Matter / Subject</th>
-                <th className="py-3 px-4">Assigned Advocate</th>
-                <th className="py-3 px-4 text-center">Status</th>
-                <th className="py-3 px-4 text-right">Actions</th>
+              {/* Case Table Header */}
+              <tr className="border-b border-slate-800 bg-slate-950/70 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                <th className="py-3 px-3 w-28 whitespace-nowrap">File No.</th>
+                <th className="py-3 px-3 min-w-[140px]">Client / Institution</th>
+                <th className="py-3 px-3 min-w-[150px]">Case No. &amp; Court</th>
+                <th className="py-3 px-3 min-w-[150px]">Parties</th>
+                <th className="py-3 px-3 min-w-[120px]">Matter</th>
+                <th className="py-3 px-3 min-w-[110px]">Advocate</th>
+                <th className="py-3 px-3 text-center w-28 whitespace-nowrap">Status</th>
+                <th className="py-3 px-3 text-right w-20 whitespace-nowrap">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60">
@@ -339,94 +354,110 @@ export default function CasesRegistryPage() {
                   return (
                     <tr key={caseId} className="hover:bg-slate-800/40 transition-colors group">
                       {/* Chamber File No */}
-                      <td className="py-3.5 px-4 font-mono font-bold text-[#cca776] whitespace-nowrap">
+                      <td className="py-3 px-3 font-mono font-bold text-[#cca776] whitespace-nowrap">
                         <Link href={`/cases/new?id=${caseId}`} className="hover:underline">
                           {c.chamberFileNo}
                         </Link>
                       </td>
 
                       {/* Institution */}
-                      <td className="py-3.5 px-4 font-semibold text-white">
-                        <div className="truncate max-w-[200px]" title={c.institutionName}>
+                      <td className="py-3 px-3">
+                        <div className="font-semibold text-white truncate max-w-[160px]" title={c.institutionName}>
                           {c.institutionName}
                         </div>
                         {c.branch && (
-                          <div className="text-[10px] text-slate-400">Branch: {c.branch}</div>
+                          <div className="text-[10px] text-slate-400 truncate max-w-[160px]">
+                            Branch: {c.branch}
+                          </div>
                         )}
                       </td>
 
-                      {/* Case Numbers */}
-                      <td className="py-3.5 px-4">
+                      {/* Case Numbers & Courts (Concise tags & stacked text) */}
+                      <td className="py-3 px-3">
                         {c.caseNumbers && c.caseNumbers.length > 0 ? (
-                          <div className="space-y-1">
-                            {c.caseNumbers.slice(0, 2).map((cn, idx) => (
-                              <div key={idx} className="font-mono text-slate-200">
-                                <span className="font-semibold">{cn.caseNumber}</span>
-                                <span className="text-[10px] text-slate-400 ml-1">
-                                  ({cn.caseType} • {cn.courtDivision})
-                                </span>
-                              </div>
-                            ))}
-                            {c.caseNumbers.length > 2 && (
-                              <span className="text-[10px] text-[#cca776]">
-                                +{c.caseNumbers.length - 2} more
+                          <div className="space-y-0.5">
+                            <div className="flex items-center gap-1 flex-wrap">
+                              <span
+                                className="font-mono text-[11px] font-semibold text-slate-200 bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-700/80 truncate max-w-[140px]"
+                                title={c.caseNumbers[0].caseNumber}
+                              >
+                                {c.caseNumbers[0].caseNumber}
                               </span>
-                            )}
+                              {c.caseNumbers.length > 1 && (
+                                <span className="text-[10px] font-bold text-[#cca776] bg-[#cca776]/10 px-1 py-0.2 rounded border border-[#cca776]/20">
+                                  +{c.caseNumbers.length - 1}
+                                </span>
+                              )}
+                            </div>
+                            <span className="text-[10px] text-slate-400 block truncate max-w-[160px]">
+                              {c.caseNumbers[0].courtDivision} • {c.caseNumbers[0].caseType}
+                            </span>
                           </div>
                         ) : (
-                          <span className="text-slate-500 italic">No numbers entered</span>
+                          <span className="text-slate-500 italic text-[11px]">Unspecified</span>
                         )}
                       </td>
 
-                      {/* Parties */}
-                      <td className="py-3.5 px-4">
+                      {/* Primary Parties (Concise & truncated) */}
+                      <td className="py-3 px-3">
                         {c.parties && c.parties.length > 0 ? (
-                          <div className="truncate max-w-[220px]" title={c.parties[0].partyNameDetails}>
-                            <span className="text-slate-200 font-medium">{c.parties[0].partyNameDetails}</span>
+                          <div className="max-w-[160px]" title={c.parties[0].partyNameDetails}>
+                            <span className="text-slate-200 font-medium truncate block text-xs">
+                              {c.parties[0].partyNameDetails}
+                            </span>
                             {c.parties.length > 1 && (
-                              <span className="text-[10px] text-slate-400 block">
-                                &amp; {c.parties.length - 1} other parties
+                              <span className="text-[10px] text-slate-400 truncate block">
+                                &amp; {c.parties.length - 1} others
                               </span>
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-500 italic">None</span>
+                          <span className="text-slate-500 italic text-[11px]">None</span>
                         )}
                       </td>
 
                       {/* Matter */}
-                      <td className="py-3.5 px-4 text-slate-300">
-                        <div className="truncate max-w-[150px]" title={c.matter}>
-                          {c.matter}
+                      <td className="py-3 px-3 text-slate-300">
+                        <div className="truncate max-w-[130px] text-xs" title={c.matter}>
+                          {c.matter || "—"}
                         </div>
                       </td>
 
                       {/* Advocate */}
-                      <td className="py-3.5 px-4 text-slate-300 font-medium">
-                        {c.assignedAdvocate?.advocateName || "Unassigned"}
+                      <td className="py-3 px-3 text-slate-300 font-medium whitespace-nowrap">
+                        <div className="truncate max-w-[120px]" title={c.assignedAdvocate?.advocateName}>
+                          {c.assignedAdvocate?.advocateName || "Unassigned"}
+                        </div>
                       </td>
 
-                      {/* Status */}
-                      <td className="py-3.5 px-4 text-center whitespace-nowrap">
+                      {/* Status Badge */}
+                      <td className="py-3 px-3 text-center whitespace-nowrap">
                         {getStatusBadge(c.status)}
                       </td>
 
                       {/* Action buttons */}
-                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-1.5">
+                      <td className="py-3 px-3 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1">
                           <Link
                             href={`/cases/new?id=${caseId}`}
                             title="Edit Case File"
-                            className="p-1.5 rounded text-slate-400 hover:text-[#cca776] hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-400 hover:text-[#cca776] hover:bg-slate-800 transition-colors"
                           >
                             <Edit className="h-4 w-4" />
                           </Link>
                           {currentUserRole === "admin" && (
                             <button
                               type="button"
-                              onClick={() => handleDeleteCase(caseId, c.chamberFileNo)}
+                              onClick={() =>
+                                setDeleteModalState({
+                                  isOpen: true,
+                                  caseId,
+                                  fileNo: c.chamberFileNo,
+                                  isDeleting: false,
+                                })
+                              }
                               title="Delete Case File"
-                              className="p-1.5 rounded text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 transition-colors cursor-pointer"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>
@@ -441,6 +472,21 @@ export default function CasesRegistryPage() {
           </table>
         </div>
       </div>
+
+      {/* Custom Case Deletion Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteModalState.isOpen}
+        onClose={() =>
+          setDeleteModalState({ isOpen: false, caseId: "", fileNo: "", isDeleting: false })
+        }
+        onConfirm={handleConfirmDelete}
+        title="Delete Case File Record"
+        message={`Are you sure you want to delete Case File "${deleteModalState.fileNo}"? This action permanently removes the brief, hearing updates, and parties record from the chamber database.`}
+        confirmText="Delete File"
+        cancelText="Keep File"
+        variant="danger"
+        isLoading={deleteModalState.isDeleting}
+      />
     </div>
   );
 }

@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 import { Institution, CaseNumberItem, PartyItem, StatusHearingUpdate, User } from "@/types";
 import { LegalDatePicker } from "@/components/common/LegalDatePicker";
+import { ConfirmationModal } from "@/components/common/ConfirmationModal";
 
 function CaseFormContent() {
   const router = useRouter();
@@ -29,6 +30,7 @@ function CaseFormContent() {
   const preselectedInstId = searchParams.get("institutionId");
 
   const [isSaving, setIsSaving] = useState(false);
+  const [showClearConfirmModal, setShowClearConfirmModal] = useState(false);
 
   // Institutions state
   const [institutions, setInstitutions] = useState<Institution[]>([]);
@@ -1202,15 +1204,11 @@ function CaseFormContent() {
 
               <button
                 type="button"
-                onClick={() => {
-                  if (confirm("Are you sure you want to clear current edits?")) {
-                    router.push("/cases");
-                  }
-                }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-rose-400 hover:bg-rose-950/30 hover:text-rose-300 transition-colors border border-transparent hover:border-rose-900/40"
+                onClick={() => setShowClearConfirmModal(true)}
+                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-rose-400 hover:bg-rose-950/30 hover:text-rose-300 transition-colors border border-transparent hover:border-rose-900/40 cursor-pointer"
               >
                 <Trash2 className="h-4 w-4 text-rose-400" />
-                <span>Delete / Archive</span>
+                <span>Discard Edits / Return</span>
               </button>
             </div>
           </div>
@@ -1335,6 +1333,18 @@ function CaseFormContent() {
           </div>
         </div>
       </footer>
+
+      {/* Discard Edits Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={showClearConfirmModal}
+        onClose={() => setShowClearConfirmModal(false)}
+        onConfirm={() => router.push("/cases")}
+        title="Discard Current Edits"
+        message="Are you sure you want to discard your edits and return to the Case Registry? Any unsaved changes in this brief will be lost."
+        confirmText="Discard & Return"
+        cancelText="Stay on Form"
+        variant="warning"
+      />
     </div>
   );
 }

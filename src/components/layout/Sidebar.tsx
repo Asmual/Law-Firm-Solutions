@@ -16,7 +16,6 @@ import {
   ShieldCheck,
   History,
   Settings,
-  Activity,
   UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -41,7 +40,7 @@ const navItems: NavItem[] = [
     label: "Institution / Client",
     href: "/institutions",
     icon: Building2,
-    badge: "100+",
+    // Bulky 100+ badge removed per specification
   },
   {
     label: "Case Database",
@@ -62,12 +61,6 @@ const navItems: NavItem[] = [
     label: "My Profile",
     href: "/profile",
     icon: UserCircle,
-  },
-  {
-    label: "Senior Monitoring",
-    href: "/dashboard/admin",
-    icon: Activity,
-    adminOnly: true,
   },
   {
     label: "Team & Role Control",
@@ -151,8 +144,8 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
         </div>
 
         {/* Navigation List */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-          <div className={cn("px-3 mb-2", collapsed && "text-center")}>
+        <div className="flex-1 overflow-y-auto px-2.5 py-4 space-y-1">
+          <div className={cn("px-2.5 mb-2", collapsed && "text-center")}>
             <p className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
               {collapsed ? "—" : "Chamber Modules"}
             </p>
@@ -166,12 +159,11 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
             .map((item) => {
               const Icon = item.icon;
               const isActive = (() => {
+                // Highlighting /dashboard, /dashboard/admin, /dashboard/advocate, /dashboard/associate
                 if (item.href === "/dashboard") {
                   return (
                     pathname === "/dashboard" ||
-                    pathname === "/dashboard/advocate" ||
-                    pathname === "/dashboard/associate" ||
-                    (pathname === "/dashboard/admin" && userRole !== "admin")
+                    pathname.startsWith("/dashboard/")
                   );
                 }
                 if (item.href === "/cases") {
@@ -183,9 +175,6 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                 if (item.href === "/cases/new") {
                   return pathname === "/cases/new";
                 }
-                if (item.href === "/dashboard/admin") {
-                  return pathname === "/dashboard/admin";
-                }
                 return pathname === item.href || pathname.startsWith(item.href + "/");
               })();
 
@@ -196,7 +185,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                   onClick={onCloseMobile}
                   title={collapsed ? item.label : undefined}
                   className={cn(
-                    "group flex items-center gap-3 rounded-lg px-3 py-2.5 text-xs font-medium transition-colors",
+                    "group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors",
                     isActive
                       ? "bg-[#cca776]/15 text-[#cca776] font-semibold shadow-sm ring-1 ring-[#cca776]/30"
                       : "text-slate-400 hover:bg-slate-900 hover:text-slate-100"
@@ -210,7 +199,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                   />
                   {!collapsed && (
                     <div className="flex flex-1 items-center justify-between truncate">
-                      <span>{item.label}</span>
+                      <span className="truncate">{item.label}</span>
                       {item.badge && (
                         <span className="ml-auto rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-[#cca776] border border-[#cca776]/30">
                           {item.badge}
@@ -225,7 +214,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
 
         {/* Chamber Status Info */}
         {!collapsed && (
-          <div className="p-3 mx-3 mb-3 rounded-xl bg-slate-900/80 border border-slate-800/80">
+          <div className="p-3 mx-2.5 mb-3 rounded-xl bg-slate-900/80 border border-slate-800/80">
             <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
               <ShieldCheck className="h-4 w-4 text-emerald-400" />
               <span>Chamber System Active</span>

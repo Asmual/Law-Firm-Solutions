@@ -106,7 +106,15 @@ export default function AdminDashboardPage() {
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-12 w-full">
       {/* 1. Top Executive Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-7 text-white shadow-xl border border-slate-800">
+      <div className="relative overflow-hidden rounded-2xl border border-slate-800 p-6 sm:p-7 text-white shadow-xl">
+        {/* Blurred Chamber Background Image Asset */}
+        <div
+          className="absolute inset-0 bg-cover bg-center filter blur-xs scale-105 opacity-25 pointer-events-none"
+          style={{ backgroundImage: "url('/images/chamber-overview-bg.jpg')" }}
+        />
+        {/* High-Contrast Obsidian Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/80 pointer-events-none" />
+
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
           <div className="space-y-1.5 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30 whitespace-nowrap">
@@ -143,85 +151,85 @@ export default function AdminDashboardPage() {
         <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
       </div>
 
-      {/* 2. KPI Metric Cards (Stacked in clean 4-card grid, single-line text) */}
+      {/* 2. KPI Metric Cards (Bounded, centered & scaled icons, single-line text) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {/* Card 1: Active Cases */}
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap block truncate">
               Active Litigation Files
             </span>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-2xl font-bold text-slate-900 dark:text-white">
                 {activeCasesCount}
               </span>
-              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 whitespace-nowrap truncate">
                 High Court &amp; Artha Rin
               </span>
             </div>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 shrink-0">
-            <Briefcase className="h-5 w-5" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 overflow-hidden">
+            <Briefcase className="h-5 w-5 shrink-0" />
           </div>
         </div>
 
         {/* Card 2: Banks & Clients */}
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap block truncate">
               Corporate &amp; Bank Clients
             </span>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-2xl font-bold text-[#cca776]">
                 {institutions.length > 0 ? `${institutions.length}+` : "15+"}
               </span>
-              <span className="text-xs font-medium text-slate-500 whitespace-nowrap">
+              <span className="text-xs font-medium text-slate-500 whitespace-nowrap truncate">
                 Institutions &amp; Branches
               </span>
             </div>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/10 text-[#cca776] shrink-0">
-            <Building2 className="h-5 w-5" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#cca776]/10 text-[#cca776] overflow-hidden">
+            <Building2 className="h-5 w-5 shrink-0" />
           </div>
         </div>
 
         {/* Card 3: Total Cases */}
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap block truncate">
               Total Case Registry
             </span>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
                 {cases.length}
               </span>
-              <span className="text-xs font-semibold text-purple-500 whitespace-nowrap">
+              <span className="text-xs font-semibold text-purple-500 whitespace-nowrap truncate">
                 Recorded Files
               </span>
             </div>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-500 shrink-0">
-            <CalendarDays className="h-5 w-5" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-500/10 text-purple-500 overflow-hidden">
+            <CalendarDays className="h-5 w-5 shrink-0" />
           </div>
         </div>
 
         {/* Card 4: Disposed / Concluded */}
-        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
-          <div>
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap block truncate">
               Disposed &amp; Decreed
             </span>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                 {disposedCasesCount}
               </span>
-              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 whitespace-nowrap truncate">
                 Decreed in favor
               </span>
             </div>
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 shrink-0">
-            <CheckCircle2 className="h-5 w-5" />
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 overflow-hidden">
+            <CheckCircle2 className="h-5 w-5 shrink-0" />
           </div>
         </div>
       </div>

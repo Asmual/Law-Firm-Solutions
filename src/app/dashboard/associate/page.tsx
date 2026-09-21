@@ -55,7 +55,15 @@ export default function AssociateDashboardPage() {
   return (
     <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-12 w-full">
       {/* 1. Top Executive Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-7 text-white shadow-xl border border-slate-800">
+      <div className="relative overflow-hidden rounded-2xl border border-slate-800 p-6 sm:p-7 text-white shadow-xl">
+        {/* Blurred Chamber Background Image Asset */}
+        <div
+          className="absolute inset-0 bg-cover bg-center filter blur-xs scale-105 opacity-25 pointer-events-none"
+          style={{ backgroundImage: "url('/images/chamber-overview-bg.jpg')" }}
+        />
+        {/* High-Contrast Obsidian Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/80 pointer-events-none" />
+
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
           <div className="space-y-1.5 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30 whitespace-nowrap">

@@ -65,18 +65,10 @@ export async function middleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("law_firm_session")?.value;
   const authenticated = await isValidSession(sessionCookie);
 
-  const isProtectedRoute =
-    pathname.startsWith("/dashboard") ||
-    pathname.startsWith("/cases") ||
-    pathname.startsWith("/institutions") ||
-    pathname.startsWith("/reports") ||
-    pathname.startsWith("/team") ||
-    pathname.startsWith("/cause-list");
-
-  // 1. Unauthenticated users attempting to access protected routes are redirected to Login (/)
-  if (isProtectedRoute && !authenticated) {
+  // 1. Any route other than root (/) requires authentication.
+  // Unauthenticated users attempting to access ANY interface are redirected to login (/)
+  if (pathname !== "/" && !authenticated) {
     const loginUrl = new URL("/", request.url);
-    loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 

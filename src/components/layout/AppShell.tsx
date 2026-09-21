@@ -19,6 +19,9 @@ export function AppShell({ children }: AppShellProps) {
   const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
+    pathname === "/" ? false : null
+  );
   const lastActivityRef = useRef(0);
 
   // Inactivity auto-logout handler
@@ -31,6 +34,30 @@ export function AppShell({ children }: AppShellProps) {
       router.replace("/");
     }
   }, [router]);
+
+  // Auth gate check: Ensure unauthenticated users cannot see any interface
+  useEffect(() => {
+    if (pathname === "/") return;
+
+    let isMounted = true;
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (!isMounted) return;
+        if (!data.authenticated) {
+          router.replace("/");
+        } else {
+          setIsAuthenticated(true);
+        }
+      })
+      .catch(() => {
+        if (isMounted) router.replace("/");
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [pathname, router]);
 
   useEffect(() => {
     if (pathname === "/") return;
@@ -67,6 +94,19 @@ export function AppShell({ children }: AppShellProps) {
         <main className="w-full">
           {children}
         </main>
+        <Toaster position="top-right" richColors />
+      </div>
+    );
+  }
+
+  // Gate for protected routes while verifying session
+  if (isAuthenticated === null) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-slate-950 text-slate-400 text-xs">
+        <div className="flex items-center gap-2">
+          <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#cca776] border-t-transparent" />
+          <span>Verifying chamber credentials...</span>
+        </div>
         <Toaster position="top-right" richColors />
       </div>
     );

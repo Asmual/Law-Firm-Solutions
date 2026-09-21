@@ -8,12 +8,17 @@ import {
   ArrowUpRight,
   Clock,
   Gavel,
+  Building2,
+  Calendar,
+  CheckCircle2,
+  FileText,
 } from "lucide-react";
-import { User } from "@/types";
+import { User, Case } from "@/types";
 
 export default function AdvocateDashboardPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [cases, setCases] = useState<Case[]>([]);
   const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
@@ -21,16 +26,27 @@ export default function AdvocateDashboardPage() {
       .then((res) => res.json())
       .then((data) => {
         if (!data.authenticated || !data.user) {
-          router.replace("/#portal");
+          router.replace("/");
           return;
         }
         setCurrentUser(data.user);
       })
       .catch(() => {
-        router.replace("/#portal");
+        router.replace("/");
       })
       .finally(() => setIsChecking(false));
   }, [router]);
+
+  useEffect(() => {
+    fetch("/api/cases?limit=50")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.cases) {
+          setCases(data.cases);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   if (isChecking || !currentUser) {
     return (
@@ -40,161 +56,241 @@ export default function AdvocateDashboardPage() {
     );
   }
 
+  // Filter cases assigned to current advocate (or show chamber cases if advocate name matches)
+  const myCases = cases.filter((c) => {
+    const advName = c.assignedAdvocate?.advocateName?.toLowerCase() || "";
+    const currentName = currentUser.name.toLowerCase();
+    return advName.includes(currentName) || currentName.includes(advName) || c.assignedAdvocate?.advocateId === currentUser.id;
+  });
+
+  const displayCases = myCases.length > 0 ? myCases : cases;
+  const runningCasesCount = displayCases.filter((c) => c.status !== "disposed" && c.status !== "decreed").length;
+  const disposedCasesCount = displayCases.filter((c) => c.status === "disposed" || c.status === "decreed").length;
+
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-12">
-      {/* Top Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30">
+    <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-12 w-full">
+      {/* 1. Top Executive Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-7 text-white shadow-xl border border-slate-800">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+          <div className="space-y-1.5 min-w-0">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30 whitespace-nowrap">
               <Gavel className="h-3.5 w-3.5" />
               <span>Advocate Practice Suite</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white whitespace-nowrap truncate">
               Advocate Litigation Workspace
             </h1>
-            <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
               Welcome, <strong className="text-[#cca776]">{currentUser.name}</strong> ({currentUser.chamberDesignation || "Advocate"}). Monitor your assigned writ petitions, Artha Rin recovery hearings, and upcoming cause list positions.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <Link
               href="/cases/new"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2.5 text-sm font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2.5 text-xs font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all whitespace-nowrap cursor-pointer"
             >
               <FilePlus2 className="h-4 w-4" />
-              <span>+ New Case Entry</span>
+              <span>+ Record New Case</span>
             </Link>
             <Link
               href="/cause-list"
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-800/90 px-4 py-2.5 text-sm font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 transition-all"
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-800/90 px-4 py-2.5 text-xs font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
             >
               <Clock className="h-4 w-4 text-[#cca776]" />
-              <span>Today&apos;s Cause List</span>
+              <span>Cause List Schedule</span>
             </Link>
           </div>
         </div>
 
-        {/* Ambient glow decoration with #cca776 */}
-        <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
+        {/* Ambient glow decoration */}
+        <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
       </div>
 
-      {/* Quick Metrics for Advocate */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Assigned Active Files
-          </span>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              28
-            </span>
-            <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">
-              High Court & Artha Rin
-            </span>
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Upcoming Hearings (This Week)
-          </span>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-[#cca776]">
-              6
-            </span>
-            <span className="text-xs font-semibold text-slate-500">
-              2 Fixed Today
-            </span>
-          </div>
-        </div>
-
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Decreed & Concluded
-          </span>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-              14
-            </span>
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              In Bank&apos;s Favor
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Advocate Cause List & Hearing Schedule */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800 gap-3">
+      {/* 2. Key Metrics Row - Clean, single-line stats with ample width */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-                Your Assigned Hearings & Cause List Position
-              </h2>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              Assigned Active Files
+            </span>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">
+                {runningCasesCount}
+              </span>
+              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 whitespace-nowrap">
+                High Court & Artha Rin
+              </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Files scheduled for today and upcoming court dates
-            </p>
+          </div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 shrink-0">
+            <FileText className="h-5 w-5" />
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              Total Assigned Files
+            </span>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-[#cca776]">
+                {displayCases.length}
+              </span>
+              <span className="text-xs font-semibold text-slate-500 whitespace-nowrap">
+                In Chamber Register
+              </span>
+            </div>
+          </div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/10 text-[#cca776] shrink-0">
+            <Gavel className="h-5 w-5" />
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              Concluded & Decreed
+            </span>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                {disposedCasesCount}
+              </span>
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
+                In Bank&apos;s Favor
+              </span>
+            </div>
+          </div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 shrink-0">
+            <CheckCircle2 className="h-5 w-5" />
+          </div>
+        </div>
+      </div>
+
+      {/* 3. Assigned Litigation Files & Hearings Section (Stacked cleanly, NO scrollbars, Single-line items) */}
+      <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] shrink-0">
+              <Clock className="h-4 w-4" />
+            </div>
+            <div>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white whitespace-nowrap">
+                Assigned Case Files & Hearing Positions
+              </h2>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Authoritative chamber records assigned to your litigation portfolio
+              </p>
+            </div>
           </div>
           <Link
-            href="/cause-list"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b8935f]"
+            href="/cases"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-[#cca776] hover:text-[#b8935f] shrink-0 whitespace-nowrap"
           >
-            <span>View Full Schedule</span>
+            <span>View All Cases</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200 dark:bg-slate-950 dark:text-slate-400 dark:border-slate-800">
-              <tr>
-                <th className="px-5 py-3">Chamber File</th>
-                <th className="px-5 py-3">Case Number</th>
-                <th className="px-5 py-3">Bank</th>
-                <th className="px-5 py-3">Court / Bench</th>
-                <th className="px-5 py-3">Status Remarks</th>
-                <th className="px-5 py-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              <tr className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
-                <td className="px-5 py-3.5 font-semibold text-slate-900 dark:text-white">
-                  CF-2024/001
-                </td>
-                <td className="px-5 py-3.5">
-                  <div className="font-medium text-slate-900 dark:text-white">
-                    Writ Petition No. 5821/2024
+        {/* Stacked Cases List - One below another, zero horizontal scrollbar, single-line text layout */}
+        <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          {displayCases.length === 0 ? (
+            <div className="p-8 text-center text-xs text-slate-500">
+              No assigned case files found.
+            </div>
+          ) : (
+            displayCases.map((c) => {
+              const latestUpdate = c.statusUpdates && c.statusUpdates.length > 0
+                ? c.statusUpdates[c.statusUpdates.length - 1]
+                : null;
+              const primaryCaseNo = c.caseNumbers && c.caseNumbers.length > 0
+                ? c.caseNumbers[0].caseNumber
+                : "No Case No";
+              const primaryCourt = c.caseNumbers && c.caseNumbers.length > 0
+                ? c.caseNumbers[0].courtDivision
+                : "High Court Division";
+
+              const nextHearing = latestUpdate?.nextHearingDate || latestUpdate?.updateDate;
+              const isDisposed = c.status === "disposed" || c.status === "decreed";
+
+              return (
+                <div
+                  key={c._id || c.id}
+                  className="p-4 sm:p-5 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors flex flex-col gap-2.5"
+                >
+                  {/* Line 1: Chamber File, Institution Name, Court Division, Status, and Action Link */}
+                  <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap min-w-0">
+                      {/* File No Badge */}
+                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 shrink-0 whitespace-nowrap">
+                        {c.chamberFileNo}
+                      </span>
+
+                      {/* Institution / Bank */}
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#cca776] shrink-0 whitespace-nowrap">
+                        <Building2 className="h-3.5 w-3.5" />
+                        <span>{c.institutionName}</span>
+                      </div>
+
+                      {/* Court / Bench */}
+                      <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
+                        • {primaryCourt}
+                      </span>
+                    </div>
+
+                    {/* Right side: Status Badge + Next Hearing Date + Link */}
+                    <div className="flex items-center gap-2.5 shrink-0 ml-auto sm:ml-0">
+                      {nextHearing && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+                          <Calendar className="h-3 w-3 text-[#cca776]" />
+                          <span>{nextHearing}</span>
+                        </span>
+                      )}
+
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold whitespace-nowrap ${
+                          isDisposed
+                            ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/30"
+                            : "bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30"
+                        }`}
+                      >
+                        {isDisposed ? "Decreed / Disposed" : "Active Litigation"}
+                      </span>
+
+                      <Link
+                        href={`/cases/new?id=${c._id || c.id}`}
+                        className="inline-flex items-center gap-1 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-[#cca776] hover:bg-[#cca776] hover:text-slate-950 transition-all border border-slate-200 dark:border-slate-700 whitespace-nowrap cursor-pointer"
+                      >
+                        <span>Open File</span>
+                        <ArrowUpRight className="h-3 w-3" />
+                      </Link>
+                    </div>
                   </div>
-                  <div className="text-[11px] text-slate-500">
-                    Artha Rin Suit No. 142/2023
+
+                  {/* Line 2: Case Numbers, Matter, Parties & Order Summary (Single line with truncate) */}
+                  <div className="flex items-center justify-between gap-4 text-xs text-slate-600 dark:text-slate-300 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0 truncate">
+                      <span className="font-semibold text-slate-900 dark:text-slate-100 shrink-0 whitespace-nowrap">
+                        {primaryCaseNo}
+                      </span>
+                      <span className="text-slate-400 shrink-0">•</span>
+                      <span className="text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
+                        {c.matter}
+                      </span>
+                      {latestUpdate?.statusRemarks && (
+                        <>
+                          <span className="text-slate-400 shrink-0">•</span>
+                          <span className="text-slate-500 dark:text-slate-400 truncate italic">
+                            &quot;{latestUpdate.statusRemarks}&quot;
+                          </span>
+                        </>
+                      )}
+                    </div>
                   </div>
-                </td>
-                <td className="px-5 py-3.5 font-medium">
-                  NRB Bank PLC
-                </td>
-                <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400">
-                  High Court Division (Annex 14)
-                </td>
-                <td className="px-5 py-3.5">
-                  <span className="inline-flex items-center rounded-full bg-[#cca776]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#cca776] ring-1 ring-[#cca776]/30">
-                    Stay Extension Fixed
-                  </span>
-                </td>
-                <td className="px-5 py-3.5 text-right">
-                  <Link
-                    href="/cases/CF-2024-001"
-                    className="font-medium text-[#cca776] hover:underline"
-                  >
-                    Open File
-                  </Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </div>

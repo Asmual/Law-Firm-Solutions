@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Institution, CaseNumberItem, PartyItem, StatusHearingUpdate, User } from "@/types";
+import { LegalDatePicker } from "@/components/common/LegalDatePicker";
 
 function CaseFormContent() {
   const router = useRouter();
@@ -737,12 +738,11 @@ function CaseFormContent() {
                             className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
                           />
                         </td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="date"
+                        <td className="py-1.5 px-1 min-w-[130px]">
+                          <LegalDatePicker
                             value={p.caseReceivedDate || ""}
-                            onChange={(e) => updateParty(idx, "caseReceivedDate", e.target.value)}
-                            className="w-full px-1.5 py-1 text-[11px] bg-slate-950 border border-slate-700/80 rounded text-slate-300 focus:outline-none focus:border-[#cca776]"
+                            onChange={(val) => updateParty(idx, "caseReceivedDate", val)}
+                            placeholder="DD.MM.YYYY"
                           />
                         </td>
                         <td className="py-1.5 px-1">
@@ -937,11 +937,10 @@ function CaseFormContent() {
                     <label className="block text-[10px] font-semibold text-slate-400 mb-1">
                       Date Assigned
                     </label>
-                    <input
-                      type="date"
+                    <LegalDatePicker
                       value={dateAssigned}
-                      onChange={(e) => setDateAssigned(e.target.value)}
-                      className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      onChange={(val) => setDateAssigned(val)}
+                      placeholder="DD.MM.YYYY"
                     />
                   </div>
                   <div>
@@ -1019,12 +1018,11 @@ function CaseFormContent() {
                   {statusUpdates.map((su, idx) => (
                     <tr key={idx} className="hover:bg-slate-800/30">
                       <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
-                      <td className="py-2 px-2">
-                        <input
-                          type="date"
+                      <td className="py-2 px-2 w-36">
+                        <LegalDatePicker
                           value={su.updateDate}
-                          onChange={(e) => updateStatus(idx, "updateDate", e.target.value)}
-                          className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
+                          onChange={(val) => updateStatus(idx, "updateDate", val)}
+                          placeholder="DD.MM.YYYY"
                         />
                       </td>
                       <td className="py-2 px-2">

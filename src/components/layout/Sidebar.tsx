@@ -159,9 +159,29 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
             })
             .map((item) => {
               const Icon = item.icon;
-              const isActive =
-                pathname === item.href ||
-                (item.href !== "/dashboard" && pathname.startsWith(item.href));
+              const isActive = (() => {
+                if (item.href === "/dashboard") {
+                  return (
+                    pathname === "/dashboard" ||
+                    pathname === "/dashboard/advocate" ||
+                    pathname === "/dashboard/associate" ||
+                    (pathname === "/dashboard/admin" && userRole !== "admin")
+                  );
+                }
+                if (item.href === "/cases") {
+                  return (
+                    pathname === "/cases" ||
+                    (pathname.startsWith("/cases/") && pathname !== "/cases/new")
+                  );
+                }
+                if (item.href === "/cases/new") {
+                  return pathname === "/cases/new";
+                }
+                if (item.href === "/dashboard/admin") {
+                  return pathname === "/dashboard/admin";
+                }
+                return pathname === item.href || pathname.startsWith(item.href + "/");
+              })();
 
               return (
                 <Link

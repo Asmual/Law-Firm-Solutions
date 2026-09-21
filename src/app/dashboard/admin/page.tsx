@@ -15,13 +15,16 @@ import {
   ChevronRight,
   Users,
   ShieldCheck,
+  Calendar,
 } from "lucide-react";
 import { toast } from "sonner";
-import { User } from "@/types";
+import { User, Case, Institution } from "@/types";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [cases, setCases] = useState<Case[]>([]);
+  const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [isChecking, setIsChecking] = useState(true);
   const [isSeeding, setIsSeeding] = useState(false);
 
@@ -30,7 +33,7 @@ export default function AdminDashboardPage() {
       .then((res) => res.json())
       .then((data) => {
         if (!data.authenticated || !data.user) {
-          router.replace("/#portal");
+          router.replace("/");
           return;
         }
 
@@ -47,10 +50,26 @@ export default function AdminDashboardPage() {
         setCurrentUser(data.user);
       })
       .catch(() => {
-        router.replace("/#portal");
+        router.replace("/");
       })
       .finally(() => setIsChecking(false));
   }, [router]);
+
+  useEffect(() => {
+    fetch("/api/cases?limit=50")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.cases) setCases(data.cases);
+      })
+      .catch(() => {});
+
+    fetch("/api/institutions?limit=200")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.institutions) setInstitutions(data.institutions);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleSeedDatabase = async () => {
     setIsSeeding(true);
@@ -59,6 +78,10 @@ export default function AdminDashboardPage() {
       const data = await res.json();
       if (data.success) {
         toast.success(data.message || "Sample data seeded successfully!");
+        // Refresh cases
+        const casesRes = await fetch("/api/cases?limit=50");
+        const casesData = await casesRes.json();
+        if (casesData.cases) setCases(casesData.cases);
       } else {
         toast.error(data.error || "Failed to seed sample data");
       }
@@ -77,35 +100,38 @@ export default function AdminDashboardPage() {
     );
   }
 
+  const activeCasesCount = cases.filter((c) => c.status !== "disposed" && c.status !== "decreed").length;
+  const disposedCasesCount = cases.filter((c) => c.status === "disposed" || c.status === "decreed").length;
+
   return (
-    <div className="space-y-8 max-w-7xl mx-auto pb-12">
-      {/* Top Banner / Hero */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30">
+    <div className="flex flex-col gap-6 max-w-7xl mx-auto pb-12 w-full">
+      {/* 1. Top Executive Banner */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-7 text-white shadow-xl border border-slate-800">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+          <div className="space-y-1.5 min-w-0">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#cca776]/15 px-3 py-1 text-xs font-semibold text-[#cca776] border border-[#cca776]/30 whitespace-nowrap">
               <ShieldCheck className="h-3.5 w-3.5" />
-              <span>Chamber Administrator & Managing Partner Hub</span>
+              <span>Chamber Administrator &amp; Managing Partner Hub</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white whitespace-nowrap truncate">
               Executive Chamber Overview
             </h1>
-            <p className="text-sm text-slate-300 max-w-2xl leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
               Logged in as <strong className="text-[#cca776]">{currentUser.name}</strong> (Managing Partner • Admin). Full oversight of 100+ banking institutions, case assignments, associate workloads, and firm-wide recovery decrees.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
             <Link
               href="/cases"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2.5 text-sm font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-4 py-2.5 text-xs font-bold text-slate-950 shadow-md hover:bg-[#b8935f] transition-all whitespace-nowrap cursor-pointer"
             >
               <Briefcase className="h-4 w-4" />
               <span>Monitor All Cases</span>
             </Link>
             <Link
               href="/team"
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-800/90 px-4 py-2.5 text-sm font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 hover:border-[#cca776]/50 transition-all"
+              className="inline-flex items-center gap-2 rounded-xl bg-slate-800/90 px-4 py-2.5 text-xs font-semibold text-slate-200 border border-slate-700 hover:bg-slate-700 transition-all whitespace-nowrap cursor-pointer"
             >
               <Users className="h-4 w-4 text-[#cca776]" />
               <span>Manage Roles &amp; Team</span>
@@ -113,128 +139,118 @@ export default function AdminDashboardPage() {
           </div>
         </div>
 
-        {/* Ambient glow decoration with #cca776 */}
-        <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
+        {/* Ambient glow decoration */}
+        <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
       </div>
 
-      {/* KPI Metric Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* 2. KPI Metric Cards (Stacked in clean 4-card grid, single-line text) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
         {/* Card 1: Active Cases */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Total Active Cases
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              Active Litigation Files
             </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400">
-              <Briefcase className="h-4 w-4" />
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-slate-900 dark:text-white">
+                {activeCasesCount}
+              </span>
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
+                High Court &amp; Artha Rin
+              </span>
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              142
-            </span>
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              +12 this month
-            </span>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 shrink-0">
+            <Briefcase className="h-5 w-5" />
           </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Across High Court & Artha Rin Courts
-          </p>
         </div>
 
         {/* Card 2: Banks & Clients */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Bank / Corporate Clients
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              Corporate &amp; Bank Clients
             </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
-              <Building2 className="h-4 w-4" />
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-[#cca776]">
+                {institutions.length > 0 ? `${institutions.length}+` : "15+"}
+              </span>
+              <span className="text-xs font-medium text-slate-500 whitespace-nowrap">
+                Institutions &amp; Branches
+              </span>
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              100+
-            </span>
-            <span className="text-xs font-medium text-slate-500">
-              Institutions & Branches
-            </span>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/10 text-[#cca776] shrink-0">
+            <Building2 className="h-5 w-5" />
           </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            NRB Bank, BRAC Bank, EBL, etc.
-          </p>
         </div>
 
-        {/* Card 3: Hearings This Week */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Hearings This Week
+        {/* Card 3: Total Cases */}
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              Total Case Registry
             </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-50 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400">
-              <CalendarDays className="h-4 w-4" />
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                {cases.length}
+              </span>
+              <span className="text-xs font-semibold text-purple-500 whitespace-nowrap">
+                Recorded Files
+              </span>
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              18
-            </span>
-            <span className="inline-flex items-center text-xs font-semibold text-[#cca776]">
-              5 fixed today
-            </span>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10 text-purple-500 shrink-0">
+            <CalendarDays className="h-5 w-5" />
           </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            In High Court Division Annexes
-          </p>
         </div>
 
         {/* Card 4: Disposed / Concluded */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Disposed & Decreed
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900 flex items-center justify-between">
+          <div>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 whitespace-nowrap">
+              Disposed &amp; Decreed
             </span>
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400">
-              <CheckCircle2 className="h-4 w-4" />
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                {disposedCasesCount}
+              </span>
+              <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 whitespace-nowrap">
+                Decreed in favor
+              </span>
             </div>
           </div>
-          <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-slate-900 dark:text-white">
-              47
-            </span>
-            <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-              Decreed in favor
-            </span>
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 shrink-0">
+            <CheckCircle2 className="h-5 w-5" />
           </div>
-          <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-            Recorded in Completed Register
-          </p>
         </div>
       </div>
 
-      {/* Admin Modules Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {/* 3. Admin Modules Grid (Stacked in clean 3-col grid where all titles and texts fit cleanly) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
         <Link
           href="/team"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-[#cca776]/70 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
+          className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-[#cca776]/70 transition-all dark:border-slate-800 dark:bg-slate-900 flex flex-col justify-between"
         >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] group-hover:scale-105 transition-transform">
-              <Users className="h-5 w-5" />
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/15 text-[#cca776] shrink-0">
+                <Users className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 truncate">
+                <h2 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors whitespace-nowrap">
+                  Team &amp; Role Control
+                </h2>
+                <p className="text-[11px] text-slate-500 whitespace-nowrap">
+                  Elevate roles &amp; assign advocates
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors">
-                Team & Role Management
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Elevate user roles & assign advocates
-              </p>
-            </div>
+            <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Manage chamber practitioners, bar enrollment credentials, and role privileges.
+            </p>
           </div>
-          <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Change roles from User/Associate to Advocate or Admin with immediate database elevation.
-          </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-[#cca776]">
+          <div className="mt-3 flex items-center text-xs font-semibold text-[#cca776] whitespace-nowrap">
             <span>Manage Chamber Team</span>
             <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
@@ -242,25 +258,27 @@ export default function AdminDashboardPage() {
 
         <Link
           href="/institutions"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-blue-500/50 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
+          className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-blue-500/60 transition-all dark:border-slate-800 dark:bg-slate-900 flex flex-col justify-between"
         >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500 group-hover:scale-105 transition-transform">
-              <Building2 className="h-5 w-5" />
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 shrink-0">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 truncate">
+                <h2 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors whitespace-nowrap">
+                  100+ Banks &amp; Clients
+                </h2>
+                <p className="text-[11px] text-slate-500 whitespace-nowrap">
+                  Focal persons &amp; branch directories
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
-                100+ Banks & Corporate Clients
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Legal focal persons & branch directories
-              </p>
-            </div>
+            <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Browse corporate bank directories, SAMD divisions, branch contacts, and case volumes.
+            </p>
           </div>
-          <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Browse corporate client directories, branch details, and active case distributions per bank.
-          </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 dark:text-blue-400">
+          <div className="mt-3 flex items-center text-xs font-semibold text-blue-500 whitespace-nowrap">
             <span>Open Institution Registry</span>
             <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
@@ -268,120 +286,159 @@ export default function AdminDashboardPage() {
 
         <Link
           href="/reports"
-          className="group relative rounded-xl border border-slate-200 bg-white p-6 shadow-sm hover:border-emerald-500/50 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
+          className="group rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-emerald-500/60 transition-all dark:border-slate-800 dark:bg-slate-900 flex flex-col justify-between"
         >
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500 group-hover:scale-105 transition-transform">
-              <FileSpreadsheet className="h-5 w-5" />
+          <div>
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500 shrink-0">
+                <FileSpreadsheet className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 truncate">
+                <h2 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors whitespace-nowrap">
+                  Official Letterhead Reports
+                </h2>
+                <p className="text-[11px] text-slate-500 whitespace-nowrap">
+                  Monthly statements for banks
+                </p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                Official Letterhead Reports
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Running vs Disposed Monthly Statements
-              </p>
-            </div>
+            <p className="mt-2.5 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Generate formal litigation statements formatted with official chamber letterhead for banks.
+            </p>
           </div>
-          <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Generate formal status position statements for banks with letterhead formatting and PDF export.
-          </p>
-          <div className="mt-4 flex items-center text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+          <div className="mt-3 flex items-center text-xs font-semibold text-emerald-500 whitespace-nowrap">
             <span>Generate Statements</span>
             <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
           </div>
         </Link>
       </div>
 
-      {/* Cause List Schedule */}
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 border-b border-slate-200 dark:border-slate-800 gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white">
-                Upcoming Hearing Schedule & Cause List
-              </h2>
+      {/* 4. Upcoming Hearing Schedule & Cause List (Stacked list, NO scrollbars, single-line items) */}
+      <div className="rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900 overflow-hidden w-full">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 gap-3">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] shrink-0">
+              <Clock className="h-4 w-4" />
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              High Court Division & Special Artha Rin Adalats
-            </p>
+            <div>
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white whitespace-nowrap">
+                Upcoming Hearing Schedule &amp; Cause List
+              </h2>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                High Court Division &amp; Special Artha Rin Adalats
+              </p>
+            </div>
           </div>
           <Link
             href="/cause-list"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b8935f]"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-[#cca776] hover:text-[#b8935f] shrink-0 whitespace-nowrap"
           >
             <span>View Full Daily Cause List</span>
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider font-semibold border-b border-slate-200 dark:bg-slate-950 dark:text-slate-400 dark:border-slate-800">
-              <tr>
-                <th className="px-5 py-3">Chamber File</th>
-                <th className="px-5 py-3">Case Number(s)</th>
-                <th className="px-5 py-3">Bank / Institution</th>
-                <th className="px-5 py-3">Court / Bench</th>
-                <th className="px-5 py-3">Assigned Advocate</th>
-                <th className="px-5 py-3">Status</th>
-                <th className="px-5 py-3 text-right">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
-              <tr className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors">
-                <td className="px-5 py-3.5 font-semibold text-slate-900 dark:text-white">
-                  CF-2024/001
-                </td>
-                <td className="px-5 py-3.5">
-                  <div className="font-medium text-slate-900 dark:text-white">
-                    Writ Petition No. 5821/2024
+        {/* Stacked Cases - Zero scrollbars, clean single-line layout */}
+        <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          {cases.length === 0 ? (
+            <div className="p-8 text-center text-xs text-slate-500">
+              No active case files found.
+            </div>
+          ) : (
+            cases.slice(0, 5).map((c) => {
+              const primaryCaseNo = c.caseNumbers && c.caseNumbers.length > 0
+                ? c.caseNumbers[0].caseNumber
+                : "No Case No";
+              const primaryCourt = c.caseNumbers && c.caseNumbers.length > 0
+                ? c.caseNumbers[0].courtDivision
+                : "High Court Division";
+              const latestUpdate = c.statusUpdates && c.statusUpdates.length > 0
+                ? c.statusUpdates[c.statusUpdates.length - 1]
+                : null;
+              const nextHearing = latestUpdate?.nextHearingDate || latestUpdate?.updateDate;
+              const isDisposed = c.status === "disposed" || c.status === "decreed";
+              const advocateName = c.assignedAdvocate?.advocateName || "Unassigned";
+
+              return (
+                <div
+                  key={c._id || c.id}
+                  className="p-4 sm:p-5 hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors flex flex-col gap-2"
+                >
+                  <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap min-w-0">
+                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 shrink-0 whitespace-nowrap">
+                        {c.chamberFileNo}
+                      </span>
+                      <span className="text-xs font-bold text-[#cca776] shrink-0 whitespace-nowrap">
+                        {c.institutionName}
+                      </span>
+                      <span className="text-xs text-slate-500 dark:text-slate-400 shrink-0 whitespace-nowrap">
+                        • {primaryCourt}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2.5 shrink-0 ml-auto sm:ml-0">
+                      {nextHearing && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 text-[11px] font-medium text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+                          <Calendar className="h-3 w-3 text-[#cca776]" />
+                          <span>{nextHearing}</span>
+                        </span>
+                      )}
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold whitespace-nowrap ${
+                          isDisposed
+                            ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/30"
+                            : "bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30"
+                        }`}
+                      >
+                        {isDisposed ? "Decreed / Disposed" : "Active Litigation"}
+                      </span>
+                      <Link
+                        href={`/cases/new?id=${c._id || c.id}`}
+                        className="inline-flex items-center gap-1 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-[#cca776] hover:bg-[#cca776] hover:text-slate-950 transition-all border border-slate-200 dark:border-slate-700 whitespace-nowrap cursor-pointer"
+                      >
+                        <span>View File</span>
+                        <ArrowUpRight className="h-3 w-3" />
+                      </Link>
+                    </div>
                   </div>
-                  <div className="text-[11px] text-slate-500">
-                    Artha Rin Suit No. 142/2023
+
+                  <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 min-w-0 truncate">
+                    <span className="font-semibold text-slate-800 dark:text-slate-200 shrink-0 whitespace-nowrap">
+                      {primaryCaseNo}
+                    </span>
+                    <span className="shrink-0">•</span>
+                    <span className="shrink-0 whitespace-nowrap">
+                      Advocate: <strong className="text-slate-700 dark:text-slate-300">{advocateName}</strong>
+                    </span>
+                    {latestUpdate?.statusRemarks && (
+                      <>
+                        <span className="shrink-0">•</span>
+                        <span className="truncate italic">
+                          &quot;{latestUpdate.statusRemarks}&quot;
+                        </span>
+                      </>
+                    )}
                   </div>
-                </td>
-                <td className="px-5 py-3.5 font-medium">
-                  NRB Bank PLC
-                </td>
-                <td className="px-5 py-3.5 text-slate-500 dark:text-slate-400">
-                  High Court Division (Annex 14)
-                </td>
-                <td className="px-5 py-3.5">
-                  Advocate Anisur Rahman
-                </td>
-                <td className="px-5 py-3.5">
-                  <span className="inline-flex items-center rounded-full bg-[#cca776]/15 px-2.5 py-0.5 text-[11px] font-semibold text-[#cca776] ring-1 ring-[#cca776]/30">
-                    Stay Extension Fixed
-                  </span>
-                </td>
-                <td className="px-5 py-3.5 text-right">
-                  <Link
-                    href="/cases/CF-2024-001"
-                    className="font-medium text-[#cca776] hover:underline"
-                  >
-                    View File
-                  </Link>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
 
-      {/* Database Seed Box */}
-      <div className="rounded-xl border border-slate-200 bg-slate-100/70 p-5 dark:border-slate-800 dark:bg-slate-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* 5. Database Seed Box (Compact and clean at the bottom) */}
+      <div className="rounded-xl border border-slate-200 bg-slate-100/70 p-4 dark:border-slate-800 dark:bg-slate-900/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 shrink-0">
             <Database className="h-4 w-4" />
           </div>
           <div>
-            <h4 className="text-xs font-bold text-slate-900 dark:text-white">
-              Database Seed & Initialization (Admin Only)
+            <h4 className="text-xs font-bold text-slate-900 dark:text-white whitespace-nowrap">
+              Database Seed &amp; Initialization
             </h4>
             <p className="text-[11px] text-slate-500 dark:text-slate-400">
-              Populate demo financial institutions (NRB Bank, BRAC Bank, EBL), advocates, and sample case files.
+              Populate demo financial institutions (15 banks), advocates, and sample case files.
             </p>
           </div>
         </div>
@@ -389,7 +446,7 @@ export default function AdminDashboardPage() {
         <button
           onClick={handleSeedDatabase}
           disabled={isSeeding}
-          className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 transition-colors disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-50 transition-colors disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 shrink-0 whitespace-nowrap cursor-pointer"
         >
           {isSeeding ? "Seeding Data..." : "Seed Sample Data"}
         </button>

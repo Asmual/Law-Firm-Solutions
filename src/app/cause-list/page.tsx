@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Case, Institution } from "@/types";
+import { LegalDatePicker } from "@/components/common/LegalDatePicker";
 
 export default function CauseListPage() {
   const [selectedDate, setSelectedDate] = useState<string>(
@@ -136,11 +137,10 @@ export default function CauseListPage() {
             <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
               Select Cause Date
             </label>
-            <input
-              type="date"
+            <LegalDatePicker
               value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:border-[#cca776]"
+              onChange={(val) => setSelectedDate(val)}
+              placeholder="DD.MM.YYYY"
             />
           </div>
 

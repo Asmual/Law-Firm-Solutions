@@ -78,6 +78,13 @@ export interface AssignedAdvocate {
   internalRemarks?: string;
 }
 
+export interface AssignedAssociate {
+  associateId?: string;
+  associateName: string;
+  dateAssigned?: string;
+  internalRemarks?: string;
+}
+
 export interface StatusHearingUpdate {
   id?: string;
   updateDate: string;
@@ -122,6 +129,7 @@ export interface Case {
   parties: PartyItem[];
   specialNotes?: SpecialNotes;
   assignedAdvocate?: AssignedAdvocate;
+  assignedAssociate?: AssignedAssociate;
   statusUpdates: StatusHearingUpdate[];
   status: CaseStatus;
   disposalDetails?: {

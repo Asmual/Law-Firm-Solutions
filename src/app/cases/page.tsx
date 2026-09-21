@@ -18,8 +18,10 @@ export default function CasesRegistryPage() {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
 
   // Filters
+  const [filterScope, setFilterScope] = useState<"all" | "my">("all");
   const [selectedInstId, setSelectedInstId] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -30,6 +32,7 @@ export default function CasesRegistryPage() {
       .then((data) => {
         if (data?.authenticated && data?.user) {
           setCurrentUserRole(data.user.role);
+          setCurrentUserId(data.user.id || data.user._id || null);
         }
       })
       .catch(() => {});
@@ -47,6 +50,9 @@ export default function CasesRegistryPage() {
       .catch(() => {});
 
     let url = `/api/cases?limit=100`;
+    if (filterScope === "my" && currentUserId) {
+      url += `&memberId=${currentUserId}`;
+    }
     if (selectedInstId && selectedInstId !== "all") {
       url += `&institutionId=${selectedInstId}`;
     }
@@ -69,12 +75,15 @@ export default function CasesRegistryPage() {
         toast.error("Failed to load case registry");
       })
       .finally(() => setIsLoading(false));
-  }, [selectedInstId, selectedStatus, searchQuery]);
+  }, [filterScope, currentUserId, selectedInstId, selectedStatus, searchQuery]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     let url = `/api/cases?limit=100`;
+    if (filterScope === "my" && currentUserId) {
+      url += `&memberId=${currentUserId}`;
+    }
     if (selectedInstId && selectedInstId !== "all") {
       url += `&institutionId=${selectedInstId}`;
     }
@@ -189,16 +198,40 @@ export default function CasesRegistryPage() {
             <FileSpreadsheet className="h-3.5 w-3.5 text-[#cca776]" />
             <span>Generate Reports</span>
           </Link>
-          {currentUserRole !== "admin" && (
-            <Link
-              href="/cases/new"
-              className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all"
-            >
-              <Plus className="h-4 w-4" />
-              <span>Add New Case File</span>
-            </Link>
-          )}
+          <Link
+            href="/cases/new"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all"
+          >
+            <Plus className="h-4 w-4" />
+            <span>Add New Case File</span>
+          </Link>
         </div>
+      </div>
+
+      {/* Scope Selector: All Cases vs My Assigned Cases */}
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setFilterScope("all")}
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            filterScope === "all"
+              ? "bg-[#cca776] text-slate-950 font-bold shadow-sm"
+              : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+          }`}
+        >
+          All Chamber Cases
+        </button>
+        <button
+          type="button"
+          onClick={() => setFilterScope("my")}
+          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+            filterScope === "my"
+              ? "bg-[#cca776] text-slate-950 font-bold shadow-sm"
+              : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+          }`}
+        >
+          My Assigned Cases Only
+        </button>
       </div>
 
       {/* Filter and Search Bar matching Blueprint specifications */}
@@ -388,14 +421,16 @@ export default function CasesRegistryPage() {
                           >
                             <Edit className="h-4 w-4" />
                           </Link>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteCase(caseId, c.chamberFileNo)}
-                            title="Delete Case File"
-                            className="p-1.5 rounded text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 transition-colors"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
+                          {currentUserRole === "admin" && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteCase(caseId, c.chamberFileNo)}
+                              title="Delete Case File"
+                              className="p-1.5 rounded text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 transition-colors cursor-pointer"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

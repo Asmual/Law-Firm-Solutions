@@ -37,6 +37,12 @@ export interface ICaseDocument extends Document {
     dateAssigned?: string;
     internalRemarks?: string;
   };
+  assignedAssociate?: {
+    associateId?: mongoose.Types.ObjectId;
+    associateName: string;
+    dateAssigned?: string;
+    internalRemarks?: string;
+  };
   statusUpdates: Array<{
     updateDate: string;
     statusRemarks: string;
@@ -128,6 +134,12 @@ const CaseSchema = new Schema<ICaseDocument>(
       dateAssigned: { type: String, default: "" },
       internalRemarks: { type: String, default: "" },
     },
+    assignedAssociate: {
+      associateId: { type: Schema.Types.ObjectId, ref: "User" },
+      associateName: { type: String, default: "", trim: true },
+      dateAssigned: { type: String, default: "" },
+      internalRemarks: { type: String, default: "" },
+    },
     statusUpdates: [
       {
         updateDate: { type: String, required: true },
@@ -172,6 +184,7 @@ CaseSchema.index({
   "caseNumbers.caseNumber": "text",
   "parties.partyNameDetails": "text",
   "assignedAdvocate.advocateName": "text",
+  "assignedAssociate.associateName": "text",
 });
 
 export const CaseModel: Model<ICaseDocument> =

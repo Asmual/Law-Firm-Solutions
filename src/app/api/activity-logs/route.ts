@@ -10,13 +10,6 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    if (session.role !== "admin") {
-      return NextResponse.json(
-        { success: false, error: "Forbidden. Only Senior Lawyer / Admin can view activity logs." },
-        { status: 403 }
-      );
-    }
-
     await connectToDatabase();
     const { searchParams } = new URL(req.url);
     const limit = Math.min(parseInt(searchParams.get("limit") || "50", 10), 100);
@@ -24,11 +17,20 @@ export async function GET(req: NextRequest) {
     const action = searchParams.get("action");
     const entityType = searchParams.get("entityType");
     const userRole = searchParams.get("userRole");
+    const requestedUserId = searchParams.get("userId");
 
     const query: Record<string, unknown> = {};
+
+    if (session.role === "admin") {
+      if (requestedUserId) query.userId = requestedUserId;
+      if (userRole) query.userRole = userRole;
+    } else {
+      // Non-admin can only inspect their own work logs
+      query.userId = session.userId;
+    }
+
     if (action) query.action = action;
     if (entityType) query.entityType = entityType;
-    if (userRole) query.userRole = userRole;
 
     const skip = (page - 1) * limit;
     const [logs, total] = await Promise.all([

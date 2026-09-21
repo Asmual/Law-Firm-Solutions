@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import {
   Users,
   ShieldCheck,
@@ -8,6 +9,7 @@ import {
   Phone,
   Ban,
   CheckCircle,
+  Briefcase,
 } from "lucide-react";
 import { toast } from "sonner";
 import { User, UserRole } from "@/types";
@@ -223,12 +225,15 @@ export default function TeamPage() {
                     >
                       {/* Name & Email */}
                       <td className="px-5 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700">
+                        <Link
+                          href={`/team/${user.id || user._id}`}
+                          className="flex items-center gap-3 group"
+                        >
+                          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 group-hover:border-[#cca776] transition-colors">
                             {user.name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900 dark:text-white flex items-center gap-1.5">
+                            <div className="font-semibold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5">
                               <span>{user.name}</span>
                               {user.authProvider === "google" && (
                                 <span className="rounded bg-blue-500/10 px-1.5 py-0.2 text-[9px] font-medium text-blue-400 border border-blue-500/20">
@@ -240,7 +245,7 @@ export default function TeamPage() {
                               {user.email}
                             </span>
                           </div>
-                        </div>
+                        </Link>
                       </td>
 
                       {/* Designation */}
@@ -290,66 +295,78 @@ export default function TeamPage() {
                       </td>
 
                       {/* Admin Access & Role Control */}
-                      {isAdmin && (
-                        <td className="px-5 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            {/* Role Select */}
-                            <select
-                              value={user.role}
-                              disabled={updatingId === (user.id || user._id)}
-                              onChange={(e) =>
-                                handleRoleChange(
-                                  (user.id || user._id)!,
-                                  e.target.value as UserRole
-                                )
-                              }
-                              className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
-                            >
-                              {ALL_ROLES.map((r) => (
-                                <option key={r} value={r}>
-                                  Set as {r.toUpperCase()}
-                                </option>
-                              ))}
-                            </select>
+                      <td className="px-5 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {/* View Profile & Cases Dossier */}
+                          <Link
+                            href={`/team/${user.id || user._id}`}
+                            className="inline-flex items-center gap-1 rounded-lg border border-[#cca776]/40 bg-[#cca776]/10 px-2.5 py-1 text-xs font-semibold text-[#cca776] hover:bg-[#cca776]/20 transition-colors"
+                            title="Inspect assigned cases, work log, and generate report"
+                          >
+                            <Briefcase className="h-3.5 w-3.5" />
+                            <span>View Dossier</span>
+                          </Link>
 
-                            {/* Block / Unblock Button */}
-                            {user.id !== currentUser?.id && user._id !== currentUser?.id ? (
-                              <button
-                                type="button"
+                          {isAdmin && (
+                            <>
+                              {/* Role Select */}
+                              <select
+                                value={user.role}
                                 disabled={updatingId === (user.id || user._id)}
-                                onClick={() =>
-                                  handleToggleStatus(
+                                onChange={(e) =>
+                                  handleRoleChange(
                                     (user.id || user._id)!,
-                                    user.isActive !== false,
-                                    user.name
+                                    e.target.value as UserRole
                                   )
                                 }
-                                className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer disabled:opacity-50 ${
-                                  user.isActive !== false
-                                    ? "bg-rose-950/40 text-rose-400 border border-rose-800/60 hover:bg-rose-900/60"
-                                    : "bg-emerald-950/40 text-emerald-400 border border-emerald-800/60 hover:bg-emerald-900/60"
-                                }`}
+                                className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-800 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 cursor-pointer"
                               >
-                                {user.isActive !== false ? (
-                                  <>
-                                    <Ban className="h-3 w-3" />
-                                    <span>Block</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <CheckCircle className="h-3 w-3" />
-                                    <span>Unblock</span>
-                                  </>
-                                )}
-                              </button>
-                            ) : (
-                              <span className="text-[10px] text-slate-400 px-2 py-1 bg-slate-800 rounded border border-slate-700">
-                                You
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                      )}
+                                {ALL_ROLES.map((r) => (
+                                  <option key={r} value={r}>
+                                    Set as {r.toUpperCase()}
+                                  </option>
+                                ))}
+                              </select>
+
+                              {/* Block / Unblock Button */}
+                              {user.id !== currentUser?.id && user._id !== currentUser?.id ? (
+                                <button
+                                  type="button"
+                                  disabled={updatingId === (user.id || user._id)}
+                                  onClick={() =>
+                                    handleToggleStatus(
+                                      (user.id || user._id)!,
+                                      user.isActive !== false,
+                                      user.name
+                                    )
+                                  }
+                                  className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer disabled:opacity-50 ${
+                                    user.isActive !== false
+                                      ? "bg-rose-950/40 text-rose-400 border border-rose-800/60 hover:bg-rose-900/60"
+                                      : "bg-emerald-950/40 text-emerald-400 border border-emerald-800/60 hover:bg-emerald-900/60"
+                                  }`}
+                                >
+                                  {user.isActive !== false ? (
+                                    <>
+                                      <Ban className="h-3 w-3" />
+                                      <span>Block</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <CheckCircle className="h-3 w-3" />
+                                      <span>Unblock</span>
+                                    </>
+                                  )}
+                                </button>
+                              ) : (
+                                <span className="text-[10px] text-slate-400 px-2 py-1 bg-slate-800 rounded border border-slate-700">
+                                  You
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      </td>
                     </tr>
                   );
                 })}

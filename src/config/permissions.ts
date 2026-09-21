@@ -65,6 +65,7 @@ export const DEFAULT_PERMISSION_MATRIX: PermissionMatrix = {
     "monitoring:view",
   ],
   advocate: [
+    "cases:create",
     "cases:view_assigned",
     "cases:edit",
     "cases:view_internal_remarks",
@@ -76,6 +77,7 @@ export const DEFAULT_PERMISSION_MATRIX: PermissionMatrix = {
     "cases:view_assigned",
     "cases:add_status",
     "cases:upload_documents",
+    "reports:own_cases",
   ],
   viewer: [
     "cases:view_assigned",

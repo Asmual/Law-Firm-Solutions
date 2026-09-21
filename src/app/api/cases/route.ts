@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import { CaseModel } from "@/models/Case";
 import { InstitutionModel } from "@/models/Institution";
-import { getCurrentUserFromSession } from "@/lib/auth";
+import { getCurrentUserFromSession, getSessionUser } from "@/lib/auth";
+import { logActivity } from "@/lib/activity-logger";
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,6 +13,8 @@ export async function GET(req: NextRequest) {
     const institutionId = searchParams.get("institutionId");
     const status = searchParams.get("status");
     const advocateId = searchParams.get("advocateId");
+    const associateId = searchParams.get("associateId");
+    const memberId = searchParams.get("memberId");
     const query = searchParams.get("query");
     const limit = parseInt(searchParams.get("limit") || "100", 10);
     const page = parseInt(searchParams.get("page") || "1", 10);
@@ -26,21 +29,39 @@ export async function GET(req: NextRequest) {
       filter.status = status;
     }
 
-    if (advocateId) {
-      filter["assignedAdvocate.advocateId"] = advocateId;
+    if (memberId) {
+      filter.$or = [
+        { "assignedAdvocate.advocateId": memberId },
+        { "assignedAssociate.associateId": memberId },
+      ];
+    } else {
+      if (advocateId) {
+        filter["assignedAdvocate.advocateId"] = advocateId;
+      }
+      if (associateId) {
+        filter["assignedAssociate.associateId"] = associateId;
+      }
     }
 
     if (query && query.trim() !== "") {
       const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const regex = new RegExp(escaped, "i");
-      filter.$or = [
+      const searchConditions = [
         { chamberFileNo: regex },
         { institutionName: regex },
         { matter: regex },
         { "caseNumbers.caseNumber": regex },
         { "parties.partyNameDetails": regex },
         { "assignedAdvocate.advocateName": regex },
+        { "assignedAssociate.associateName": regex },
       ];
+
+      if (filter.$or) {
+        filter.$and = [{ $or: filter.$or }, { $or: searchConditions }];
+        delete filter.$or;
+      } else {
+        filter.$or = searchConditions;
+      }
     }
 
     const skip = (page - 1) * limit;
@@ -65,17 +86,15 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const user = await getCurrentUserFromSession();
-    if (!user) {
+    const session = await getSessionUser();
+    if (!user || !session) {
       return NextResponse.json({ error: "Unauthorized. Please log in." }, { status: 401 });
     }
 
-    // Role Rule: Admin is for oversight/monitoring only. Only Advocate and Associate create cases.
-    if (user.role === "admin") {
+    // Role Rule: Admin, Advocate, and Associate are authorized to create case files
+    if (user.role !== "admin" && user.role !== "advocate" && user.role !== "associate") {
       return NextResponse.json(
-        {
-          error:
-            "Administrative policy: Administrators hold oversight and management authority. Case file creation is reserved for Advocates and Associates.",
-        },
+        { error: "Forbidden. Your role does not have case creation permission." },
         { status: 403 }
       );
     }
@@ -94,6 +113,7 @@ export async function POST(req: NextRequest) {
       parties,
       specialNotes,
       assignedAdvocate,
+      assignedAssociate,
       statusUpdates,
       status,
     } = body;
@@ -130,6 +150,19 @@ export async function POST(req: NextRequest) {
         }))
       : [];
 
+    // If Advocate creates case without specifying advocate, default to self
+    let resolvedAdvocate = assignedAdvocate;
+    if (user.role === "advocate" && (!resolvedAdvocate || !resolvedAdvocate.advocateName || resolvedAdvocate.advocateName === "Unassigned")) {
+      resolvedAdvocate = {
+        advocateId: user.userId,
+        advocateName: user.name,
+        dateAssigned: new Date().toISOString().split("T")[0],
+        internalRemarks: "Initiated and managed by Advocate",
+      };
+    } else if (!resolvedAdvocate) {
+      resolvedAdvocate = { advocateName: "Unassigned" };
+    }
+
     const newCase = await CaseModel.create({
       chamberFileNo: chamberFileNo.trim(),
       institutionId,
@@ -140,7 +173,8 @@ export async function POST(req: NextRequest) {
       caseNumbers: Array.isArray(caseNumbers) ? caseNumbers : [],
       parties: Array.isArray(parties) ? parties : [],
       specialNotes: specialNotes || {},
-      assignedAdvocate: assignedAdvocate || { advocateName: "Unassigned" },
+      assignedAdvocate: resolvedAdvocate,
+      assignedAssociate: assignedAssociate || undefined,
       statusUpdates: formattedStatusUpdates,
       status: status || "running",
       documents: [],
@@ -149,6 +183,16 @@ export async function POST(req: NextRequest) {
     // Increment institution's active cases count
     await InstitutionModel.findByIdAndUpdate(institutionId, {
       $inc: { totalCases: 1, activeCases: 1 },
+    });
+
+    // Record audit activity log
+    await logActivity({
+      user: session,
+      action: "case:create",
+      entityType: "case",
+      entityId: String(newCase._id),
+      entityTitle: newCase.chamberFileNo,
+      description: `${user.name} (${user.role}) opened new case file ${newCase.chamberFileNo} for ${newCase.institutionName}`,
     });
 
     return NextResponse.json(

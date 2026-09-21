@@ -73,9 +73,11 @@ function CaseFormContent() {
   const [mainPetitionNote, setMainPetitionNote] = useState("");
   const [extensionNote, setExtensionNote] = useState("");
 
-  // Section 6: Assigned Advocate
+  // Section 6: Assigned Advocate & Associate
   const [assignedAdvocateName, setAssignedAdvocateName] = useState("Unassigned");
   const [assignedAdvocateId, setAssignedAdvocateId] = useState("");
+  const [assignedAssociateName, setAssignedAssociateName] = useState("");
+  const [assignedAssociateId, setAssignedAssociateId] = useState("");
   const [dateAssigned, setDateAssigned] = useState(new Date().toISOString().split("T")[0]);
   const [internalRemarks, setInternalRemarks] = useState("");
 
@@ -108,8 +110,9 @@ function CaseFormContent() {
       .then((data) => {
         if (data?.authenticated && data?.user) {
           setCurrentUserRole(data.user.role);
-          if (data.user.role === "admin" && !editId) {
-            toast.info("Chamber Admins hold monitoring oversight. Case creation is handled by Advocates & Associates.");
+          if (data.user.role === "advocate" && !editId) {
+            setAssignedAdvocateName(data.user.name);
+            setAssignedAdvocateId(data.user.id || data.user._id || "");
           }
         }
       })
@@ -172,6 +175,10 @@ function CaseFormContent() {
             setAssignedAdvocateId(c.assignedAdvocate.advocateId || "");
             setDateAssigned(c.assignedAdvocate.dateAssigned || "");
             setInternalRemarks(c.assignedAdvocate.internalRemarks || "");
+          }
+          if (c.assignedAssociate) {
+            setAssignedAssociateName(c.assignedAssociate.associateName || "");
+            setAssignedAssociateId(c.assignedAssociate.associateId || "");
           }
           if (c.statusUpdates && c.statusUpdates.length > 0) setStatusUpdates(c.statusUpdates);
           if (c.status) setCaseStatus(c.status);
@@ -345,6 +352,12 @@ function CaseFormContent() {
         dateAssigned,
         internalRemarks,
       },
+      assignedAssociate: (assignedAssociateId || assignedAssociateName) ? {
+        associateId: assignedAssociateId || undefined,
+        associateName: assignedAssociateName,
+        dateAssigned,
+        internalRemarks: "Assisting Associate",
+      } : undefined,
       statusUpdates: statusUpdates.filter((s) => s.statusRemarks.trim() !== ""),
       status: caseStatus,
     };
@@ -929,6 +942,29 @@ function CaseFormContent() {
                     {/* Fallback custom option */}
                     <option value="Adv. Shahriar Mahmud">Adv. Shahriar Mahmud</option>
                     <option value="Adv. Tanvir Ahmed">Adv. Tanvir Ahmed</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
+                    Assisting Associate (Optional)
+                  </label>
+                  <select
+                    value={assignedAssociateId}
+                    onChange={(e) => {
+                      const selId = e.target.value;
+                      setAssignedAssociateId(selId);
+                      const found = advocates.find((u) => (u._id || u.id) === selId);
+                      setAssignedAssociateName(found ? found.name : "");
+                    }}
+                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                  >
+                    <option value="">None Assigned (No Associate)</option>
+                    {advocates.map((u) => (
+                      <option key={u._id || u.id} value={u._id || u.id}>
+                        {u.name} ({u.chamberDesignation || u.role})
+                      </option>
+                    ))}
                   </select>
                 </div>
 

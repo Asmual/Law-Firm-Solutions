@@ -1,27 +1,196 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import {
   Building2,
   Search,
   Plus,
   Trash2,
   Save,
-  CheckCircle2,
   FileText,
   Clock,
-  UserCheck,
   Printer,
-  ChevronRight,
-  Shield,
-  Layers,
-  AlertCircle,
+  Eye,
+  ArrowLeft,
+  X,
+  User,
+  Scale,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Institution, CaseNumberItem, PartyItem, StatusHearingUpdate, User } from "@/types";
+import { Institution, CaseNumberItem, PartyItem, StatusHearingUpdate, User as UserType } from "@/types";
 import { LegalDatePicker } from "@/components/common/LegalDatePicker";
 import { ConfirmationModal } from "@/components/common/ConfirmationModal";
+
+// Predefined demo clients & institutions covering Banks, Corporate Clients, and Individual Litigants
+const DEFAULT_CLIENTS: Institution[] = [
+  {
+    id: "demo-inst-1",
+    _id: "demo-inst-1",
+    name: "Sonali Bank PLC",
+    shortCode: "SBL",
+    category: "State-Owned Bank",
+    branch: "Principal Branch, Motijheel, Dhaka",
+    focalPerson: {
+      name: "Md. Kamrul Hasan",
+      designation: "Assistant General Manager (Legal)",
+      phone: "+8801711000101",
+      email: "legal.sbl@sonalibank.com.bd",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-inst-2",
+    _id: "demo-inst-2",
+    name: "Agrani Bank PLC",
+    shortCode: "ABL",
+    category: "State-Owned Bank",
+    branch: "Agrani Bhaban Corporate Branch",
+    focalPerson: {
+      name: "Nazrul Islam Khan",
+      designation: "Senior Principal Officer (Law)",
+      phone: "+8801712000202",
+      email: "law@agranibank.org",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-inst-3",
+    _id: "demo-inst-3",
+    name: "BRAC Bank PLC",
+    shortCode: "BBL",
+    category: "Private Commercial Bank",
+    branch: "Gulshan Head Office, Special Asset Management",
+    focalPerson: {
+      name: "Tariqul Islam",
+      designation: "Head of Litigation Recovery",
+      phone: "+8801713000303",
+      email: "recovery@bracbank.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-inst-4",
+    _id: "demo-inst-4",
+    name: "Islami Bank Bangladesh PLC",
+    shortCode: "IBBL",
+    category: "Shariah Islamic Bank",
+    branch: "Dilkusha Corporate Branch, Dhaka",
+    focalPerson: {
+      name: "Abu Baker Siddique",
+      designation: "VP & In-Charge (Law Division)",
+      phone: "+8801714000404",
+      email: "law@islamibankbd.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-inst-5",
+    _id: "demo-inst-5",
+    name: "IDLC Finance PLC",
+    shortCode: "IDLC",
+    category: "Non-Banking Financial Institution (NBFI)",
+    branch: "Gulshan Corporate Office",
+    focalPerson: {
+      name: "Shafinur Rahman",
+      designation: "Legal Counsel & Head of Litigation",
+      phone: "+8801715000505",
+      email: "legal@idlc.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-corp-1",
+    _id: "demo-client-corp-1",
+    name: "Square Pharmaceuticals PLC",
+    shortCode: "SQUARE",
+    category: "Corporate Client",
+    branch: "Corporate Headquarters, Uttara",
+    focalPerson: {
+      name: "Kazi Ashiqur Rahman",
+      designation: "Chief Legal Officer",
+      phone: "+8801716000606",
+      email: "legal.affairs@squaregroup.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-corp-2",
+    _id: "demo-client-corp-2",
+    name: "Beximco Group Ltd",
+    shortCode: "BEXIMCO",
+    category: "Corporate Client",
+    branch: "BEXIMCO Industrial Park, Gazipur",
+    focalPerson: {
+      name: "Barrister Zillur Rahman",
+      designation: "Head of Corporate Affairs",
+      phone: "+8801717000707",
+      email: "zillur@beximco.net",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-corp-3",
+    _id: "demo-client-corp-3",
+    name: "Bashundhara Group",
+    shortCode: "BG",
+    category: "Corporate Client",
+    branch: "Bashundhara Industrial Headquarters, Baridhara",
+    focalPerson: {
+      name: "Maj. (Retd.) Mahfuzul Alam",
+      designation: "Executive Director (Legal & Land)",
+      phone: "+8801718000808",
+      email: "legal@bg.com.bd",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-ind-1",
+    _id: "demo-client-ind-1",
+    name: "Al-Haj Mohammad Nurul Islam",
+    shortCode: "IND",
+    category: "Individual",
+    branch: "Chittagong Commercial Center",
+    focalPerson: {
+      name: "Mohammad Nurul Islam",
+      designation: "Individual Litigant / Proprietor",
+      phone: "+8801819000909",
+      email: "nurul.islam@gmail.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-ind-2",
+    _id: "demo-client-ind-2",
+    name: "Dr. Tahmina Akter",
+    shortCode: "IND",
+    category: "Individual",
+    branch: "Dhanmondi, Dhaka",
+    focalPerson: {
+      name: "Dr. Tahmina Akter",
+      designation: "Individual Petitioner",
+      phone: "+8801911000888",
+      email: "tahmina.akter@yahoo.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-ind-3",
+    _id: "demo-client-ind-3",
+    name: "Kazi Mozammel Hossain",
+    shortCode: "IND",
+    category: "Individual",
+    branch: "Banani, Dhaka",
+    focalPerson: {
+      name: "Kazi Mozammel Hossain",
+      designation: "Managing Director & Individual Guarantor",
+      phone: "+8801711223344",
+      email: "mozammel.hossain@outlook.com",
+    },
+    isActive: true,
+  },
+];
 
 function CaseFormContent() {
   const router = useRouter();
@@ -30,15 +199,16 @@ function CaseFormContent() {
   const preselectedInstId = searchParams.get("institutionId");
 
   const [isSaving, setIsSaving] = useState(false);
-  const [showClearConfirmModal, setShowClearConfirmModal] = useState(false);
+  const [showDiscardConfirmModal, setShowDiscardConfirmModal] = useState(false);
 
-  // Institutions state
-  const [institutions, setInstitutions] = useState<Institution[]>([]);
+  // Institution / Client search & selection state
+  const [institutions, setInstitutions] = useState<Institution[]>(DEFAULT_CLIENTS);
   const [searchInstQuery, setSearchInstQuery] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedInst, setSelectedInst] = useState<Institution | null>(null);
 
-  // Advocates list for assignment
-  const [advocates, setAdvocates] = useState<User[]>([]);
+  // Advocates & Associates list
+  const [advocates, setAdvocates] = useState<UserType[]>([]);
   const [currentUserRole, setCurrentUserRole] = useState<string | null>(null);
 
   // Form Fields
@@ -70,12 +240,12 @@ function CaseFormContent() {
     },
   ]);
 
-  // Section 5: Special Notes
+  // Special Notes
   const [wokalatnamaNote, setWokalatnamaNote] = useState("");
   const [mainPetitionNote, setMainPetitionNote] = useState("");
   const [extensionNote, setExtensionNote] = useState("");
 
-  // Section 6: Assigned Advocate & Associate
+  // Assigned Advocate & Associate
   const [assignedAdvocateName, setAssignedAdvocateName] = useState("Unassigned");
   const [assignedAdvocateId, setAssignedAdvocateId] = useState("");
   const [assignedAssociateName, setAssignedAssociateName] = useState("");
@@ -83,11 +253,11 @@ function CaseFormContent() {
   const [dateAssigned, setDateAssigned] = useState(new Date().toISOString().split("T")[0]);
   const [internalRemarks, setInternalRemarks] = useState("");
 
-  // Section 7: Chronological Status Updates
+  // Chronological Status Updates
   const [statusUpdates, setStatusUpdates] = useState<StatusHearingUpdate[]>([
     {
       updateDate: new Date().toISOString().split("T")[0],
-      statusRemarks: "Initial brief received and case opened in registry.",
+      statusRemarks: "Initial brief received and case opened in chamber registry.",
       orderDetails: "",
       courtName: "",
     },
@@ -97,6 +267,8 @@ function CaseFormContent() {
 
   const selectInstitution = (inst: Institution) => {
     setSelectedInst(inst);
+    setIsDropdownOpen(false);
+    setSearchInstQuery("");
     if (inst.focalPerson) {
       if (inst.focalPerson.name) setContactName(inst.focalPerson.name);
       if (inst.focalPerson.designation) setContactDesignation(inst.focalPerson.designation);
@@ -105,7 +277,7 @@ function CaseFormContent() {
     }
   };
 
-  // Check user role and protect page
+  // Check user role
   useEffect(() => {
     fetch("/api/auth/me")
       .then((res) => res.json())
@@ -126,32 +298,42 @@ function CaseFormContent() {
     fetch("/api/institutions?limit=200")
       .then((res) => res.json())
       .then((data) => {
-        if (data.institutions) {
-          setInstitutions(data.institutions);
+        const fetchedList = data.data || data.institutions || [];
+        if (fetchedList.length > 0) {
+          // Merge with default corporate and individual clients to guarantee variety
+          const existingIds = new Set(fetchedList.map((i: Institution) => i._id || i.id));
+          const complementary = DEFAULT_CLIENTS.filter(
+            (c) => !existingIds.has(c._id) && !existingIds.has(c.id)
+          );
+          const combined = [...fetchedList, ...complementary];
+          setInstitutions(combined);
           if (preselectedInstId) {
-            const found = data.institutions.find((i: Institution) => (i._id || i.id) === preselectedInstId);
+            const found = combined.find((i: Institution) => (i._id || i.id) === preselectedInstId);
             if (found) selectInstitution(found);
           }
         }
       })
-      .catch((err) => console.error("Error fetching institutions:", err));
+      .catch(() => {
+        // Fallback to DEFAULT_CLIENTS
+        setInstitutions(DEFAULT_CLIENTS);
+      });
 
     fetch("/api/users")
       .then((res) => res.json())
       .then((data) => {
-        if (data.users) {
-          setAdvocates(data.users);
+        if (data.data || data.users) {
+          setAdvocates(data.data || data.users || []);
         }
       })
       .catch(() => {
-        // Fallback default advocates
         setAdvocates([]);
       });
   }, [preselectedInstId]);
 
-  // If editing, load case data
+  // Fetch existing case for editing
   useEffect(() => {
     if (!editId) return;
+
     fetch(`/api/cases/${editId}`)
       .then((res) => res.json())
       .then((data) => {
@@ -159,14 +341,35 @@ function CaseFormContent() {
           const c = data.case;
           setChamberFileNo(c.chamberFileNo || "");
           setMatter(c.matter || "");
+          setCaseStatus(c.status || "running");
+
+          // Institution binding
+          if (c.institutionId) {
+            setSelectedInst({
+              _id: c.institutionId,
+              id: c.institutionId,
+              name: c.institutionName || "Bound Client",
+              shortCode: "CLNT",
+              category: "Private Commercial Bank",
+              branch: c.branch || "",
+              focalPerson: c.focalPerson || { name: "", designation: "", phone: "", email: "" },
+              isActive: true,
+            });
+          }
+
           if (c.focalPerson) {
             setContactName(c.focalPerson.name || "");
             setContactDesignation(c.focalPerson.designation || "");
             setContactPhone(c.focalPerson.phone || "");
             setContactEmail(c.focalPerson.email || "");
           }
-          if (c.caseNumbers && c.caseNumbers.length > 0) setCaseNumbers(c.caseNumbers);
-          if (c.parties && c.parties.length > 0) setParties(c.parties);
+
+          if (c.caseNumbers && c.caseNumbers.length > 0) {
+            setCaseNumbers(c.caseNumbers);
+          }
+          if (c.parties && c.parties.length > 0) {
+            setParties(c.parties);
+          }
           if (c.specialNotes) {
             setWokalatnamaNote(c.specialNotes.wokalatnamaNote || "");
             setMainPetitionNote(c.specialNotes.mainPetitionNote || "");
@@ -175,30 +378,21 @@ function CaseFormContent() {
           if (c.assignedAdvocate) {
             setAssignedAdvocateName(c.assignedAdvocate.advocateName || "Unassigned");
             setAssignedAdvocateId(c.assignedAdvocate.advocateId || "");
-            setDateAssigned(c.assignedAdvocate.dateAssigned || "");
+            setDateAssigned(c.assignedAdvocate.dateAssigned || new Date().toISOString().split("T")[0]);
             setInternalRemarks(c.assignedAdvocate.internalRemarks || "");
           }
           if (c.assignedAssociate) {
             setAssignedAssociateName(c.assignedAssociate.associateName || "");
             setAssignedAssociateId(c.assignedAssociate.associateId || "");
           }
-          if (c.statusUpdates && c.statusUpdates.length > 0) setStatusUpdates(c.statusUpdates);
-          if (c.status) setCaseStatus(c.status);
-
-          // Find institution
-          fetch(`/api/institutions/${c.institutionId}`)
-            .then((r) => r.json())
-            .then((iData) => {
-              if (iData.institution) {
-                setSelectedInst(iData.institution);
-              }
-            })
-            .catch(() => {});
+          if (c.statusUpdates && c.statusUpdates.length > 0) {
+            setStatusUpdates(c.statusUpdates);
+          }
         }
       })
       .catch((err) => {
-        console.error(err);
-        toast.error("Failed to load case data");
+        console.error("Error loading case to edit:", err);
+        toast.error("Failed to load existing case details.");
       });
   }, [editId]);
 
@@ -218,7 +412,7 @@ function CaseFormContent() {
 
   const removeCaseNumberRow = (index: number) => {
     if (caseNumbers.length <= 1) {
-      toast.info("At least one Case Number row must remain.");
+      toast.info("At least one Case Number entry is required.");
       return;
     }
     setCaseNumbers(caseNumbers.filter((_, idx) => idx !== index));
@@ -232,10 +426,11 @@ function CaseFormContent() {
 
   // Repeater Helpers: Parties
   const addPartyRow = () => {
+    const nextNo = parties.length + 1;
     setParties([
       ...parties,
       {
-        partyNo: parties.length + 1,
+        partyNo: nextNo,
         partyNameDetails: "",
         caseReceivedDate: new Date().toISOString().split("T")[0],
         searchListEntry: "",
@@ -245,11 +440,10 @@ function CaseFormContent() {
 
   const removePartyRow = (index: number) => {
     if (parties.length <= 1) {
-      toast.info("At least one Party row must remain.");
+      toast.info("At least one Litigating Party entry is required.");
       return;
     }
     const filtered = parties.filter((_, idx) => idx !== index);
-    // re-index partyNo
     const reindexed = filtered.map((p, i) => ({ ...p, partyNo: i + 1 }));
     setParties(reindexed);
   };
@@ -305,7 +499,7 @@ function CaseFormContent() {
   };
 
   // Save handler
-  const handleSave = async (andAddNew = false) => {
+  const handleSave = async () => {
     if (!editId && currentUserRole === "admin") {
       toast.error(
         "Administrative rule: Administrators maintain oversight and monitoring only. Case file creation is reserved for Advocates and Associates."
@@ -314,7 +508,7 @@ function CaseFormContent() {
     }
 
     if (!selectedInst) {
-      toast.error("Please select an Institution / Client from the left list.");
+      toast.error("Please select an Institution / Client from the top selector.");
       return;
     }
 
@@ -335,6 +529,7 @@ function CaseFormContent() {
       institutionId: selectedInst._id || selectedInst.id,
       institutionName: selectedInst.name,
       matter: matter.trim(),
+      branch: selectedInst.branch || "",
       focalPerson: {
         name: contactName.trim(),
         designation: contactDesignation.trim(),
@@ -380,40 +575,7 @@ function CaseFormContent() {
       }
 
       toast.success(editId ? "Case updated successfully!" : "New Case created successfully!");
-
-      if (andAddNew) {
-        // Reset form for next entry
-        setChamberFileNo("");
-        setMatter("Artha Rin Matter");
-        setCaseNumbers([
-          {
-            caseNumber: "",
-            caseType: "Civil Petition",
-            year: new Date().getFullYear().toString(),
-            courtDivision: "Appellate Division",
-            remarks: "",
-          },
-        ]);
-        setParties([
-          {
-            partyNo: 1,
-            partyNameDetails: "",
-            caseReceivedDate: new Date().toISOString().split("T")[0],
-            searchListEntry: "",
-          },
-        ]);
-        setWokalatnamaNote("");
-        setMainPetitionNote("");
-        setExtensionNote("");
-        setStatusUpdates([
-          {
-            updateDate: new Date().toISOString().split("T")[0],
-            statusRemarks: "Initial brief received and case opened in registry.",
-          },
-        ]);
-      } else {
-        router.push("/cases");
-      }
+      router.push("/cases");
     } catch (err: unknown) {
       console.error(err);
       const msg = err instanceof Error ? err.message : "Error saving case";
@@ -423,46 +585,72 @@ function CaseFormContent() {
     }
   };
 
-  const filteredInstitutions = institutions.filter((inst) =>
-    inst.name.toLowerCase().includes(searchInstQuery.toLowerCase()) ||
-    inst.shortCode.toLowerCase().includes(searchInstQuery.toLowerCase())
-  );
+  // Filtered institutions for search dropdown
+  const filteredInstitutions = useMemo(() => {
+    if (!searchInstQuery.trim()) return institutions;
+    const q = searchInstQuery.toLowerCase();
+    return institutions.filter((inst) =>
+      inst.name.toLowerCase().includes(q) ||
+      inst.shortCode.toLowerCase().includes(q) ||
+      (inst.category && inst.category.toLowerCase().includes(q)) ||
+      (inst.branch && inst.branch.toLowerCase().includes(q))
+    );
+  }, [institutions, searchInstQuery]);
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      {/* Top Header Banner matching blueprint flow */}
-      <header className="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-20 backdrop-blur-md px-6 py-3">
-        <div className="max-w-[1700px] mx-auto flex flex-wrap items-center justify-between gap-4">
+      {/* Top Header - Normal static flow (NOT sticky) so scrolling feels natural */}
+      <header className="border-b border-slate-800 bg-slate-900/90 relative z-10 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30 flex items-center justify-center font-serif font-bold text-xl shadow-inner">
-              ⚖
-            </div>
+            <Link
+              href="/cases"
+              className="h-9 w-9 rounded-lg border border-slate-800 bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors cursor-pointer"
+              title="Return to Case Registry"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-lg font-bold tracking-tight text-white uppercase">
-                  {editId ? "Edit Case File" : "Add / Edit Case File"}
+                  {editId ? `Edit Case File • ${chamberFileNo || "Loading..."}` : "Add New Case File"}
                 </h1>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#cca776]/20 text-[#cca776] border border-[#cca776]/40 font-medium">
-                  The Legal Solutions System Flow
+                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#cca776]/15 text-[#cca776] border border-[#cca776]/30 font-medium">
+                  Authoritative Litigation Entry
                 </span>
               </div>
-              <p className="text-xs text-slate-400">
-                All fields integrated into one authoritative litigation record • High Court & Banking Practice
+              <p className="text-xs text-slate-400 mt-0.5">
+                All parameters integrated into one unified record • High Court &amp; Banking Practice
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Top Actions: Print / Export, View Dossier, Save Record */}
+          <div className="flex items-center gap-2.5">
             <button
-              onClick={() => router.push("/cases")}
-              className="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800/80 text-slate-300 hover:bg-slate-800 transition-colors"
+              type="button"
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
             >
-              Back to Case Registry
+              <Printer className="h-4 w-4 text-[#cca776]" />
+              <span>Print / Export PDF</span>
             </button>
+
+            {editId && (
+              <Link
+                href={`/cases/${editId}`}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
+              >
+                <Eye className="h-4 w-4 text-blue-400" />
+                <span>View Case Dossier</span>
+              </Link>
+            )}
+
             <button
-              onClick={() => handleSave(false)}
+              type="button"
+              onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-2 px-5 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
             >
               <Save className="h-4 w-4" />
               <span>{isSaving ? "Saving..." : "Save Record"}</span>
@@ -471,876 +659,698 @@ function CaseFormContent() {
         </div>
       </header>
 
-      {/* Blueprint Visual Breadcrumb Step Indicator */}
-      <div className="bg-slate-900/50 border-b border-slate-800/80 px-6 py-2">
-        <div className="max-w-[1700px] mx-auto flex items-center text-xs text-slate-400 gap-2 overflow-x-auto whitespace-nowrap py-1">
-          <span className="flex items-center gap-1.5 text-slate-400">
-            <Shield className="h-3.5 w-3.5 text-emerald-400" /> Login Active
-          </span>
-          <ChevronRight className="h-3 w-3 text-slate-600" />
-          <span className="text-slate-400">Dashboard</span>
-          <ChevronRight className="h-3 w-3 text-slate-600" />
-          <span className="text-[#cca776] font-semibold flex items-center gap-1">
-            <Building2 className="h-3.5 w-3.5" /> Institution Selection
-          </span>
-          <ChevronRight className="h-3 w-3 text-slate-600" />
-          <span className="text-white font-semibold flex items-center gap-1 bg-slate-800 px-2 py-0.5 rounded">
-            <FileText className="h-3.5 w-3.5 text-[#cca776]" /> Case Database (Entry Form)
-          </span>
-          <ChevronRight className="h-3 w-3 text-slate-600" />
-          <span className="text-slate-400">Case List (Registry)</span>
-        </div>
-      </div>
+      {/* Main Single-Column Full-Width Form Layout */}
+      <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-6">
 
-      {/* Main 3-Column Layout matching Blueprint exactly */}
-      <main className="flex-1 max-w-[1700px] w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-        
-        {/* ================= LEFT COLUMN: INSTITUTION / CLIENT LIST (100+ Banks) ================= */}
-        <aside className="lg:col-span-3 flex flex-col bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-          <div className="p-3.5 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+        {/* ================= SECTION 1: TOP INSTITUTION / CLIENT SELECTOR ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
             <div className="flex items-center gap-2">
               <Building2 className="h-4 w-4 text-[#cca776]" />
               <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
-                Institutions / Clients
+                1. Institution / Client
               </h2>
             </div>
-            <span className="text-[11px] font-semibold text-[#cca776] px-2 py-0.5 rounded bg-[#cca776]/10 border border-[#cca776]/20">
-              ~100 Banks
-            </span>
-          </div>
-
-          {/* Search Box for Institutions */}
-          <div className="p-3 border-b border-slate-800 bg-slate-950/60">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search institution name..."
-                value={searchInstQuery}
-                onChange={(e) => setSearchInstQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]"
-              />
-            </div>
-          </div>
-
-          {/* Scrollable Institution List */}
-          <div className="flex-1 overflow-y-auto max-h-[750px] divide-y divide-slate-800/60">
-            {filteredInstitutions.length === 0 ? (
-              <div className="p-6 text-center text-xs text-slate-500">
-                No matching financial institutions found.
-              </div>
-            ) : (
-              filteredInstitutions.map((inst) => {
-                const isSelected = selectedInst && (selectedInst._id === inst._id || selectedInst.id === inst.id);
-                return (
-                  <button
-                    key={inst._id || inst.id || inst.name}
-                    onClick={() => selectInstitution(inst)}
-                    className={`w-full text-left px-3.5 py-3 transition-colors flex items-center justify-between group ${
-                      isSelected
-                        ? "bg-[#cca776]/20 border-l-4 border-l-[#cca776] text-white"
-                        : "text-slate-300 hover:bg-slate-800/70"
-                    }`}
-                  >
-                    <div className="truncate pr-2">
-                      <div className="text-xs font-semibold truncate group-hover:text-[#cca776] transition-colors">
-                        {inst.name}
-                      </div>
-                      <div className="text-[10px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-                        <span className="uppercase text-[9px] px-1 py-0.2 rounded bg-slate-800 text-slate-300">
-                          {inst.shortCode}
-                        </span>
-                        <span className="truncate">{inst.category}</span>
-                      </div>
-                    </div>
-                    {isSelected && (
-                      <CheckCircle2 className="h-4 w-4 text-[#cca776] shrink-0" />
-                    )}
-                  </button>
-                );
-              })
-            )}
-          </div>
-
-          {/* Selected Status Footer */}
-          <div className="p-3 bg-slate-900/80 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
-            <span>Selected Client:</span>
-            <span className="font-semibold text-[#cca776] truncate max-w-[150px]">
-              {selectedInst ? selectedInst.name : "None"}
-            </span>
-          </div>
-        </aside>
-
-        {/* ================= CENTER COLUMN: CASE ENTRY FORM (All 7 Sections) ================= */}
-        <section className="lg:col-span-6 space-y-4">
-          
-          {/* Row 1: Section 1 (File Information) & Section 2 (Case Numbers) */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            
-            {/* 1. FILE INFORMATION */}
-            <div className="md:col-span-5 bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-800">
-                <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                  1. File Information
-                </span>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                  File No. <span className="text-rose-400">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. 1224 or CF-2024/098"
-                  value={chamberFileNo}
-                  onChange={(e) => setChamberFileNo(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white font-mono placeholder-slate-500 focus:outline-none focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]"
-                />
-                <p className="text-[11px] text-slate-400 mt-1.5">
-                  Unique physical chamber file binder number.
-                </p>
-              </div>
-            </div>
-
-            {/* 2. CASE NUMBER(S) REPEATER TABLE */}
-            <div className="md:col-span-7 bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-              <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-800">
-                <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                  2. Case Number(s)
-                </span>
-                <button
-                  type="button"
-                  onClick={addCaseNumberRow}
-                  className="flex items-center gap-1 text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2 py-1 rounded transition-colors"
-                >
-                  <Plus className="h-3 w-3" /> Add Another Case Number
-                </button>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead>
-                    <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
-                      <th className="py-1.5 px-1 text-center w-8">SL</th>
-                      <th className="py-1.5 px-1.5">Case Number</th>
-                      <th className="py-1.5 px-1.5">Case Type</th>
-                      <th className="py-1.5 px-1.5 w-16">Year</th>
-                      <th className="py-1.5 px-1.5">Court / Division</th>
-                      <th className="py-1.5 px-1.5">Remarks</th>
-                      <th className="py-1.5 px-1 text-center w-8">Act</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {caseNumbers.map((cn, idx) => (
-                      <tr key={idx} className="hover:bg-slate-800/30">
-                        <td className="py-2 px-1 text-center font-mono text-slate-400">{idx + 1}</td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="text"
-                            placeholder="C.P. No. 3727/2023"
-                            value={cn.caseNumber}
-                            onChange={(e) => updateCaseNumber(idx, "caseNumber", e.target.value)}
-                            className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1">
-                          <select
-                            value={cn.caseType}
-                            onChange={(e) => updateCaseNumber(idx, "caseType", e.target.value)}
-                            className="w-full px-1.5 py-1 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                          >
-                            <option value="Civil Petition">Civil Petition</option>
-                            <option value="Writ Petition">Writ Petition</option>
-                            <option value="Artha Rin Suit">Artha Rin Suit</option>
-                            <option value="Civil Revision">Civil Revision</option>
-                            <option value="First Appeal">First Appeal</option>
-                            <option value="Criminal Misc">Criminal Misc</option>
-                            <option value="Execution Case">Execution Case</option>
-                          </select>
-                        </td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="text"
-                            value={cn.year}
-                            onChange={(e) => updateCaseNumber(idx, "year", e.target.value)}
-                            className="w-full px-1 py-1 text-xs text-center bg-slate-950 border border-slate-700/80 rounded text-slate-200 font-mono focus:outline-none focus:border-[#cca776]"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="text"
-                            placeholder="Appellate / High Court"
-                            value={cn.courtDivision}
-                            onChange={(e) => updateCaseNumber(idx, "courtDivision", e.target.value)}
-                            className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="text"
-                            placeholder="e.g. Arising out of W.P."
-                            value={cn.remarks || ""}
-                            onChange={(e) => updateCaseNumber(idx, "remarks", e.target.value)}
-                            className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1 text-center">
-                          <button
-                            type="button"
-                            onClick={() => removeCaseNumberRow(idx)}
-                            className="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-950/40"
-                            title="Remove row"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 2: Section 3 (Party Name & Details) & Section 4 (Matter & Contact Person) */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            
-            {/* 3. PARTY NAME & DETAILS REPEATER TABLE */}
-            <div className="md:col-span-7 bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-              <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-800">
-                <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                  3. Party Name & Details
-                </span>
-                <button
-                  type="button"
-                  onClick={addPartyRow}
-                  className="flex items-center gap-1 text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2 py-1 rounded transition-colors"
-                >
-                  <Plus className="h-3 w-3" /> Add Another Party
-                </button>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead>
-                    <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
-                      <th className="py-1.5 px-1 text-center w-8">SL</th>
-                      <th className="py-1.5 px-1.5 w-24">Party No.</th>
-                      <th className="py-1.5 px-1.5">Party Name & Details</th>
-                      <th className="py-1.5 px-1.5 w-28">Received Date</th>
-                      <th className="py-1.5 px-1.5 w-28">Search List</th>
-                      <th className="py-1.5 px-1 text-center w-8">Act</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {parties.map((p, idx) => (
-                      <tr key={idx} className="hover:bg-slate-800/30">
-                        <td className="py-2 px-1 text-center font-mono text-slate-400">{idx + 1}</td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="text"
-                            placeholder="Petitioner / Opp. Party"
-                            value={p.partyNo === 1 ? "Petitioner No. 1" : `Opposite Party No. 0${p.partyNo - 1}`}
-                            onChange={() => updateParty(idx, "partyNo", idx + 1)}
-                            className="w-full px-1.5 py-1 text-[11px] bg-slate-950 border border-slate-700/80 rounded text-slate-300 focus:outline-none focus:border-[#cca776]"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="text"
-                            placeholder="e.g. Luxury Agro Limited / NRB Bank Gulshan"
-                            value={p.partyNameDetails}
-                            onChange={(e) => updateParty(idx, "partyNameDetails", e.target.value)}
-                            className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1 min-w-[130px]">
-                          <LegalDatePicker
-                            value={p.caseReceivedDate || ""}
-                            onChange={(val) => updateParty(idx, "caseReceivedDate", val)}
-                            placeholder="DD.MM.YYYY"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1">
-                          <input
-                            type="text"
-                            placeholder="SL-12345/23"
-                            value={p.searchListEntry || ""}
-                            onChange={(e) => updateParty(idx, "searchListEntry", e.target.value)}
-                            className="w-full px-1.5 py-1 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-300 font-mono focus:outline-none focus:border-[#cca776]"
-                          />
-                        </td>
-                        <td className="py-1.5 px-1 text-center">
-                          <button
-                            type="button"
-                            onClick={() => removePartyRow(idx)}
-                            className="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-950/40"
-                            title="Remove row"
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* 4. MATTER & CONTACT PERSON */}
-            <div className="md:col-span-5 bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-800">
-                <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                  4. Matter & Contact Person
-                </span>
-              </div>
-              <div className="space-y-2.5">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                    Matter / Subject <span className="text-rose-400">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Artha Rin Matter, Stay Vacation"
-                    value={matter}
-                    onChange={(e) => setMatter(e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-100 focus:outline-none focus:border-[#cca776]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                    Contact Person (Client Bank Officer)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Md. Kamrul Hasan"
-                    value={contactName}
-                    onChange={(e) => setContactName(e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-100 focus:outline-none focus:border-[#cca776]"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-[10px] font-semibold text-slate-400 mb-1">
-                      Designation
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Legal Division"
-                      value={contactDesignation}
-                      onChange={(e) => setContactDesignation(e.target.value)}
-                      className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-semibold text-slate-400 mb-1">
-                      Phone
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="017XXXXXXXX"
-                      value={contactPhone}
-                      onChange={(e) => setContactPhone(e.target.value)}
-                      className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-semibold text-slate-400 mb-1">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="legal@bank.com"
-                    value={contactEmail}
-                    onChange={(e) => setContactEmail(e.target.value)}
-                    className="w-full px-2.5 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 3: Section 5 (Special Note) & Section 6 (Assigned Advocate) */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            
-            {/* 5. SPECIAL NOTE */}
-            <div className="md:col-span-6 bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-              <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-800">
-                <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                  5. Special Notes
-                </span>
-              </div>
-              <div className="space-y-2.5">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                    Wokalatnama / Power Note
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Available with bank / Filed on 12.02.2024"
-                    value={wokalatnamaNote}
-                    onChange={(e) => setWokalatnamaNote(e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                    Main Petition Note
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Main petition filed by the bank"
-                    value={mainPetitionNote}
-                    onChange={(e) => setMainPetitionNote(e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                    Extension Note
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="No extension filed yet / Extension granted till June"
-                    value={extensionNote}
-                    onChange={(e) => setExtensionNote(e.target.value)}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* 6. ASSIGNED ADVOCATE & CASE STATUS */}
-            <div className="md:col-span-6 bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-              <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
-                <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                  6. Assigned Advocate & Status
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                  Internal Chamber
-                </span>
-              </div>
-              <div className="space-y-2.5">
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                    Assigned Advocate <span className="text-rose-400">*</span>
-                  </label>
-                  <select
-                    value={assignedAdvocateId || assignedAdvocateName}
-                    onChange={handleAdvocateChange}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
-                  >
-                    <option value="Unassigned">Unassigned (Chamber Pool)</option>
-                    {advocates.map((adv) => (
-                      <option key={adv._id || adv.id} value={adv._id || adv.id}>
-                        {adv.name} ({adv.chamberDesignation || adv.role})
-                      </option>
-                    ))}
-                    {/* Fallback custom option */}
-                    <option value="Adv. Shahriar Mahmud">Adv. Shahriar Mahmud</option>
-                    <option value="Adv. Tanvir Ahmed">Adv. Tanvir Ahmed</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-semibold text-slate-300 mb-1">
-                    Assisting Associate (Optional)
-                  </label>
-                  <select
-                    value={assignedAssociateId}
-                    onChange={(e) => {
-                      const selId = e.target.value;
-                      setAssignedAssociateId(selId);
-                      const found = advocates.find((u) => (u._id || u.id) === selId);
-                      setAssignedAssociateName(found ? found.name : "");
-                    }}
-                    className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
-                  >
-                    <option value="">None Assigned (No Associate)</option>
-                    {advocates.map((u) => (
-                      <option key={u._id || u.id} value={u._id || u.id}>
-                        {u.name} ({u.chamberDesignation || u.role})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-[10px] font-semibold text-slate-400 mb-1">
-                      Date Assigned
-                    </label>
-                    <LegalDatePicker
-                      value={dateAssigned}
-                      onChange={(val) => setDateAssigned(val)}
-                      placeholder="DD.MM.YYYY"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-semibold text-slate-400 mb-1">
-                      Overall Case Status
-                    </label>
-                    <select
-                      value={caseStatus}
-                      onChange={(e) =>
-                        setCaseStatus(
-                          e.target.value as
-                            | "running"
-                            | "stay_granted"
-                            | "adjourned"
-                            | "disposed"
-                            | "decreed"
-                        )
-                      }
-                      className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-[#cca776] font-semibold focus:outline-none focus:border-[#cca776]"
-                    >
-                      <option value="running">Running (Active)</option>
-                      <option value="stay_granted">Stay Granted</option>
-                      <option value="adjourned">Adjourned</option>
-                      <option value="disposed">Disposed</option>
-                      <option value="decreed">Decreed / Judgment</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] font-semibold text-slate-400 mb-1">
-                    Internal Remarks / Instruction
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Drafting and hearing before Bench 14"
-                    value={internalRemarks}
-                    onChange={(e) => setInternalRemarks(e.target.value)}
-                    className="w-full px-2.5 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 4: Section 7 (Remark / Status - Chronological Updates) */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
-            <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-[#cca776]" />
-                <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                  7. Remark / Status (Chronological Updates)
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={addStatusRow}
-                className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
-              >
-                <Plus className="h-3.5 w-3.5" /> Add New Status / Remark
-              </button>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
-                    <th className="py-2 px-2 text-center w-10">SL</th>
-                    <th className="py-2 px-2 w-32">Date</th>
-                    <th className="py-2 px-2">Status / Remarks / Order Details</th>
-                    <th className="py-2 px-2 text-center w-12">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60">
-                  {statusUpdates.map((su, idx) => (
-                    <tr key={idx} className="hover:bg-slate-800/30">
-                      <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
-                      <td className="py-2 px-2 w-36">
-                        <LegalDatePicker
-                          value={su.updateDate}
-                          onChange={(val) => updateStatus(idx, "updateDate", val)}
-                          placeholder="DD.MM.YYYY"
-                        />
-                      </td>
-                      <td className="py-2 px-2">
-                        <textarea
-                          rows={2}
-                          placeholder="e.g. First Order: Rule and Stay for 06 Months on 12.08.2012 before Bijoy-09"
-                          value={su.statusRemarks}
-                          onChange={(e) => updateStatus(idx, "statusRemarks", e.target.value)}
-                          className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded text-slate-100 focus:outline-none focus:border-[#cca776]"
-                        />
-                      </td>
-                      <td className="py-2 px-2 text-center">
-                        <button
-                          type="button"
-                          onClick={() => removeStatusRow(idx)}
-                          className="text-rose-400 hover:text-rose-300 p-1.5 rounded hover:bg-rose-950/40"
-                          title="Remove update"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Sticky Actions Bar inside form matching blueprint */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-4 bg-slate-900 border border-slate-800 rounded-xl">
-            <div className="text-xs text-slate-400">
-              {selectedInst ? (
-                <span>
-                  Case file will be bound to{" "}
-                  <strong className="text-white">{selectedInst.name}</strong>
-                </span>
-              ) : (
-                <span className="text-amber-400 flex items-center gap-1">
-                  <AlertCircle className="h-3.5 w-3.5" /> Please pick an Institution from the left panel
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => router.push("/cases")}
-                className="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors"
-              >
-                ✕ Cancel
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSave(true)}
-                disabled={isSaving}
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-500 text-white shadow transition-all cursor-pointer disabled:opacity-50"
-              >
-                <Plus className="h-4 w-4" /> Save & Add New
-              </button>
-              <button
-                type="button"
-                onClick={() => handleSave(false)}
-                disabled={isSaving}
-                className="flex items-center gap-2 px-6 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
-              >
-                <Save className="h-4 w-4" />
-                <span>{isSaving ? "Saving..." : "Save Record"}</span>
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* ================= RIGHT COLUMN: ACTIONS & QUICK SEARCH ================= */}
-        <aside className="lg:col-span-3 space-y-4">
-          
-          {/* ACTIONS (For this case) */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-            <div className="p-3 bg-slate-900 border-b border-slate-800 flex items-center gap-2">
-              <Layers className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
-                Actions (For this case)
-              </h2>
-            </div>
-            <div className="p-3 space-y-1.5">
+            {selectedInst && (
               <button
                 type="button"
                 onClick={() => {
-                  if (editId) router.push(`/cases/${editId}`);
-                  else toast.info("Save this case first to view full profile.");
+                  setSelectedInst(null);
+                  setIsDropdownOpen(true);
                 }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#cca776] transition-colors border border-transparent hover:border-slate-700"
+                className="text-[11px] font-semibold text-[#cca776] hover:underline cursor-pointer"
               >
-                <FileText className="h-4 w-4 text-[#cca776]" />
-                <span>View Case File</span>
+                Change Selection
               </button>
-
-              <button
-                type="button"
-                onClick={() => toast.info("Already in the case editor.")}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#cca776] transition-colors border border-transparent hover:border-slate-700"
-              >
-                <FileText className="h-4 w-4 text-sky-400" />
-                <span>Edit Case File</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={addStatusRow}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#cca776] transition-colors border border-transparent hover:border-slate-700"
-              >
-                <Clock className="h-4 w-4 text-emerald-400" />
-                <span>Add Status / Remark</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => toast.info("Advocate assignment dropdown is available in section 6.")}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#cca776] transition-colors border border-transparent hover:border-slate-700"
-              >
-                <UserCheck className="h-4 w-4 text-violet-400" />
-                <span>Assign / Reassign</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => router.push("/reports")}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#cca776] transition-colors border border-transparent hover:border-slate-700"
-              >
-                <FileText className="h-4 w-4 text-[#cca776]" />
-                <span>Generate Report (This Case)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => window.print()}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-slate-300 hover:bg-slate-800 hover:text-[#cca776] transition-colors border border-transparent hover:border-slate-700"
-              >
-                <Printer className="h-4 w-4 text-amber-400" />
-                <span>Print / Export (PDF)</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setShowClearConfirmModal(true)}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs rounded-lg text-rose-400 hover:bg-rose-950/30 hover:text-rose-300 transition-colors border border-transparent hover:border-rose-900/40 cursor-pointer"
-              >
-                <Trash2 className="h-4 w-4 text-rose-400" />
-                <span>Discard Edits / Return</span>
-              </button>
-            </div>
+            )}
           </div>
 
-          {/* QUICK SEARCH PANEL matching Blueprint */}
-          <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-            <div className="p-3 bg-slate-900 border-b border-slate-800 flex items-center gap-2">
-              <Search className="h-4 w-4 text-[#cca776]" />
+          {!selectedInst ? (
+            <div className="relative">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Select or Search Institution / Client <span className="text-rose-400">*</span>
+              </label>
+
+              <div className="relative">
+                <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Type to search Bank, NBFI, Corporate Client, or Individual Litigant..."
+                  value={searchInstQuery}
+                  onFocus={() => setIsDropdownOpen(true)}
+                  onChange={(e) => {
+                    setSearchInstQuery(e.target.value);
+                    setIsDropdownOpen(true);
+                  }}
+                  className="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#cca776] transition-colors"
+                />
+              </div>
+
+              {/* Searchable Dropdown Overlay */}
+              {isDropdownOpen && (
+                <div className="absolute top-full left-0 right-0 mt-1 z-30 max-h-72 overflow-y-auto bg-slate-900 border border-slate-700 rounded-xl shadow-2xl divide-y divide-slate-800">
+                  {filteredInstitutions.length === 0 ? (
+                    <div className="p-4 text-center text-xs text-slate-400">
+                      No matching institution or client found.
+                    </div>
+                  ) : (
+                    filteredInstitutions.map((inst) => (
+                      <button
+                        key={inst._id || inst.id || inst.name}
+                        type="button"
+                        onClick={() => selectInstitution(inst)}
+                        className="w-full text-left px-4 py-3 hover:bg-slate-800 transition-colors flex items-center justify-between group cursor-pointer"
+                      >
+                        <div>
+                          <div className="text-xs font-bold text-white group-hover:text-[#cca776] transition-colors flex items-center gap-2">
+                            <span>{inst.name}</span>
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-[#cca776] border border-[#cca776]/20 font-mono">
+                              {inst.shortCode}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-2">
+                            <span className="text-slate-300 font-medium">{inst.category || "Institution"}</span>
+                            {inst.branch && <span>• {inst.branch}</span>}
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-semibold text-slate-500 group-hover:text-white transition-colors">
+                          Select →
+                        </span>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Selected Institution / Client Card */
+            <div className="p-4 rounded-xl bg-slate-950/80 border border-[#cca776]/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm font-bold text-white">
+                    {selectedInst.name}
+                  </span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#cca776]/15 text-[#cca776] border border-[#cca776]/30 uppercase">
+                    {selectedInst.category}
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                    {selectedInst.shortCode}
+                  </span>
+                </div>
+                {selectedInst.branch && (
+                  <p className="text-xs text-slate-400">
+                    Branch / Office: <strong className="text-slate-300">{selectedInst.branch}</strong>
+                  </p>
+                )}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedInst(null);
+                  setIsDropdownOpen(true);
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors self-start md:self-center cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" />
+                <span>Change Client</span>
+              </button>
+            </div>
+          )}
+
+          {/* Focal Person Contact Details (Associated with this Institution/Client) */}
+          <div className="pt-2 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                Focal Contact Person
+              </label>
+              <input
+                type="text"
+                placeholder="Officer / Representative Name"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                Designation / Department
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. AGM (Legal) / Director"
+                value={contactDesignation}
+                onChange={(e) => setContactDesignation(e.target.value)}
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                Direct Phone / WhatsApp
+              </label>
+              <input
+                type="text"
+                placeholder="+88017XXXXXXXX"
+                value={contactPhone}
+                onChange={(e) => setContactPhone(e.target.value)}
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                Official Email
+              </label>
+              <input
+                type="email"
+                placeholder="contact@client.com"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ================= SECTION 2: FILE & MATTER DETAILS ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
+            <FileText className="h-4 w-4 text-[#cca776]" />
+            <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+              2. Chamber File &amp; Subject Matter
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div className="md:col-span-4 space-y-1">
+              <label className="block text-xs font-semibold text-slate-300">
+                Chamber File No. <span className="text-rose-400">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. 1224 or CF-2024/098"
+                value={chamberFileNo}
+                onChange={(e) => setChamberFileNo(e.target.value)}
+                className="w-full px-3 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+              />
+              <p className="text-[11px] text-slate-400">
+                Unique chamber file binder number.
+              </p>
+            </div>
+
+            <div className="md:col-span-8 space-y-1">
+              <label className="block text-xs font-semibold text-slate-300">
+                Matter / Subject Description <span className="text-rose-400">*</span>
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Artha Rin Suit, Stay Vacation, Writ Petition No. 1204/2024"
+                value={matter}
+                onChange={(e) => setMatter(e.target.value)}
+                className="w-full px-3 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+              />
+              <p className="text-[11px] text-slate-400">
+                Litigation subject, relief sought, and legal issue summary.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= SECTION 3: CASE NUMBER(S) & COURTS ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <Scale className="h-4 w-4 text-[#cca776]" />
               <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
-                Quick Search
+                3. Case Number(s) &amp; Court Filings
               </h2>
             </div>
-            <div className="p-3 space-y-3">
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  By Institution
-                </label>
-                <select
-                  value={selectedInst ? selectedInst._id || selectedInst.id : ""}
-                  onChange={(e) => {
-                    const inst = institutions.find((i) => (i._id || i.id) === e.target.value);
-                    if (inst) selectInstitution(inst);
-                  }}
-                  className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                >
-                  <option value="">-- All Institutions --</option>
-                  {institutions.map((i) => (
-                    <option key={i._id || i.id} value={i._id || i.id}>
-                      {i.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <button
+              type="button"
+              onClick={addCaseNumberRow}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Add Another Court / Case No.</span>
+            </button>
+          </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  By File No.
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. 1224"
-                  value={chamberFileNo}
-                  onChange={(e) => setChamberFileNo(e.target.value)}
-                  className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 font-mono focus:outline-none focus:border-[#cca776]"
-                />
-              </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                  <th className="py-2 px-2 text-center w-10">SL</th>
+                  <th className="py-2 px-2">Case Number</th>
+                  <th className="py-2 px-2">Case Type</th>
+                  <th className="py-2 px-2 w-20 text-center">Year</th>
+                  <th className="py-2 px-2">Court / Division</th>
+                  <th className="py-2 px-2">Remarks</th>
+                  <th className="py-2 px-2 text-center w-12">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {caseNumbers.map((cn, idx) => (
+                  <tr key={idx} className="hover:bg-slate-800/30">
+                    <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. C.P. No. 3727/2023"
+                        value={cn.caseNumber}
+                        onChange={(e) => updateCaseNumber(idx, "caseNumber", e.target.value)}
+                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <select
+                        value={cn.caseType}
+                        onChange={(e) => updateCaseNumber(idx, "caseType", e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      >
+                        <option value="Civil Petition">Civil Petition</option>
+                        <option value="Writ Petition">Writ Petition</option>
+                        <option value="Artha Rin Suit">Artha Rin Suit</option>
+                        <option value="Civil Revision">Civil Revision</option>
+                        <option value="First Appeal">First Appeal</option>
+                        <option value="Criminal Misc">Criminal Misc</option>
+                        <option value="Execution Case">Execution Case</option>
+                      </select>
+                    </td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        value={cn.year}
+                        onChange={(e) => updateCaseNumber(idx, "year", e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs text-center bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 font-mono focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        placeholder="Appellate / High Court / Artha Rin Adalat"
+                        value={cn.courtDivision}
+                        onChange={(e) => updateCaseNumber(idx, "courtDivision", e.target.value)}
+                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. Arising out of W.P. No. 1220"
+                        value={cn.remarks || ""}
+                        onChange={(e) => updateCaseNumber(idx, "remarks", e.target.value)}
+                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2 text-center">
+                      <button
+                        type="button"
+                        onClick={() => removeCaseNumberRow(idx)}
+                        className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
+                        title="Remove row"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  By Case Number
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. C.P. 3727/2023"
-                  className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 font-mono focus:outline-none focus:border-[#cca776]"
-                />
-              </div>
+        {/* ================= SECTION 4: LITIGATING PARTIES ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-[#cca776]" />
+              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+                4. Litigating Parties (Petitioner / Opposite Party)
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={addPartyRow}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Add Another Party</span>
+            </button>
+          </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-                  By Party Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Luxury Agro"
-                  className="w-full px-2 py-1 text-xs bg-slate-950 border border-slate-700 rounded text-slate-200 focus:outline-none focus:border-[#cca776]"
-                />
-              </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                  <th className="py-2 px-2 text-center w-10">SL</th>
+                  <th className="py-2 px-2 w-32">Party Type</th>
+                  <th className="py-2 px-2">Party Name &amp; Address Details</th>
+                  <th className="py-2 px-2 w-36">Received Date</th>
+                  <th className="py-2 px-2 w-32">Search List</th>
+                  <th className="py-2 px-2 text-center w-12">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {parties.map((p, idx) => (
+                  <tr key={idx} className="hover:bg-slate-800/30">
+                    <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        placeholder="Petitioner / Opp. Party"
+                        value={p.partyNo === 1 ? "Petitioner No. 1" : `Opposite Party No. 0${p.partyNo - 1}`}
+                        onChange={() => updateParty(idx, "partyNo", idx + 1)}
+                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-300 focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. Luxury Agro Limited / NRB Bank Limited Gulshan Branch"
+                        value={p.partyNameDetails}
+                        onChange={(e) => updateParty(idx, "partyNameDetails", e.target.value)}
+                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2 min-w-[140px]">
+                      <LegalDatePicker
+                        value={p.caseReceivedDate || ""}
+                        onChange={(val) => updateParty(idx, "caseReceivedDate", val)}
+                        placeholder="DD.MM.YYYY"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        placeholder="SL-12345/23"
+                        value={p.searchListEntry || ""}
+                        onChange={(e) => updateParty(idx, "searchListEntry", e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-300 font-mono focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2 text-center">
+                      <button
+                        type="button"
+                        onClick={() => removePartyRow(idx)}
+                        className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
+                        title="Remove row"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-              <button
-                type="button"
-                onClick={() => router.push("/cases")}
-                className="w-full flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg bg-slate-800 hover:bg-slate-700 text-[#cca776] border border-[#cca776]/30 transition-colors"
+        {/* ================= SECTION 5: ASSIGNED ADVOCATE & CASE STATUS ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <Scale className="h-4 w-4 text-[#cca776]" />
+              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+                5. Assigned Advocate &amp; Chamber Status
+              </h2>
+            </div>
+            <span className="text-[10px] px-2.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 font-medium">
+              Internal Chamber Assignment
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Assigned Advocate (Counsel) <span className="text-rose-400">*</span>
+              </label>
+              <select
+                value={assignedAdvocateId || assignedAdvocateName}
+                onChange={handleAdvocateChange}
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
               >
-                <Search className="h-3.5 w-3.5" />
-                <span>Search in Registry</span>
-              </button>
+                <option value="Unassigned">Unassigned (Chamber Pool)</option>
+                {advocates.map((adv) => (
+                  <option key={adv._id || adv.id} value={adv._id || adv.id}>
+                    {adv.name} ({adv.chamberDesignation || adv.role})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Assisting Associate (Optional)
+              </label>
+              <select
+                value={assignedAssociateId}
+                onChange={(e) => {
+                  const selId = e.target.value;
+                  setAssignedAssociateId(selId);
+                  const found = advocates.find((u) => (u._id || u.id) === selId);
+                  setAssignedAssociateName(found ? found.name : "");
+                }}
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+              >
+                <option value="">None Assigned</option>
+                {advocates.map((u) => (
+                  <option key={u._id || u.id} value={u._id || u.id}>
+                    {u.name} ({u.chamberDesignation || u.role})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Date Assigned
+              </label>
+              <LegalDatePicker
+                value={dateAssigned}
+                onChange={(val) => setDateAssigned(val)}
+                placeholder="DD.MM.YYYY"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Litigation Status
+              </label>
+              <select
+                value={caseStatus}
+                onChange={(e) =>
+                  setCaseStatus(
+                    e.target.value as
+                      | "running"
+                      | "stay_granted"
+                      | "adjourned"
+                      | "disposed"
+                      | "decreed"
+                  )
+                }
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-[#cca776] font-bold focus:outline-none focus:border-[#cca776]"
+              >
+                <option value="running">Running (Active Litigation)</option>
+                <option value="stay_granted">Stay Granted / Injunction</option>
+                <option value="adjourned">Adjourned</option>
+                <option value="disposed">Disposed</option>
+                <option value="decreed">Decreed / Judgment Executed</option>
+              </select>
             </div>
           </div>
-        </aside>
-      </main>
 
-      {/* ================= BOTTOM BAR: OUTPUT & USAGE ================= */}
-      <footer className="mt-auto border-t border-slate-800 bg-slate-900/90 px-6 py-4">
-        <div className="max-w-[1700px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-xs font-bold tracking-wider text-slate-400 uppercase">
-            <Layers className="h-4 w-4 text-[#cca776]" />
-            <span>Output & Usage</span>
+          <div>
+            <label className="block text-xs font-medium text-slate-400 mb-1">
+              Internal Remarks / Instructions
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Drafting rejoinder and hearing before High Court Bench 14"
+              value={internalRemarks}
+              onChange={(e) => setInternalRemarks(e.target.value)}
+              className="w-full px-3 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+            />
+          </div>
+        </div>
+
+        {/* ================= SECTION 6: PROCEEDINGS & CHRONOLOGICAL STATUS ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-[#cca776]" />
+              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+                6. Proceedings &amp; Status Remarks (Chronological History)
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={addStatusRow}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              <span>Add New Status / Hearing</span>
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 w-full md:w-auto text-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                  <th className="py-2 px-2 text-center w-10">SL</th>
+                  <th className="py-2 px-2 w-36">Date</th>
+                  <th className="py-2 px-2">Status / Remarks / Order Details</th>
+                  <th className="py-2 px-2 w-48">Court / Bench</th>
+                  <th className="py-2 px-2 w-36">Next Fixed Date</th>
+                  <th className="py-2 px-2 text-center w-12">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/60">
+                {statusUpdates.map((su, idx) => (
+                  <tr key={idx} className="hover:bg-slate-800/30">
+                    <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
+                    <td className="py-2 px-2">
+                      <LegalDatePicker
+                        value={su.updateDate}
+                        onChange={(val) => updateStatus(idx, "updateDate", val)}
+                        placeholder="DD.MM.YYYY"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <textarea
+                        rows={2}
+                        placeholder="e.g. First Order: Rule and Stay for 06 Months on 12.08.2024 before Bijoy-09"
+                        value={su.statusRemarks}
+                        onChange={(e) => updateStatus(idx, "statusRemarks", e.target.value)}
+                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. Annex-14 / Court 03"
+                        value={su.courtName || ""}
+                        onChange={(e) => updateStatus(idx, "courtName", e.target.value)}
+                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      />
+                    </td>
+                    <td className="py-2 px-2">
+                      <LegalDatePicker
+                        value={su.nextHearingDate || ""}
+                        onChange={(val) => updateStatus(idx, "nextHearingDate", val)}
+                        placeholder="DD.MM.YYYY"
+                      />
+                    </td>
+                    <td className="py-2 px-2 text-center">
+                      <button
+                        type="button"
+                        onClick={() => removeStatusRow(idx)}
+                        className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
+                        title="Remove status update"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* ================= SECTION 7: SPECIAL CHAMBER NOTES ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
+            <FileText className="h-4 w-4 text-[#cca776]" />
+            <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+              7. Special Chamber Notes &amp; Filings
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Wokalatnama / Power Note
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Available with bank / Filed on 12.02.2024"
+                value={wokalatnamaNote}
+                onChange={(e) => setWokalatnamaNote(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Main Petition Note
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Main petition filed by the bank"
+                value={mainPetitionNote}
+                onChange={(e) => setMainPetitionNote(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                Extension Note
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Extension granted till 30.12.2024"
+                value={extensionNote}
+                onChange={(e) => setExtensionNote(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* ================= FORM FOOTER ACTIONS ================= */}
+        <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+          <div className="text-xs text-slate-400">
+            {selectedInst ? (
+              <span>
+                Case will be enrolled under{" "}
+                <strong className="text-[#cca776]">{selectedInst.name}</strong> ({selectedInst.category})
+              </span>
+            ) : (
+              <span className="text-amber-400 flex items-center gap-1">
+                ⚠️ Please select an Institution / Client above to save
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-3">
             <button
-              onClick={() => router.push("/cases")}
-              className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-center transition-colors font-medium"
+              type="button"
+              onClick={() => setShowDiscardConfirmModal(true)}
+              className="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
             >
-              View Case Details
+              Cancel &amp; Discard
             </button>
+
             <button
-              onClick={() => router.push("/cases")}
-              className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-center transition-colors font-medium"
+              type="button"
+              onClick={handleSave}
+              disabled={isSaving}
+              className="inline-flex items-center gap-2 px-6 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
             >
-              List of Cases
-            </button>
-            <button
-              onClick={() => router.push("/reports")}
-              className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-center transition-colors font-medium"
-            >
-              Monthly Client Report
-            </button>
-            <button
-              onClick={() => router.push("/reports")}
-              className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-center transition-colors font-medium"
-            >
-              Export to Excel / PDF
-            </button>
-            <button
-              onClick={() => router.push("/dashboard")}
-              className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700/60 text-center transition-colors font-medium"
-            >
-              Dashboard & Analytics
+              <Save className="h-4 w-4" />
+              <span>{isSaving ? "Saving Record..." : "Save Record"}</span>
             </button>
           </div>
         </div>
-      </footer>
+      </main>
 
       {/* Discard Edits Confirmation Modal */}
       <ConfirmationModal
-        isOpen={showClearConfirmModal}
-        onClose={() => setShowClearConfirmModal(false)}
+        isOpen={showDiscardConfirmModal}
+        onClose={() => setShowDiscardConfirmModal(false)}
         onConfirm={() => router.push("/cases")}
         title="Discard Current Edits"
-        message="Are you sure you want to discard your edits and return to the Case Registry? Any unsaved changes in this brief will be lost."
+        message="Are you sure you want to discard your edits and return to the Case Registry? Any unsaved changes will be lost."
         confirmText="Discard & Return"
         cancelText="Stay on Form"
         variant="warning"

@@ -66,16 +66,14 @@ export async function middleware(request: NextRequest) {
   const authenticated = await isValidSession(sessionCookie);
 
   // 1. Any route other than root (/) requires authentication.
-  // Unauthenticated users attempting to access ANY interface are redirected to login (/)
+  // Unauthenticated users attempting to access ANY protected interface are redirected to login (/)
   if (pathname !== "/" && !authenticated) {
     const loginUrl = new URL("/", request.url);
-    return NextResponse.redirect(loginUrl);
-  }
-
-  // 2. Authenticated users visiting root (/) are redirected to /dashboard
-  if (pathname === "/" && authenticated) {
-    const dashboardUrl = new URL("/dashboard", request.url);
-    return NextResponse.redirect(dashboardUrl);
+    const response = NextResponse.redirect(loginUrl);
+    if (sessionCookie) {
+      response.cookies.delete("law_firm_session");
+    }
+    return response;
   }
 
   return NextResponse.next();

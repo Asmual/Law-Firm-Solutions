@@ -7,13 +7,17 @@ export async function GET() {
   try {
     const session = await getSessionUser();
     if (!session) {
-      return NextResponse.json({ authenticated: false, user: null });
+      const res = NextResponse.json({ authenticated: false, user: null });
+      res.cookies.delete("law_firm_session");
+      return res;
     }
 
     await connectToDatabase();
     const user = await UserModel.findById(session.userId).lean();
     if (!user) {
-      return NextResponse.json({ authenticated: false, user: null });
+      const res = NextResponse.json({ authenticated: false, user: null });
+      res.cookies.delete("law_firm_session");
+      return res;
     }
 
     return NextResponse.json({

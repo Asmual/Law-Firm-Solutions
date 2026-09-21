@@ -38,9 +38,16 @@ export default function HomePage() {
   });
 
   useEffect(() => {
+    let isMounted = true;
+    const timeout = setTimeout(() => {
+      if (isMounted) setCheckingAuth(false);
+    }, 1200);
+
     fetch("/api/auth/me")
       .then((res) => res.json())
       .then((data) => {
+        if (!isMounted) return;
+        clearTimeout(timeout);
         if (data.authenticated && data.user) {
           router.replace("/dashboard");
         } else {
@@ -48,8 +55,15 @@ export default function HomePage() {
         }
       })
       .catch(() => {
+        if (!isMounted) return;
+        clearTimeout(timeout);
         setCheckingAuth(false);
       });
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeout);
+    };
   }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {

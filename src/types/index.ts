@@ -1,4 +1,4 @@
-export type UserRole = "admin" | "partner" | "advocate" | "associate" | "user";
+export type UserRole = "admin" | "advocate" | "associate" | "viewer";
 
 export interface User {
   id: string;
@@ -11,6 +11,7 @@ export interface User {
   barEnrollmentNo?: string;
   avatarUrl?: string;
   authProvider?: "credentials" | "google";
+  allowedInstitutions?: string[];
   isActive: boolean;
   createdAt?: string;
 }
@@ -128,6 +129,36 @@ export interface Case {
     decreeSummary?: string;
   };
   documents?: CaseDocument[];
+  isConfidential?: boolean;
+  isDeleted?: boolean;
+  deletedAt?: string;
   createdAt?: string;
   updatedAt?: string;
 }
+
+export interface ActivityLog {
+  _id?: string;
+  id?: string;
+  userId?: string;
+  userName: string;
+  userEmail: string;
+  userRole: string;
+  action: string;
+  entityType: string;
+  entityId?: string;
+  entityTitle?: string;
+  description: string;
+  ipAddress?: string;
+  beforeState?: Record<string, unknown>;
+  afterState?: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface SystemSettings {
+  associateCanCreateCase: boolean;
+  inactivityTimeoutMinutes: number;
+  twoFactorAuthEnabled: boolean;
+  viewerRoleEnabled: boolean;
+  maxUploadSizeMb: number;
+}
+

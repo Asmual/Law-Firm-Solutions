@@ -9,25 +9,22 @@ import {
   UserCircle2,
   Calendar,
   LogOut,
+  Menu,
 } from "lucide-react";
 import { toast } from "sonner";
 import { User } from "@/types";
+import { formatLegalDate } from "@/config/branding";
 
 interface HeaderProps {
   onOpenSearch?: () => void;
+  onOpenMobileMenu?: () => void;
 }
 
-export function Header({ onOpenSearch }: HeaderProps) {
+export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const [currentDateStr] = useState(() => {
-    if (typeof window === "undefined") return "";
-    return new Intl.DateTimeFormat("en-GB", {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }).format(new Date());
+    return formatLegalDate(new Date());
   });
 
   useEffect(() => {
@@ -53,38 +50,46 @@ export function Header({ onOpenSearch }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-slate-800 bg-slate-950/90 px-6 backdrop-blur text-slate-100">
-      {/* Left: Global Search Bar */}
-      <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-slate-800 bg-slate-950/90 px-4 sm:px-6 backdrop-blur text-slate-100">
+      {/* Left: Mobile Menu Toggle & Global Search Bar */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={onOpenMobileMenu}
+          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white"
+          title="Open Navigation"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+
         <button
           onClick={onOpenSearch}
-          className="group flex h-9 w-64 md:w-96 items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-3 text-xs text-slate-400 hover:border-[#cca776]/60 hover:text-slate-200 transition-all"
+          className="group flex h-9 w-56 sm:w-80 md:w-96 items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-3 text-xs text-slate-400 hover:border-[#cca776]/60 hover:text-slate-200 transition-all"
         >
           <div className="flex items-center gap-2">
             <Search className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#cca776] transition-colors" />
-            <span className="truncate">Search Chamber File, Case No, Bank, Party...</span>
+            <span className="truncate">Search File No, Case, Bank, Party...</span>
           </div>
           <kbd className="hidden rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 sm:inline-block">
             Ctrl K
           </kbd>
         </button>
 
-        {/* Date Display */}
-        <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-400">
+        {/* Date Display (DD.MM.YYYY standard) */}
+        <div className="hidden xl:flex items-center gap-1.5 text-xs text-slate-400 border-l border-slate-800 pl-3">
           <Calendar className="h-3.5 w-3.5 text-[#cca776]" />
-          <span>{currentDateStr || "Court Calendar"}</span>
+          <span>{currentDateStr}</span>
         </div>
       </div>
 
       {/* Right: Quick Actions & Profile */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         {/* Quick Add Case Button */}
         <Link
           href="/cases/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-3.5 py-1.5 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-3 py-1.5 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] transition-colors"
         >
           <Plus className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">New Case Entry</span>
+          <span className="hidden sm:inline">Add Case</span>
         </Link>
 
         {/* Notifications */}
@@ -101,22 +106,22 @@ export function Header({ onOpenSearch }: HeaderProps) {
 
         {/* User Badge / Profile */}
         {currentUser ? (
-          <div className="flex items-center gap-2.5 pl-2 border-l border-slate-800">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-200 ring-1 ring-slate-700 font-bold text-xs">
+          <div className="flex items-center gap-2 sm:gap-2.5 pl-2 border-l border-slate-800">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30 font-bold text-xs">
               {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
             </div>
             <div className="hidden md:flex flex-col text-left">
-              <span className="text-xs font-semibold text-slate-100 leading-none">
+              <span className="text-xs font-semibold text-slate-100 leading-none truncate max-w-[120px]">
                 {currentUser.name}
               </span>
               <span className="text-[10px] text-[#cca776] font-medium mt-0.5 uppercase tracking-wider">
-                {currentUser.role} • {currentUser.chamberDesignation || "Practitioner"}
+                {currentUser.role}
               </span>
             </div>
             <button
               onClick={handleLogout}
               title="Sign Out"
-              className="ml-1 p-1 rounded-md text-slate-400 hover:bg-slate-800 hover:text-red-400 transition-colors"
+              className="ml-1 p-1 rounded-md text-slate-400 hover:bg-slate-800 hover:text-red-400 transition-colors cursor-pointer"
             >
               <LogOut className="h-3.5 w-3.5" />
             </button>
@@ -127,7 +132,7 @@ export function Header({ onOpenSearch }: HeaderProps) {
             className="flex items-center gap-2 pl-2 border-l border-slate-800 text-xs font-semibold text-[#cca776] hover:text-[#b8935f]"
           >
             <UserCircle2 className="h-5 w-5" />
-            <span className="hidden md:inline">Sign In</span>
+            <span className="hidden sm:inline">Sign In</span>
           </Link>
         )}
       </div>

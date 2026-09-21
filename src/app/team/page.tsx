@@ -138,7 +138,6 @@ export default function TeamPage() {
 
   const isAdmin =
     currentUser?.role === "admin" ||
-    currentUser?.role === "partner" ||
     !currentUser; // default allows admin demo testing
 
   return (

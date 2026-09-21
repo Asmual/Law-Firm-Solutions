@@ -62,8 +62,8 @@ export async function GET(req: NextRequest) {
       user = await UserModel.create({
         name: googleUser.name || "Google User",
         email: normalizedEmail,
-        role: "user",
-        chamberDesignation: "Member",
+        role: "associate",
+        chamberDesignation: "Associate Advocate",
         avatarUrl: googleUser.picture || "",
         authProvider: "google",
         isActive: true,

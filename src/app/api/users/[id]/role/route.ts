@@ -15,10 +15,10 @@ export async function PUT(req: NextRequest, context: RouteContext) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    // Role check: Only admin or managing partner can change roles
-    if (session.role !== "admin" && session.role !== "partner") {
+    // Role check: Only admin can change roles
+    if (session.role !== "admin") {
       return NextResponse.json(
-        { success: false, error: "Access denied. Only Chamber Admin or Managing Partner can change user roles." },
+        { success: false, error: "Access denied. Only Senior Lawyer / Chamber Admin can change user roles." },
         { status: 403 }
       );
     }

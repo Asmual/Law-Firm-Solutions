@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { UserModel } from "@/models/User";
 import { verifyPassword, signSessionToken } from "@/lib/auth";
 import { UserRole } from "@/types";
+import { logActivity } from "@/lib/activity-logger";
 
 export async function POST(req: NextRequest) {
   try {
@@ -51,6 +52,30 @@ export async function POST(req: NextRequest) {
       email: user.email,
       role: user.role as UserRole,
       chamberDesignation: user.chamberDesignation,
+    });
+
+    // Update last active timestamp
+    await UserModel.findByIdAndUpdate(user._id, { lastActiveAt: new Date() });
+
+    // Record login activity log
+    const ip = req.headers.get("x-forwarded-for") || req.headers.get("x-real-ip") || "unknown";
+    const userAgent = req.headers.get("user-agent") || "unknown";
+    await logActivity({
+      user: {
+        userId: user._id.toString(),
+        name: user.name,
+        email: user.email,
+        role: user.role as UserRole,
+        chamberDesignation: user.chamberDesignation,
+        exp: 0,
+      },
+      action: "auth:login",
+      entityType: "auth",
+      entityId: user._id.toString(),
+      entityTitle: user.name,
+      description: `User ${user.name} logged into chamber portal successfully.`,
+      ipAddress: ip,
+      userAgent: userAgent,
     });
 
     const response = NextResponse.json({

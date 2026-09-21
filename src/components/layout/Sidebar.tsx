@@ -17,6 +17,7 @@ import {
   History,
   Settings,
   Activity,
+  UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserRole } from "@/types";
@@ -56,6 +57,11 @@ const navItems: NavItem[] = [
     label: "Reports & Letterhead",
     href: "/reports",
     icon: FileSpreadsheet,
+  },
+  {
+    label: "My Profile",
+    href: "/profile",
+    icon: UserCircle,
   },
   {
     label: "Senior Monitoring",

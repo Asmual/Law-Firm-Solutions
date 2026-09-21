@@ -11,6 +11,7 @@ export interface IUserDocument extends Document {
   chamberDesignation: string;
   barEnrollmentNo?: string;
   avatarUrl?: string;
+  bio?: string;
   authProvider: "credentials" | "google";
   allowedInstitutions?: mongoose.Types.ObjectId[];
   twoFactorEnabled?: boolean;
@@ -38,6 +39,7 @@ const UserSchema = new Schema<IUserDocument>(
     chamberDesignation: { type: String, default: "Legal Practitioner" },
     barEnrollmentNo: { type: String, default: "" },
     avatarUrl: { type: String, default: "" },
+    bio: { type: String, default: "" },
     authProvider: { type: String, enum: ["credentials", "google"], default: "credentials" },
     allowedInstitutions: [
       {

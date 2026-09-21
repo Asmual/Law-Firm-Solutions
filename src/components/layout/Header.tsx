@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -107,21 +108,36 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         {/* User Badge / Profile */}
         {currentUser ? (
           <div className="flex items-center gap-2 sm:gap-2.5 pl-2 border-l border-slate-800">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30 font-bold text-xs">
-              {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
-            </div>
-            <div className="hidden md:flex flex-col text-left">
-              <span className="text-xs font-semibold text-slate-100 leading-none truncate max-w-[120px]">
-                {currentUser.name}
-              </span>
-              <span className="text-[10px] text-[#cca776] font-medium mt-0.5 uppercase tracking-wider">
-                {currentUser.role}
-              </span>
-            </div>
+            <Link
+              href="/profile"
+              title="View & Edit My Profile"
+              className="flex items-center gap-2 sm:gap-2.5 group hover:opacity-90 transition-all cursor-pointer"
+            >
+              {currentUser.avatarUrl ? (
+                <img
+                  src={currentUser.avatarUrl}
+                  alt={currentUser.name}
+                  className="h-8 w-8 rounded-full object-cover ring-1 ring-[#cca776]/50 group-hover:ring-[#cca776] shadow-sm shrink-0"
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30 font-bold text-xs shrink-0 group-hover:bg-[#cca776]/25 transition-colors">
+                  {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
+                </div>
+              )}
+              <div className="hidden md:flex flex-col text-left">
+                <span className="text-xs font-semibold text-slate-100 leading-none truncate max-w-[130px] group-hover:text-[#cca776] transition-colors">
+                  {currentUser.name}
+                </span>
+                <span className="text-[10px] text-[#cca776] font-medium mt-0.5 uppercase tracking-wider">
+                  {currentUser.role}
+                </span>
+              </div>
+            </Link>
+
             <button
               onClick={handleLogout}
-              title="Sign Out"
-              className="ml-1 p-1 rounded-md text-slate-400 hover:bg-slate-800 hover:text-red-400 transition-colors cursor-pointer"
+              title="Sign Out of Chamber"
+              className="ml-1 p-1.5 rounded-md text-slate-400 hover:bg-slate-800 hover:text-red-400 transition-colors cursor-pointer"
             >
               <LogOut className="h-3.5 w-3.5" />
             </button>

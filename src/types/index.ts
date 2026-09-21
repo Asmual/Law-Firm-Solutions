@@ -10,6 +10,7 @@ export interface User {
   chamberDesignation: string;
   barEnrollmentNo?: string;
   avatarUrl?: string;
+  bio?: string;
   authProvider?: "credentials" | "google";
   allowedInstitutions?: string[];
   isActive: boolean;

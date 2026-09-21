@@ -30,6 +30,8 @@ export async function GET() {
         chamberDesignation: user.chamberDesignation,
         barEnrollmentNo: user.barEnrollmentNo,
         phone: user.phone,
+        avatarUrl: user.avatarUrl || "",
+        bio: user.bio || "",
       },
     });
   } catch (error: unknown) {

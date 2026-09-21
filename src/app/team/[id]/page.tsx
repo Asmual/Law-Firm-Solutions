@@ -444,29 +444,29 @@ export default function MemberProfileMonitoringPage({
         </Link>
       </div>
 
-      {/* 1. Member Profile Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-            {/* Avatar */}
+      {/* 1. Member Profile Banner - Compact & Circular Avatar */}
+      <div className="relative overflow-hidden rounded-xl bg-slate-900/90 p-4 sm:p-5 text-white shadow-lg border border-slate-800">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
+            {/* Avatar (Circular with Gold Ring) */}
             <div className="shrink-0">
               {member.avatarUrl ? (
                 <img
                   src={member.avatarUrl}
                   alt={member.name}
-                  className="h-24 w-24 rounded-2xl object-cover ring-2 ring-[#cca776]/50 shadow-xl"
+                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover ring-2 ring-[#cca776] shadow-md"
                 />
               ) : (
-                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-[#cca776]/15 text-[#cca776] ring-2 ring-[#cca776]/30 font-bold text-3xl shadow-xl">
+                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-2 ring-[#cca776]/40 font-bold text-2xl sm:text-3xl shadow-md">
                   {member.name.charAt(0).toUpperCase()}
                 </div>
               )}
             </div>
 
             {/* Information */}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 min-w-0">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+                <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
                   {member.name}
                 </h1>
                 <span

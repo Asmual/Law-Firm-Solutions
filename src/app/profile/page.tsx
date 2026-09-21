@@ -22,6 +22,11 @@ import {
   Search,
   Clock,
   FileSpreadsheet,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  AlertCircle,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
@@ -58,6 +63,9 @@ export default function ProfilePage() {
     confirmPassword: "",
   });
   const [changingPassword, setChangingPassword] = useState(false);
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // My Cases State
   const [myCases, setMyCases] = useState<Case[]>([]);
@@ -522,40 +530,41 @@ export default function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-6xl mx-auto pb-16 w-full font-sans">
-      {/* 1. Header Banner & Profile Snapshot */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-6 sm:p-8 text-white shadow-xl border border-slate-800">
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-            {/* Avatar with Clickable Camera Upload */}
-            <div className="relative group shrink-0">
+      {/* 1. Header Banner & Profile Snapshot - Compact, Modern & Snug */}
+      <div className="relative overflow-hidden rounded-xl bg-slate-900/90 p-4 sm:p-5 text-white shadow-lg border border-slate-800">
+        <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
+          {/* Circular Avatar Container with Integrated Camera & Remove */}
+          <div className="flex flex-col items-center shrink-0">
+            <div className="relative group">
               {profileData.avatarUrl ? (
                 <img
                   src={profileData.avatarUrl}
                   alt={profileData.name}
-                  className="h-24 w-24 rounded-2xl object-cover ring-2 ring-[#cca776]/50 shadow-xl"
+                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover ring-2 ring-[#cca776] shadow-md cursor-pointer hover:opacity-95 transition-opacity"
+                  onClick={() => fileInputRef.current?.click()}
                 />
               ) : (
-                <div className="flex h-24 w-24 items-center justify-center rounded-2xl bg-[#cca776]/15 text-[#cca776] ring-2 ring-[#cca776]/30 font-bold text-3xl shadow-xl">
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-2 ring-[#cca776]/40 font-bold text-2xl sm:text-3xl shadow-md cursor-pointer hover:bg-[#cca776]/20 transition-colors"
+                >
                   {profileData.name ? profileData.name.charAt(0).toUpperCase() : "U"}
                 </div>
               )}
 
-              {/* Upload trigger button overlay */}
+              {/* Pinned Camera Badge Button on the bottom-right of avatar circle */}
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploadingImage}
-                title="Change Profile Photo"
+                title="Upload or Change Photo"
                 aria-label="Upload photo"
-                className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-1 text-white transition-opacity cursor-pointer disabled:opacity-50"
+                className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 hover:scale-110 transition-transform shadow-md cursor-pointer disabled:opacity-50"
               >
                 {uploadingImage ? (
-                  <Loader2 className="h-6 w-6 animate-spin text-[#cca776]" />
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : (
-                  <>
-                    <Camera className="h-5 w-5 text-[#cca776]" />
-                    <span className="text-[10px] font-semibold">Change</span>
-                  </>
+                  <Camera className="h-3.5 w-3.5" />
                 )}
               </button>
 
@@ -568,73 +577,65 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Profile Info */}
-            <div className="space-y-1.5">
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-                  {profileData.name || "Advocate Name"}
-                </h1>
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#cca776]/15 px-2.5 py-0.5 text-xs font-semibold text-[#cca776] border border-[#cca776]/30">
-                  <ShieldCheck className="h-3 w-3" />
-                  {roleLabel}
-                </span>
-              </div>
-
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-slate-400">
-                <span className="flex items-center gap-1.5">
-                  <Mail className="h-3.5 w-3.5 text-[#cca776]" />
-                  {profileData.email}
-                </span>
-                {profileData.phone && (
-                  <span className="flex items-center gap-1.5">
-                    <Phone className="h-3.5 w-3.5 text-[#cca776]" />
-                    {profileData.phone}
-                  </span>
-                )}
-                {profileData.barEnrollmentNo && (
-                  <span className="flex items-center gap-1.5 text-slate-300">
-                    <Gavel className="h-3.5 w-3.5 text-[#cca776]" />
-                    Bar Roll: <span className="font-mono text-white">{profileData.barEnrollmentNo}</span>
-                  </span>
-                )}
-              </div>
-
-              {profileData.chamberDesignation && (
-                <p className="text-xs font-medium text-slate-300">
-                  {profileData.chamberDesignation}
-                </p>
-              )}
-            </div>
-          </div>
-
-          {/* Quick Stats or Actions */}
-          <div className="flex flex-wrap items-center justify-center gap-2">
+            {/* Remove button directly beneath the avatar circle */}
             {profileData.avatarUrl && (
               <button
                 type="button"
                 onClick={handleRemovePhoto}
                 disabled={uploadingImage}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-rose-800/40 bg-rose-950/20 px-3 py-2 text-xs font-medium text-rose-300 hover:bg-rose-950/40 transition-colors cursor-pointer disabled:opacity-50"
+                className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold text-rose-400 hover:text-rose-300 transition-colors cursor-pointer disabled:opacity-50 hover:underline"
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <Trash2 className="h-2.5 w-2.5" />
                 <span>Remove Photo</span>
               </button>
             )}
+          </div>
 
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={uploadingImage}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#cca776] px-4 py-2 text-xs font-bold text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
-            >
-              <Camera className="h-3.5 w-3.5" />
-              <span>{profileData.avatarUrl ? "Update Photo" : "Upload Photo"}</span>
-            </button>
+          {/* Practitioner Info - Tightly fitted without massive gaps */}
+          <div className="flex-1 min-w-0 space-y-1.5 text-center sm:text-left">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                {profileData.name || "Advocate Name"}
+              </h1>
+              <span className="inline-flex items-center gap-1 rounded-full bg-[#cca776]/15 px-2 py-0.5 text-[11px] font-semibold text-[#cca776] border border-[#cca776]/30">
+                <ShieldCheck className="h-3 w-3" />
+                {roleLabel}
+              </span>
+            </div>
+
+            {profileData.chamberDesignation && (
+              <p className="text-xs font-semibold text-[#cca776]/90">
+                {profileData.chamberDesignation}
+              </p>
+            )}
+
+            {/* Contact & Bar roll badges */}
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-0.5 text-[11px] text-slate-300">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-950/60 border border-slate-800">
+                <Mail className="h-3 w-3 text-[#cca776]" />
+                {profileData.email}
+              </span>
+              {profileData.phone && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-950/60 border border-slate-800">
+                  <Phone className="h-3 w-3 text-[#cca776]" />
+                  {profileData.phone}
+                </span>
+              )}
+              {profileData.barEnrollmentNo && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-950/60 border border-slate-800">
+                  <Gavel className="h-3 w-3 text-[#cca776]" />
+                  Roll: <span className="font-mono text-white">{profileData.barEnrollmentNo}</span>
+                </span>
+              )}
+            </div>
+
+            {profileData.bio && (
+              <p className="text-[11px] text-slate-400 italic pt-0.5 max-w-3xl line-clamp-2">
+                &ldquo;{profileData.bio}&rdquo;
+              </p>
+            )}
           </div>
         </div>
-
-        {/* Ambient glow decoration */}
-        <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
       </div>
 
       {/* 2. Navigation Tabs (Mobile-responsive horizontal scroll) */}
@@ -700,23 +701,23 @@ export default function ProfilePage() {
       {activeTab === "profile" && (
         <form
           onSubmit={handleSaveProfile}
-          className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 sm:p-8 shadow-xl backdrop-blur-xl space-y-6 animate-in fade-in"
+          className="rounded-xl border border-slate-800 bg-slate-900/90 p-4 sm:p-5 shadow-lg space-y-4 animate-in fade-in"
         >
-          <div>
+          <div className="pb-2 border-b border-slate-800">
             <h2 className="text-sm font-bold text-white flex items-center gap-2">
               <User className="h-4 w-4 text-[#cca776]" />
               <span>Chamber Practitioner Information</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-[11px] text-slate-400 mt-0.5">
               Update your formal profile, courtroom designation, and bar enrollment record
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {/* Full Legal Name */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
-                Full Legal Name *
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Full Legal Name <span className="text-rose-400">*</span>
               </label>
               <div className="relative">
                 <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
@@ -726,14 +727,14 @@ export default function ProfilePage() {
                   value={profileData.name}
                   onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                   placeholder="e.g. Barrister / Advocate Name"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             {/* Official Email (Read-only verified) */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Chamber Email Address
               </label>
               <div className="relative">
@@ -742,17 +743,17 @@ export default function ProfilePage() {
                   type="email"
                   disabled
                   value={profileData.email}
-                  className="w-full rounded-xl border border-slate-800 bg-slate-900/50 pl-8 pr-3 py-2 text-xs text-slate-400 cursor-not-allowed"
+                  className="w-full rounded-lg border border-slate-800 bg-slate-900/50 pl-8 pr-3 py-2 text-xs text-slate-400 cursor-not-allowed"
                 />
               </div>
-              <span className="text-[10px] text-slate-500 mt-1 block">
+              <span className="text-[10px] text-slate-500 mt-0.5 block">
                 Official chamber login credential
               </span>
             </div>
 
             {/* Phone */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Contact Phone / WhatsApp
               </label>
               <div className="relative">
@@ -762,17 +763,17 @@ export default function ProfilePage() {
                   value={profileData.phone}
                   onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
                   placeholder="+88017XXXXXXXX"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             {/* Role Badge */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Authorized System Role
               </label>
-              <div className="flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/50 px-3 py-2 text-xs text-slate-300">
+              <div className="flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-xs text-slate-300">
                 <ShieldCheck className="h-4 w-4 text-[#cca776]" />
                 <span className="font-semibold capitalize text-white">{profileData.role}</span>
                 <span className="ml-auto text-[10px] text-slate-500">Chamber policy</span>
@@ -781,7 +782,7 @@ export default function ProfilePage() {
 
             {/* Chamber Designation */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Chamber Designation / Title
               </label>
               <div className="relative">
@@ -793,14 +794,14 @@ export default function ProfilePage() {
                     setProfileData({ ...profileData, chamberDesignation: e.target.value })
                   }
                   placeholder="e.g. Senior Advocate, Associate Partner"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             {/* Bar Council Roll No */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
                 Bar Council Enrollment Number
               </label>
               <div className="relative">
@@ -812,7 +813,7 @@ export default function ProfilePage() {
                     setProfileData({ ...profileData, barEnrollmentNo: e.target.value })
                   }
                   placeholder="e.g. BC/ADV/2018/7421"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
                 />
               </div>
             </div>
@@ -820,15 +821,15 @@ export default function ProfilePage() {
 
           {/* Professional Bio */}
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-300 mb-1">
               Professional Bio &amp; Legal Practice Focus
             </label>
             <textarea
-              rows={4}
+              rows={3}
               value={profileData.bio}
               onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
               placeholder="Highlight legal expertise (e.g. Banking & Artha Rin, Writ Petitions, Company Litigation, Commercial Arbitration)..."
-              className="w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none resize-none"
+              className="w-full rounded-lg border border-slate-700 bg-slate-950 p-2.5 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none resize-none transition-colors"
             />
           </div>
 
@@ -836,16 +837,16 @@ export default function ProfilePage() {
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-6 py-2.5 text-xs font-bold text-slate-950 hover:bg-[#cca776]/90 shadow-lg shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#cca776] px-5 py-2 text-xs font-bold text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
             >
               {saving ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   <span>Saving Updates...</span>
                 </>
               ) : (
                 <>
-                  <Save className="h-4 w-4" />
+                  <Save className="h-3.5 w-3.5" />
                   <span>Save Profile Details</span>
                 </>
               )}
@@ -1094,69 +1095,137 @@ export default function ProfilePage() {
       {activeTab === "security" && (
         <form
           onSubmit={handleChangePassword}
-          className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 sm:p-8 shadow-xl backdrop-blur-xl space-y-6 max-w-xl animate-in fade-in"
+          className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 sm:p-6 shadow-lg space-y-5 max-w-xl animate-in fade-in"
         >
-          <div>
-            <h2 className="text-sm font-bold text-white flex items-center gap-2">
-              <KeyRound className="h-4 w-4 text-[#cca776]" />
-              <span>Change Chamber Password</span>
-            </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Ensure your account uses a robust password of at least 6 characters
-            </p>
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div>
+              <h2 className="text-sm font-bold text-white flex items-center gap-2">
+                <KeyRound className="h-4 w-4 text-[#cca776]" />
+                <span>Change Chamber Password</span>
+              </h2>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Update and secure your chamber account credentials
+              </p>
+            </div>
+            {(passwordData.currentPassword || passwordData.newPassword || passwordData.confirmPassword) && (
+              <button
+                type="button"
+                onClick={() =>
+                  setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" })
+                }
+                className="text-[11px] font-semibold text-rose-400 hover:text-rose-300 transition-colors inline-flex items-center gap-1 cursor-pointer"
+              >
+                <X className="h-3 w-3" />
+                <span>Clear Form</span>
+              </button>
+            )}
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             {/* Current Password */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
-                Current Password *
+              <label className="block text-xs font-semibold text-slate-300 mb-1">
+                Current Password <span className="text-rose-400">*</span>
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
                 <input
-                  type="password"
+                  type={showCurrent ? "text" : "password"}
                   required
                   value={passwordData.currentPassword}
                   onChange={(e) =>
                     setPasswordData({ ...passwordData, currentPassword: e.target.value })
                   }
                   placeholder="Enter current password"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-10 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrent(!showCurrent)}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  title={showCurrent ? "Hide password" : "Show password"}
+                >
+                  {showCurrent ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                </button>
               </div>
             </div>
 
             {/* New Password */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
-                New Password (min 6 characters) *
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-300">
+                  New Password <span className="text-rose-400">*</span>
+                </label>
+                {passwordData.newPassword && (
+                  <span
+                    className={`text-[10px] inline-flex items-center gap-1 font-semibold ${
+                      passwordData.newPassword.length >= 6 ? "text-emerald-400" : "text-amber-400"
+                    }`}
+                  >
+                    {passwordData.newPassword.length >= 6 ? (
+                      <>
+                        <CheckCircle2 className="h-3 w-3" /> Min length satisfied
+                      </>
+                    ) : (
+                      <>Min 6 chars ({passwordData.newPassword.length}/6)</>
+                    )}
+                  </span>
+                )}
+              </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
                 <input
-                  type="password"
+                  type={showNew ? "text" : "password"}
                   required
                   minLength={6}
                   value={passwordData.newPassword}
                   onChange={(e) =>
                     setPasswordData({ ...passwordData, newPassword: e.target.value })
                   }
-                  placeholder="Enter new password"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                  placeholder="Enter new password (min 6 characters)"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-10 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowNew(!showNew)}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  title={showNew ? "Hide password" : "Show password"}
+                >
+                  {showNew ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                </button>
               </div>
             </div>
 
             {/* Confirm New Password */}
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
-                Confirm New Password *
-              </label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-300">
+                  Confirm New Password <span className="text-rose-400">*</span>
+                </label>
+                {passwordData.confirmPassword && (
+                  <span
+                    className={`text-[10px] inline-flex items-center gap-1 font-semibold ${
+                      passwordData.newPassword === passwordData.confirmPassword
+                        ? "text-emerald-400"
+                        : "text-rose-400"
+                    }`}
+                  >
+                    {passwordData.newPassword === passwordData.confirmPassword ? (
+                      <>
+                        <CheckCircle2 className="h-3 w-3" /> Passwords match
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="h-3 w-3" /> Passwords do not match
+                      </>
+                    )}
+                  </span>
+                )}
+              </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
                 <input
-                  type="password"
+                  type={showConfirm ? "text" : "password"}
                   required
                   minLength={6}
                   value={passwordData.confirmPassword}
@@ -1164,26 +1233,39 @@ export default function ProfilePage() {
                     setPasswordData({ ...passwordData, confirmPassword: e.target.value })
                   }
                   placeholder="Re-enter new password"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-10 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  title={showConfirm ? "Hide password" : "Show password"}
+                >
+                  {showConfirm ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-2 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
             <button
               type="submit"
-              disabled={changingPassword}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#cca776] px-6 py-2.5 text-xs font-bold text-slate-950 hover:bg-[#cca776]/90 shadow-lg shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
+              disabled={
+                changingPassword ||
+                !passwordData.currentPassword ||
+                passwordData.newPassword.length < 6 ||
+                passwordData.newPassword !== passwordData.confirmPassword
+              }
+              className="inline-flex items-center gap-2 rounded-lg bg-[#cca776] px-5 py-2 text-xs font-bold text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {changingPassword ? (
                 <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
                   <span>Updating Password...</span>
                 </>
               ) : (
                 <>
-                  <KeyRound className="h-4 w-4" />
+                  <KeyRound className="h-3.5 w-3.5" />
                   <span>Update Password</span>
                 </>
               )}

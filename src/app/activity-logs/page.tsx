@@ -328,7 +328,7 @@ export default function ActivityAuditLogsPage() {
                   return (
                     <tr
                       key={log._id}
-                      className="hover:bg-slate-800/40 transition-colors group"
+                      className="transition-colors"
                     >
                       {/* Timestamp */}
                       <td className="px-4 py-3.5 whitespace-nowrap text-slate-400 font-mono text-[11px]">

@@ -219,24 +219,24 @@ export default function AdvocateDashboardPage() {
               return (
                 <div
                   key={c._id || c.id}
-                  className="p-4 sm:p-5 hover:bg-[#724916] group transition-colors flex flex-col gap-2.5"
+                  className="p-4 sm:p-5 transition-colors flex flex-col gap-2.5"
                 >
                   {/* Line 1: Chamber File, Institution Name, Court Division, Status, and Action Link */}
                   <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap min-w-0">
                       {/* File No Badge */}
-                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-[#cbb292] text-[#0F172B] border border-[#ab8c67] group-hover:bg-[#8b6028] group-hover:text-[#cca776] dark:bg-slate-800 dark:text-white dark:border-slate-700 shrink-0 whitespace-nowrap">
+                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-[#cbb292] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-white dark:border-slate-700 shrink-0 whitespace-nowrap">
                         {c.chamberFileNo}
                       </span>
 
                       {/* Institution / Bank */}
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#0F172B] group-hover:text-[#cca776] dark:text-white shrink-0 whitespace-nowrap">
-                        <Building2 className="h-3.5 w-3.5 text-[#724916] group-hover:text-[#cca776] dark:text-[#cca776]" />
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#0F172B] dark:text-white shrink-0 whitespace-nowrap">
+                        <Building2 className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                         <span>{c.institutionName}</span>
                       </div>
 
                       {/* Court / Bench */}
-                      <span className="text-xs text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 shrink-0 whitespace-nowrap">
+                      <span className="text-xs text-[#4a3e33] dark:text-slate-400 shrink-0 whitespace-nowrap">
                         • {primaryCourt}
                       </span>
                     </div>
@@ -244,8 +244,8 @@ export default function AdvocateDashboardPage() {
                     {/* Right side: Status Badge + Next Hearing Date + Link */}
                     <div className="flex items-center gap-2.5 shrink-0 ml-auto sm:ml-0">
                       {nextHearing && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[#cbb292] dark:bg-slate-800 px-2.5 py-0.5 text-[11px] font-bold text-[#0F172B] group-hover:bg-[#8b6028] group-hover:text-[#cca776] dark:text-slate-300 border border-[#ab8c67] dark:border-slate-700 whitespace-nowrap">
-                          <Calendar className="h-3 w-3 text-[#724916] group-hover:text-[#cca776] dark:text-[#cca776]" />
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#cbb292] dark:bg-slate-800 px-2.5 py-0.5 text-[11px] font-bold text-[#0F172B] dark:text-slate-300 border border-[#ab8c67] dark:border-slate-700 whitespace-nowrap">
+                          <Calendar className="h-3 w-3 text-[#724916] dark:text-[#cca776]" />
                           <span>{nextHearing}</span>
                         </span>
                       )}
@@ -258,7 +258,7 @@ export default function AdvocateDashboardPage() {
 
                       <Link
                         href={`/cases/new?id=${c._id || c.id}`}
-                        className="inline-flex items-center gap-1 rounded-lg bg-[#cbb292] group-hover:bg-[#dfceb7] group-hover:text-[#0F172B] px-3 py-1 text-xs font-bold text-[#0F172B] hover:bg-[#cca776] transition-all border border-[#ab8c67] whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-1 rounded-lg bg-[#cbb292] px-3 py-1 text-xs font-bold text-[#0F172B] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-[#724916] dark:hover:text-[#cca776] transition-all border border-[#ab8c67] dark:border-slate-700 whitespace-nowrap cursor-pointer"
                       >
                         <span>Open File</span>
                         <ArrowUpRight className="h-3 w-3" />
@@ -267,19 +267,19 @@ export default function AdvocateDashboardPage() {
                   </div>
 
                   {/* Line 2: Case Numbers, Matter, Parties & Order Summary */}
-                  <div className="flex items-center justify-between gap-4 text-xs text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-300 min-w-0">
+                  <div className="flex items-center justify-between gap-4 text-xs text-[#4a3e33] dark:text-slate-300 min-w-0">
                     <div className="flex items-center gap-2 min-w-0 truncate">
-                      <span className="font-bold text-[#0F172B] group-hover:text-white dark:text-slate-100 shrink-0 whitespace-nowrap">
+                      <span className="font-bold text-[#0F172B] dark:text-slate-100 shrink-0 whitespace-nowrap">
                         {primaryCaseNo}
                       </span>
                       <span className="text-[#ab8c67] shrink-0">•</span>
-                      <span className="text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 shrink-0 whitespace-nowrap">
+                      <span className="text-[#4a3e33] dark:text-slate-400 shrink-0 whitespace-nowrap">
                         {c.matter}
                       </span>
                       {latestUpdate?.statusRemarks && (
                         <>
                           <span className="text-[#ab8c67] shrink-0">•</span>
-                          <span className="text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 truncate italic">
+                          <span className="text-[#4a3e33] dark:text-slate-400 truncate italic">
                             &quot;{latestUpdate.statusRemarks}&quot;
                           </span>
                         </>

@@ -353,9 +353,9 @@ export default function CasesRegistryPage() {
                 cases.map((c) => {
                   const caseId = c._id || c.id || "";
                   return (
-                    <tr key={caseId} className="hover:bg-[#724916] transition-colors group">
+                    <tr key={caseId} className="transition-colors border-b border-[#ab8c67]/40 dark:border-slate-800/80">
                       {/* Chamber File No */}
-                      <td className="py-3 px-3 font-mono font-bold text-[#0F172B] group-hover:text-[#cca776] dark:text-[#cca776] whitespace-nowrap">
+                      <td className="py-3 px-3 font-mono font-bold text-[#0F172B] dark:text-[#cca776] whitespace-nowrap">
                         <Link href={`/cases/${caseId}`} className="hover:underline" title="View Case Dossier">
                           {c.chamberFileNo}
                         </Link>
@@ -363,11 +363,11 @@ export default function CasesRegistryPage() {
 
                       {/* Institution */}
                       <td className="py-3 px-3">
-                        <div className="font-bold text-[#0F172B] group-hover:text-white dark:text-white truncate max-w-[160px]" title={c.institutionName}>
+                        <div className="font-bold text-[#0F172B] dark:text-white truncate max-w-[160px]" title={c.institutionName}>
                           {c.institutionName}
                         </div>
                         {c.branch && (
-                          <div className="text-[10px] text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 truncate max-w-[160px]">
+                          <div className="text-[10px] text-[#4a3e33] dark:text-slate-400 truncate max-w-[160px]">
                             Branch: {c.branch}
                           </div>
                         )}
@@ -379,7 +379,7 @@ export default function CasesRegistryPage() {
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1 flex-wrap">
                               <span
-                                className="font-mono text-[11px] font-bold text-[#0F172B] group-hover:text-[#cca776] bg-[#cbb292] group-hover:bg-[#8b6028] dark:bg-slate-800/90 dark:text-slate-200 px-1.5 py-0.5 rounded border border-[#ab8c67] dark:border-slate-700/80 truncate max-w-[140px]"
+                                className="font-mono text-[11px] font-bold text-[#0F172B] bg-[#cbb292] dark:bg-slate-800/90 dark:text-slate-200 px-1.5 py-0.5 rounded border border-[#ab8c67] dark:border-slate-700/80 truncate max-w-[140px]"
                                 title={c.caseNumbers[0].caseNumber}
                               >
                                 {c.caseNumbers[0].caseNumber}
@@ -390,12 +390,12 @@ export default function CasesRegistryPage() {
                                 </span>
                               )}
                             </div>
-                            <span className="text-[10px] text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 block truncate max-w-[160px]">
+                            <span className="text-[10px] text-[#4a3e33] dark:text-slate-400 block truncate max-w-[160px]">
                               {c.caseNumbers[0].courtDivision} • {c.caseNumbers[0].caseType}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-[#4a3e33] group-hover:text-[#cca776]/80 italic text-[11px]">Unspecified</span>
+                          <span className="text-[#4a3e33] italic text-[11px]">Unspecified</span>
                         )}
                       </td>
 
@@ -403,29 +403,29 @@ export default function CasesRegistryPage() {
                       <td className="py-3 px-3">
                         {c.parties && c.parties.length > 0 ? (
                           <div className="max-w-[160px]" title={c.parties[0].partyNameDetails}>
-                            <span className="text-[#0F172B] group-hover:text-white dark:text-slate-200 font-bold truncate block text-xs">
+                            <span className="text-[#0F172B] dark:text-slate-200 font-bold truncate block text-xs">
                               {c.parties[0].partyNameDetails}
                             </span>
                             {c.parties.length > 1 && (
-                              <span className="text-[10px] text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 truncate block">
+                              <span className="text-[10px] text-[#4a3e33] dark:text-slate-400 truncate block">
                                 &amp; {c.parties.length - 1} others
                               </span>
                             )}
                           </div>
                         ) : (
-                          <span className="text-[#4a3e33] group-hover:text-[#cca776]/80 italic text-[11px]">None</span>
+                          <span className="text-[#4a3e33] italic text-[11px]">None</span>
                         )}
                       </td>
 
                       {/* Matter */}
-                      <td className="py-3 px-3 text-[#0F172B] group-hover:text-[#cca776] dark:text-slate-300">
+                      <td className="py-3 px-3 text-[#0F172B] dark:text-slate-300">
                         <div className="truncate max-w-[130px] text-xs font-medium" title={c.matter}>
                           {c.matter || "—"}
                         </div>
                       </td>
 
                       {/* Advocate */}
-                      <td className="py-3 px-3 text-[#0F172B] group-hover:text-white dark:text-slate-300 font-bold whitespace-nowrap">
+                      <td className="py-3 px-3 text-[#0F172B] dark:text-slate-300 font-bold whitespace-nowrap">
                         <div className="truncate max-w-[120px]" title={c.assignedAdvocate?.advocateName}>
                           {c.assignedAdvocate?.advocateName || "Unassigned"}
                         </div>
@@ -442,14 +442,14 @@ export default function CasesRegistryPage() {
                           <Link
                             href={`/cases/${caseId}`}
                             title="View Case Dossier"
-                            className="p-1.5 rounded-lg text-[#724916] group-hover:text-[#cca776] hover:bg-[#8b6028] dark:text-slate-400 dark:hover:text-white transition-colors"
+                            className="p-1.5 rounded-lg text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:text-slate-400 dark:hover:text-white transition-colors"
                           >
                             <Eye className="h-4 w-4" />
                           </Link>
                           <Link
                             href={`/cases/new?id=${caseId}`}
                             title="Edit Case File"
-                            className="p-1.5 rounded-lg text-[#724916] group-hover:text-[#cca776] hover:bg-[#8b6028] dark:text-slate-400 dark:hover:text-white transition-colors"
+                            className="p-1.5 rounded-lg text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:text-slate-400 dark:hover:text-white transition-colors"
                           >
                             <Edit className="h-4 w-4" />
                           </Link>
@@ -465,7 +465,7 @@ export default function CasesRegistryPage() {
                                   })
                               }
                               title="Delete Case File"
-                              className="p-1.5 rounded-lg text-rose-700 group-hover:text-rose-300 hover:bg-rose-950/40 dark:text-rose-400 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-lg text-rose-700 hover:bg-rose-950/40 hover:text-rose-300 dark:text-rose-400 transition-colors cursor-pointer"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>

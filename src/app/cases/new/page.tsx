@@ -1138,7 +1138,7 @@ function CaseFormContent() {
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {caseNumbers.map((cn, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/30">
+                  <tr key={idx}>
                     <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
                     <td className="py-2 px-2">
                       <input
@@ -1341,7 +1341,7 @@ function CaseFormContent() {
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {parties.map((p, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/30">
+                  <tr key={idx}>
                     <td className="py-2 px-2 text-center font-mono font-bold text-slate-400">
                       {p.partyNo || idx + 1}
                     </td>
@@ -1641,7 +1641,7 @@ function CaseFormContent() {
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {statusUpdates.map((su, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/30">
+                  <tr key={idx}>
                     <td className="py-2 px-2">
                       <LegalDatePicker
                         value={su.updateDate || ""}

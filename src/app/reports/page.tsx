@@ -607,7 +607,7 @@ export default function ReportsPage() {
                 </tr>
               ) : (
                 cases.map((c, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                  <tr key={idx} className="transition-colors">
                     <td className="py-3 px-3 text-center font-mono text-slate-500 dark:text-slate-400">{idx + 1}</td>
                     <td className="py-3 px-3 font-mono font-bold text-[#cca776]">{c.chamberFileNo}</td>
                     <td className="py-3 px-4 font-mono font-medium text-slate-900 dark:text-white">

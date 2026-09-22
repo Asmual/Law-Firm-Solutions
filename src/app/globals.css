@@ -222,28 +222,7 @@ html:not(.dark) .chamber-app .text-slate-600 {
   color: #4a3e33;
 }
 
-/* Row & list hover transitions - NO WHITE HOVER BACKGROUND */
-html:not(.dark) .chamber-app .hover\:bg-slate-50\/80:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-50:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-100:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-200:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-800\/40:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-800:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-800\/60:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-800\/50:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-700:hover {
-  background-color: #724916 !important;
-  color: #CCA776 !important;
-}
-
-html:not(.dark) .chamber-app .hover\:bg-slate-50\/80:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-50:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-100:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-200:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-800\/40:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-800:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-800\/60:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-800\/50:hover *,
-html:not(.dark) .chamber-app .hover\:bg-slate-700:hover * {
-  color: #CCA776 !important;
+/* Table rows and non-button containers do not change background on hover in light mode */
+html:not(.dark) .chamber-app table tbody tr:hover {
+  background-color: transparent;
 }

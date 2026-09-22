@@ -351,7 +351,7 @@ export default function InstitutionsPage() {
                 {institutions.map((inst) => (
                   <tr
                     key={inst.id || inst._id}
-                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                    className="transition-colors"
                   >
                     <td className="px-4 py-3 font-bold text-slate-900 dark:text-white">
                       {inst.shortCode}

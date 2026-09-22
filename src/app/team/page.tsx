@@ -449,7 +449,7 @@ export default function TeamPage() {
                     return (
                       <tr
                         key={userId}
-                        className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                        className="transition-colors"
                       >
                         {/* Name & Email */}
                         <td className="px-4 py-3.5 whitespace-nowrap">

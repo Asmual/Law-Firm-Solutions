@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   FileSpreadsheet,
   Download,
@@ -20,7 +20,8 @@ import {
   Award,
   Hash,
   Briefcase,
-  AlertCircle,
+  UserCheck,
+  TrendingUp,
 } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
@@ -149,6 +150,46 @@ export default function ReportsPage() {
     (c) => c.status === "disposed" || c.status === "decreed"
   );
 
+  // Group cases by Associate for Associate Workload Report (Photo 2)
+  const associateGroups = useMemo(() => {
+    const groups: { [key: string]: { associateCode: string; associateName: string; cases: Case[] } } = {};
+
+    cases.forEach((c) => {
+      let code = c.assignedAssociate?.associateCode;
+      let name = c.assignedAssociate?.associateName;
+
+      // Fallback if not explicitly set
+      if (!code) {
+        if (name && name.includes("Shakil")) code = "A-001";
+        else if (name && name.includes("Sabrina")) code = "A-002";
+        else if (name && name.includes("Tariqul")) code = "A-003";
+        else if (c.assignedAdvocate?.advocateName) {
+          name = c.assignedAdvocate.advocateName;
+          code = "ADV-01";
+        } else {
+          code = "A-POOL";
+          name = "Chamber Unassigned Pool";
+        }
+      }
+
+      if (!name) {
+        name = "Chamber Legal Associate";
+      }
+
+      const key = `${code}_${name}`;
+      if (!groups[key]) {
+        groups[key] = {
+          associateCode: code,
+          associateName: name,
+          cases: [],
+        };
+      }
+      groups[key].cases.push(c);
+    });
+
+    return Object.values(groups).sort((a, b) => a.associateCode.localeCompare(b.associateCode));
+  }, [cases]);
+
   // Dynamic Letterhead Codes
   const instCode = (selectedInst?.shortCode || "BANK").toUpperCase();
   const monthCode = selectedMonth.slice(0, 3).toUpperCase();
@@ -180,7 +221,7 @@ export default function ReportsPage() {
     return `• Active litigation matter. Current status: ${c.status}`;
   };
 
-  // Generate Professional Legal Letterhead PDF (Exact Photo 1 layout for Client Monthly)
+  // Generate Professional Legal PDF (Photo 1 & Photo 2 exact specifications)
   const handleExportPDF = () => {
     try {
       const doc = new jsPDF({
@@ -214,6 +255,7 @@ export default function ReportsPage() {
 
       let curY = 70;
 
+      // ================= CASE A: CLIENT MONTHLY LEGAL STATUS REPORT (PHOTO 1) =================
       if (reportType === "client_monthly" || reportType === "running_cases") {
         // Reference & Date
         doc.setFont("helvetica", "bold");
@@ -273,7 +315,6 @@ export default function ReportsPage() {
           { header: "Remark / Status", dataKey: "remarks" },
         ];
 
-        // Format Case Rows
         const mapCaseToRow = (c: Case, idx: number) => {
           const p = c.parties?.[0];
           const partyNoStr = getPartyNoLabel(p, idx);
@@ -406,7 +447,7 @@ export default function ReportsPage() {
           });
         }
 
-        // Formal closing notice & signature
+        // Formal closing notice & signature (Photo 1)
         let finalY = (doc as any).lastAutoTable.finalY + 18;
         if (finalY > 480) {
           doc.addPage();
@@ -436,9 +477,185 @@ export default function ReportsPage() {
         doc.text("Head of Chamber • Law Firm Solutions", margin, finalY + 19);
 
       } else {
-        // Associate Workload initial fallback (expanded in Stage 3)
-        const clientName = "ALL ADVOCATES & ASSOCIATES";
-        doc.text(`CHAMBER ASSOCIATE WORKLOAD REPORT FOR: ${clientName}`, margin, curY + 15);
+        // ================= CASE B: ASSOCIATE WISE ASSIGNED CASES REPORT (PHOTO 2) =================
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.setTextColor(15, 23, 42);
+        doc.text(`ASSOCIATE WISE ASSIGNED CASES REPORT (As on ${todayStr})`, margin, curY);
+
+        curY += 14;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.5);
+        doc.setTextColor(100, 116, 139);
+        doc.text(
+          `Chamber Registry Distribution • Period: ${selectedMonth} • Total Associates: ${associateGroups.length} • Grand Total Assigned Cases: ${cases.length}`,
+          margin,
+          curY
+        );
+
+        curY += 16;
+
+        // Photo 2 exact 10 columns:
+        const associateCols = [
+          { header: "SL.", dataKey: "sl" },
+          { header: "Associate ID", dataKey: "assocId" },
+          { header: "Associate Name", dataKey: "assocName" },
+          { header: "Institution / Client", dataKey: "institution" },
+          { header: "Case File No.", dataKey: "chamberFile" },
+          { header: "Case Number(s)", dataKey: "caseNumbers" },
+          { header: "Party Name & Details", dataKey: "partyDetails" },
+          { header: "Matter", dataKey: "matter" },
+          { header: "Date Assigned", dataKey: "dateAssigned" },
+          { header: "Remarks (Internal)", dataKey: "remarks" },
+        ];
+
+        let tableStartY = curY;
+
+        // Iterate through each associate group
+        associateGroups.forEach((group) => {
+          if (tableStartY > 490) {
+            doc.addPage();
+            tableStartY = 40;
+          }
+
+          // Group Header Bar
+          doc.setFillColor(15, 23, 42);
+          doc.rect(margin, tableStartY, contentWidth, 14, "F");
+          doc.setTextColor(204, 167, 118);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(8);
+          doc.text(
+            `ASSOCIATE: [${group.associateCode}] ${group.associateName.toUpperCase()} — (${group.cases.length} Active Briefs)`,
+            margin + 8,
+            tableStartY + 10
+          );
+
+          tableStartY += 16;
+
+          const groupRows = group.cases.map((c, cIdx) => {
+            const cn = c.caseNumbers?.map((n) => n.caseNumber).filter(Boolean).join("\n") || "N/A";
+            const party = c.parties?.[0]?.partyNameDetails || "N/A";
+            const dateAssigned = c.assignedAssociate?.dateAssigned || c.assignedAdvocate?.dateAssigned || "-";
+            const internalRemarks = c.assignedAssociate?.internalRemarks || c.assignedAdvocate?.internalRemarks || "Drafting and hearing";
+
+            return {
+              sl: cIdx + 1,
+              assocId: group.associateCode,
+              assocName: group.associateName,
+              institution: c.institutionName || "Client",
+              chamberFile: c.chamberFileNo,
+              caseNumbers: cn,
+              partyDetails: party,
+              matter: c.matter,
+              dateAssigned,
+              remarks: internalRemarks,
+            };
+          });
+
+          autoTable(doc, {
+            columns: associateCols,
+            body: groupRows,
+            startY: tableStartY,
+            theme: "grid",
+            headStyles: {
+              fillColor: [30, 41, 59],
+              textColor: [248, 250, 252],
+              fontSize: 7,
+              fontStyle: "bold",
+              halign: "left",
+            },
+            bodyStyles: {
+              fontSize: 6.8,
+              textColor: [30, 41, 59],
+              valign: "top",
+            },
+            alternateRowStyles: {
+              fillColor: [248, 250, 252],
+            },
+            margin: { left: margin, right: margin },
+            styles: {
+              overflow: "linebreak",
+              cellPadding: 3,
+              lineColor: [226, 232, 240],
+              lineWidth: 0.5,
+            },
+            columnStyles: {
+              sl: { cellWidth: 22, halign: "center", fontStyle: "bold" },
+              assocId: { cellWidth: 42, halign: "center", fontStyle: "bold", textColor: [114, 73, 22] },
+              assocName: { cellWidth: 70, fontStyle: "bold" },
+              institution: { cellWidth: 80 },
+              chamberFile: { cellWidth: 50, halign: "center", fontStyle: "bold" },
+              caseNumbers: { cellWidth: 90 },
+              partyDetails: { cellWidth: 120 },
+              matter: { cellWidth: 80 },
+              dateAssigned: { cellWidth: 52, halign: "center" },
+              remarks: { cellWidth: 164 },
+            },
+          });
+
+          // Sub-total Row per Associate (Photo 2)
+          let subtotalY = (doc as any).lastAutoTable.finalY + 2;
+          doc.setFillColor(241, 245, 249);
+          doc.rect(margin, subtotalY, contentWidth, 13, "F");
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(7.5);
+          doc.setTextColor(15, 23, 42);
+          doc.text(
+            `Total Cases Assigned to ${group.associateCode}: ${group.cases.length}`,
+            margin + 8,
+            subtotalY + 9.5
+          );
+
+          tableStartY = subtotalY + 18;
+        });
+
+        // Grand Total Bar at bottom (Photo 2)
+        if (tableStartY > 480) {
+          doc.addPage();
+          tableStartY = 40;
+        }
+
+        doc.setFillColor(114, 73, 22); // #724916
+        doc.rect(margin, tableStartY, contentWidth, 18, "F");
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(9);
+        doc.setTextColor(255, 255, 255);
+        doc.text(
+          `GRAND TOTAL ASSIGNED CASES ACROSS CHAMBER: ${cases.length}`,
+          margin + 10,
+          tableStartY + 12
+        );
+
+        tableStartY += 35;
+
+        // Dual Signature Block: Prepared by (Admin) & Checked by (Partner) (Photo 2)
+        if (tableStartY > 480) {
+          doc.addPage();
+          tableStartY = 50;
+        }
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(71, 85, 105);
+
+        // Left signature: Prepared by (Admin)
+        doc.text("___________________________________", margin + 40, tableStartY);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(15, 23, 42);
+        doc.text("Prepared by: Chamber Admin", margin + 40, tableStartY + 12);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100, 116, 139);
+        doc.text("Operations & Registry Division", margin + 40, tableStartY + 22);
+
+        // Right signature: Checked by (Partner)
+        const rightSigX = pageWidth - margin - 220;
+        doc.text("___________________________________", rightSigX, tableStartY);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(15, 23, 42);
+        doc.text("Checked by: Managing Partner", rightSigX, tableStartY + 12);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(100, 116, 139);
+        doc.text("The Law Solutions • Senior Advocate", rightSigX, tableStartY + 22);
       }
 
       // Footer numbering on all pages
@@ -448,23 +665,56 @@ export default function ReportsPage() {
         doc.setFontSize(7.5);
         doc.setTextColor(148, 163, 184);
         doc.text(
-          `Law Firm Solutions • Confidential Client Legal Communication • Page ${i} of ${totalPages}`,
+          `Law Firm Solutions • Confidential Chamber Registry Communication • Page ${i} of ${totalPages}`,
           margin,
           575
         );
       }
 
-      doc.save(`Legal_Status_Report_${selectedMonth.replace(/\s+/g, "_")}.pdf`);
-      toast.success("PDF Letterhead Report generated and downloaded!");
+      const filePrefix = reportType === "associate_workload" ? "Associate_Assigned_Cases_Report" : "Legal_Status_Report";
+      doc.save(`${filePrefix}_${selectedMonth.replace(/\s+/g, "_")}.pdf`);
+      toast.success("PDF Report generated and downloaded successfully!");
     } catch (err) {
       console.error(err);
       toast.error("Failed to export PDF report");
     }
   };
 
-  // Export to CSV / Excel matching Photo 1 exact 9 columns
+  // Export to CSV / Excel matching Photo 1 & Photo 2 exact columns
   const handleExportCSV = () => {
     try {
+      if (reportType === "associate_workload") {
+        const headers = [
+          "SL,Associate ID,Associate Name,Institution / Client,Case File No.,Case Number(s),Party Name & Details,Matter,Date Assigned,Remarks (Internal)",
+        ];
+        const rows: string[] = [];
+        let runningIdx = 1;
+
+        associateGroups.forEach((g) => {
+          g.cases.forEach((c) => {
+            const cn = c.caseNumbers?.map((n) => n.caseNumber).filter(Boolean).join(" | ") || "";
+            const party = c.parties?.[0]?.partyNameDetails?.replace(/"/g, '""') || "";
+            const dateAssigned = c.assignedAssociate?.dateAssigned || c.assignedAdvocate?.dateAssigned || "";
+            const remarks = (c.assignedAssociate?.internalRemarks || c.assignedAdvocate?.internalRemarks || "Drafting and hearing").replace(/"/g, '""');
+            rows.push(
+              `"${runningIdx++}","${g.associateCode}","${g.associateName}","${c.institutionName || ""}","${c.chamberFileNo}","${cn}","${party}","${c.matter}","${dateAssigned}","${remarks}"`
+            );
+          });
+        });
+
+        const csvContent = "data:text/csv;charset=utf-8," + [headers, ...rows].join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `Associate_Assigned_Cases_${selectedMonth.replace(/\s+/g, "_")}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("Associate Workload CSV exported successfully!");
+        return;
+      }
+
+      // Default: Client Monthly Report CSV (Photo 1)
       const headers = [
         "Section,SL,Case Number,Party No.,Party Name & Details,Case Received on,Search List Entry,Matter,Chamber File No.,Remark / Status",
       ];
@@ -782,7 +1032,7 @@ export default function ReportsPage() {
             </div>
           </div>
 
-          {/* Recipient Bank / Client Address Block */}
+          {/* Recipient Bank / Client Address Block (Photo 1) */}
           <div className="p-6 bg-slate-50 dark:bg-slate-950/40 border-b border-slate-200 dark:border-slate-800">
             <div className="max-w-2xl space-y-1 text-xs">
               <span className="font-bold text-slate-600 dark:text-slate-400">To,</span>
@@ -1054,81 +1304,272 @@ export default function ReportsPage() {
         </div>
       )}
 
-      {/* ================= GENERAL & ASSOCIATE WORKLOAD PREVIEW (PLACEHOLDER FOR STAGE 3) ================= */}
-      {reportType !== "client_monthly" && (
-        <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-xl">
-          <div className="p-4 bg-slate-50 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      {/* ================= ON-SCREEN PREVIEW: ASSOCIATE WISE ASSIGNED CASES REPORT (PHOTO 2) ================= */}
+      {reportType === "associate_workload" && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg overflow-hidden space-y-6 p-6">
+          {/* Title Banner & Metrics Header (Photo 2) */}
+          <div className="border-b border-slate-200 dark:border-slate-800 pb-5">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Briefcase className="h-5 w-5 text-[#cca776]" />
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                    ASSOCIATE WISE ASSIGNED CASES REPORT (As on {todayStr})
+                  </h2>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                  Chamber Associate Workload, Brief Distribution &amp; Task Assignment Register
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <div className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+                  <div className="text-[10px] font-bold uppercase text-slate-400">Total Associates</div>
+                  <div className="text-base font-bold text-[#cca776]">{associateGroups.length}</div>
+                </div>
+                <div className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
+                  <div className="text-[10px] font-bold uppercase text-slate-400">Total Assigned</div>
+                  <div className="text-base font-bold text-emerald-500">{cases.length} Cases</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Grouped Table by Associate (Photo 2 exact 10 columns) */}
+          <div className="space-y-8">
+            {associateGroups.length === 0 ? (
+              <div className="p-8 text-center text-slate-400 bg-slate-50 dark:bg-slate-950 rounded-xl">
+                No associate assignments recorded.
+              </div>
+            ) : (
+              associateGroups.map((group) => (
+                <div key={group.associateCode} className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+                  {/* Associate Group Header Bar */}
+                  <div className="bg-slate-950 px-4 py-2.5 border-b border-slate-800 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <span className="px-2 py-0.5 rounded bg-[#cca776] text-black font-mono font-bold text-xs">
+                        {group.associateCode}
+                      </span>
+                      <span className="text-xs font-bold text-white tracking-wide">
+                        {group.associateName}
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-slate-400 font-medium">
+                      {group.cases.length} {group.cases.length === 1 ? "Case Assigned" : "Cases Assigned"}
+                    </span>
+                  </div>
+
+                  {/* 10-column Table */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/80 text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
+                          <th className="py-2.5 px-2 text-center w-10">SL.</th>
+                          <th className="py-2.5 px-3 text-center min-w-[80px]">Associate ID</th>
+                          <th className="py-2.5 px-3 min-w-[120px]">Associate Name</th>
+                          <th className="py-2.5 px-3 min-w-[130px]">Institution / Client</th>
+                          <th className="py-2.5 px-3 text-center min-w-[95px]">Case File No.</th>
+                          <th className="py-2.5 px-3 min-w-[130px]">Case Number(s)</th>
+                          <th className="py-2.5 px-3 min-w-[170px]">Party Name &amp; Details</th>
+                          <th className="py-2.5 px-3 min-w-[130px]">Matter</th>
+                          <th className="py-2.5 px-3 text-center min-w-[95px]">Date Assigned</th>
+                          <th className="py-2.5 px-3 min-w-[180px]">Remarks (Internal)</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                        {group.cases.map((c, cIdx) => {
+                          const cn = c.caseNumbers?.map((n) => n.caseNumber).filter(Boolean).join(", ") || "N/A";
+                          const party = c.parties?.[0]?.partyNameDetails || "N/A";
+                          const dateAssigned = c.assignedAssociate?.dateAssigned || c.assignedAdvocate?.dateAssigned || "-";
+                          const remarks = c.assignedAssociate?.internalRemarks || c.assignedAdvocate?.internalRemarks || "Drafting and hearing";
+
+                          return (
+                            <tr key={c._id || c.id || cIdx} className="hover:bg-slate-50 dark:hover:bg-slate-950/40">
+                              <td className="py-3 px-2 text-center font-mono font-bold text-slate-500">
+                                {cIdx + 1}
+                              </td>
+                              <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                                {group.associateCode}
+                              </td>
+                              <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
+                                {group.associateName}
+                              </td>
+                              <td className="py-3 px-3 text-slate-800 dark:text-slate-200 font-medium">
+                                {c.institutionName || "Client"}
+                              </td>
+                              <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                                {c.chamberFileNo}
+                              </td>
+                              <td className="py-3 px-3 font-mono font-medium text-slate-900 dark:text-white">
+                                {cn}
+                              </td>
+                              <td className="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs">
+                                <div className="whitespace-pre-line leading-relaxed max-w-[200px]">
+                                  {party}
+                                </div>
+                              </td>
+                              <td className="py-3 px-3 text-slate-800 dark:text-slate-200">
+                                {c.matter}
+                              </td>
+                              <td className="py-3 px-3 text-center font-mono text-slate-600 dark:text-slate-400">
+                                {dateAssigned}
+                              </td>
+                              <td className="py-3 px-3">
+                                <span className="inline-block px-2.5 py-1 rounded bg-[#cca776]/10 border border-[#cca776]/20 text-[#cca776] font-medium text-[11px]">
+                                  {remarks}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Subtotal Row per Associate (Photo 2) */}
+                  <div className="bg-slate-100 dark:bg-slate-950/90 px-4 py-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
+                    <span>Total Cases Assigned to {group.associateCode}:</span>
+                    <span className="font-mono text-[#cca776] text-sm">{group.cases.length}</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Grand Total Summary Bar (Photo 2) */}
+          <div className="bg-[#724916] text-white p-3.5 rounded-xl flex items-center justify-between font-bold text-xs sm:text-sm shadow-md">
+            <span className="uppercase tracking-wider">Grand Total Assigned Cases Across All Associates:</span>
+            <span className="font-mono text-base bg-black/30 px-3 py-0.5 rounded-lg border border-white/20">
+              {cases.length} Cases
+            </span>
+          </div>
+
+          {/* Dual Partner & Admin Sign-Off Block (Photo 2) */}
+          <div className="pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div className="w-full sm:w-64 text-center">
+              <div className="border-b border-slate-400 dark:border-slate-600 pb-1 mb-2 font-mono text-xs text-slate-400">
+                _________________________________
+              </div>
+              <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                Prepared by: (Chamber Admin)
+              </div>
+              <div className="text-[10px] text-slate-500">
+                Operations &amp; Registry Division
+              </div>
+            </div>
+
+            <div className="w-full sm:w-64 text-center">
+              <div className="border-b border-slate-400 dark:border-slate-600 pb-1 mb-2 font-mono text-xs text-slate-400">
+                _________________________________
+              </div>
+              <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                Checked by: (Managing Partner)
+              </div>
+              <div className="text-[11px] text-[#cca776] font-semibold">
+                Senior Advocate / Managing Partner
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= ON-SCREEN PREVIEW: RUNNING CASES ONLY ================= */}
+      {reportType === "running_cases" && (
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg overflow-hidden p-6 space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <FileText className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                {reportType === "associate_workload" ? "Associate Workload Report" : "Running Cases Register"} ({cases.length} records)
+              <Scale className="h-5 w-5 text-[#cca776]" />
+              <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-wider">
+                Active Running &amp; Stay Granted Litigation Cases ({runningCases.length})
               </h2>
             </div>
-            <span className="text-[11px] text-[#cca776] font-mono font-semibold">
-              Period: {selectedMonth}
-            </span>
+            <span className="text-xs text-[#cca776] font-mono">Period: {selectedMonth}</span>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
-                  <th className="py-3 px-3 text-center w-10">SL</th>
-                  <th className="py-3 px-3 w-28">File No.</th>
-                  <th className="py-3 px-4">Case Number</th>
-                  <th className="py-3 px-4">Parties</th>
-                  <th className="py-3 px-4">Court / Division</th>
-                  <th className="py-3 px-4">Assigned Counsel</th>
-                  <th className="py-3 px-4 text-center">Status</th>
-                  <th className="py-3 px-4">Latest Remarks</th>
+                <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-950/80 text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
+                  <th className="py-2.5 px-2 text-center w-10">S.L.</th>
+                  <th className="py-2.5 px-3 min-w-[130px]">Case Number</th>
+                  <th className="py-2.5 px-3 min-w-[110px]">Party No.</th>
+                  <th className="py-2.5 px-3 min-w-[170px]">Party Name &amp; Details</th>
+                  <th className="py-2.5 px-3 text-center min-w-[95px]">Case Received on</th>
+                  <th className="py-2.5 px-3 text-center min-w-[95px]">Search List Entry</th>
+                  <th className="py-2.5 px-3 min-w-[130px]">Matter</th>
+                  <th className="py-2.5 px-3 text-center min-w-[90px]">Chamber File No.</th>
+                  <th className="py-2.5 px-3 min-w-[220px]">Remark / Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
-                {isLoading ? (
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
+                {runningCases.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="py-12 text-center text-slate-400">
-                      <div className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-solid border-[#cca776] border-r-transparent mb-2"></div>
-                      <p>Generating report preview...</p>
-                    </td>
-                  </tr>
-                ) : cases.length === 0 ? (
-                  <tr>
-                    <td colSpan={8} className="py-12 text-center text-slate-500">
-                      <FileSpreadsheet className="h-10 w-10 text-slate-400 dark:text-slate-600 mx-auto mb-2 opacity-50" />
-                      <p className="font-semibold text-slate-700 dark:text-slate-400">No cases recorded for this selection.</p>
+                    <td colSpan={9} className="py-8 text-center text-slate-400">
+                      No running cases recorded.
                     </td>
                   </tr>
                 ) : (
-                  cases.map((c, idx) => (
-                    <tr key={idx} className="transition-colors">
-                      <td className="py-3 px-3 text-center font-mono text-slate-500 dark:text-slate-400">{idx + 1}</td>
-                      <td className="py-3 px-3 font-mono font-bold text-[#cca776]">{c.chamberFileNo}</td>
-                      <td className="py-3 px-4 font-mono font-medium text-slate-900 dark:text-white">
-                        {c.caseNumbers?.[0]?.caseNumber || "N/A"}
-                      </td>
-                      <td className="py-3 px-4 text-slate-700 dark:text-slate-200">
-                        <div className="truncate max-w-[200px]" title={c.parties?.[0]?.partyNameDetails}>
-                          {c.parties?.[0]?.partyNameDetails || "N/A"}
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 text-sky-600 dark:text-sky-400 font-medium">
-                        {c.caseNumbers?.[0]?.courtDivision || "High Court"}
-                      </td>
-                      <td className="py-3 px-4 text-slate-900 dark:text-slate-200 font-medium">
-                        {c.assignedAdvocate?.advocateName || "Unassigned"}
-                      </td>
-                      <td className="py-3 px-4 text-center">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                          {c.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-slate-600 dark:text-slate-400">
-                        <div className="truncate max-w-[240px]">
-                          {c.statusUpdates?.[c.statusUpdates.length - 1]?.statusRemarks || "Rule and stay active."}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                  runningCases.map((c, idx) => {
+                    const p = c.parties?.[0];
+                    const partyNoStr = getPartyNoLabel(p, idx);
+                    return (
+                      <tr key={c._id || c.id || idx} className="hover:bg-slate-50 dark:hover:bg-slate-950/40">
+                        <td className="py-3 px-2 text-center font-mono font-bold text-slate-500">
+                          {idx + 1}
+                        </td>
+                        <td className="py-3 px-3 font-mono font-bold text-slate-900 dark:text-white">
+                          {c.caseNumbers && c.caseNumbers.length > 0 ? (
+                            <div className="space-y-0.5">
+                              {c.caseNumbers.map((cn, i) => (
+                                <div key={i}>{cn.caseNumber}</div>
+                              ))}
+                            </div>
+                          ) : (
+                            "N/A"
+                          )}
+                        </td>
+                        <td className="py-3 px-3">
+                          <span className="font-semibold text-[#cca776] bg-[#cca776]/10 px-2 py-0.5 rounded text-[11px] border border-[#cca776]/20">
+                            {partyNoStr}
+                          </span>
+                        </td>
+                        <td className="py-3 px-3 text-slate-800 dark:text-slate-200 text-xs">
+                          <div className="whitespace-pre-line leading-relaxed">
+                            {p?.partyNameDetails || "N/A"}
+                          </div>
+                        </td>
+                        <td className="py-3 px-3 text-center font-mono text-slate-600 dark:text-slate-400">
+                          {p?.caseReceivedDate || "-"}
+                        </td>
+                        <td className="py-3 px-3 text-center font-mono font-semibold text-slate-700 dark:text-slate-300">
+                          {p?.searchListEntry || "-"}
+                        </td>
+                        <td className="py-3 px-3 text-slate-800 dark:text-slate-200 font-medium">
+                          {c.matter || "-"}
+                        </td>
+                        <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                          {c.chamberFileNo}
+                        </td>
+                        <td className="py-3 px-3 text-slate-700 dark:text-slate-300 text-[11px]">
+                          {c.statusUpdates && c.statusUpdates.length > 0 ? (
+                            <div className="space-y-1">
+                              {c.statusUpdates.map((su, sIdx) => (
+                                <div key={sIdx} className="flex items-start gap-1 leading-snug">
+                                  <span className="text-[#cca776] font-bold">•</span>
+                                  <span>
+                                    {su.updateDate && <span className="font-mono text-slate-400 mr-1">[{su.updateDate}]</span>}
+                                    {su.statusRemarks}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <span className="italic text-slate-400">Active</span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

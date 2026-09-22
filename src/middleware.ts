@@ -62,6 +62,17 @@ async function isValidSession(token: string | undefined): Promise<boolean> {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Always allow public images, icons, and static assets
+  if (
+    pathname.startsWith("/images/") ||
+    pathname.startsWith("/_next/") ||
+    pathname.startsWith("/api/") ||
+    /\.(?:jpg|jpeg|png|webp|gif|svg|ico|css|js)$/i.test(pathname)
+  ) {
+    return NextResponse.next();
+  }
+
   const sessionCookie = request.cookies.get("law_firm_session")?.value;
   const authenticated = await isValidSession(sessionCookie);
 
@@ -86,9 +97,10 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon)
-     * - public assets
+     * - images (public images folder)
+     * - static file extensions (.jpg, .png, etc.)
+     * - favicon.ico
      */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    "/((?!api|_next/static|_next/image|images|favicon.ico|.*\\.(?:jpg|jpeg|gif|png|webp|svg|ico)$).*)",
   ],
 };

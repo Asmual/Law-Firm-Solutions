@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -183,15 +184,15 @@ export default function HomePage() {
   return (
     <div className="min-h-screen relative flex flex-col justify-between overflow-x-hidden text-slate-100 selection:bg-[#cca776]/30 selection:text-[#cca776]">
       {/* Background Image: Home-Banner.jpg */}
-      <div
-        className="fixed inset-0 z-0 bg-cover bg-no-repeat bg-center transition-all duration-700"
-        style={{
-          backgroundImage: "url('/images/Home-Banner.jpg')",
-        }}
-      >
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <img
+          src="/images/Home-Banner.jpg"
+          alt="Law Firm Solutions Chamber Banner"
+          className="w-full h-full object-cover object-center"
+        />
         {/* Subtle cinematic gradient: Keeps Lady Justice on left bright & clear while ensuring right text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/20 via-slate-950/40 to-slate-950/90 lg:from-slate-950/10 lg:via-slate-950/45 lg:to-slate-950/95 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/40 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/20 via-slate-950/40 to-slate-950/90 lg:from-slate-950/10 lg:via-slate-950/45 lg:to-slate-950/95" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/40" />
       </div>
 
       {/* TOP NAVIGATION BAR: No underline, fully transparent & clean */}
@@ -310,14 +311,14 @@ export default function HomePage() {
             </button>
 
             {/* LEFT PANEL: Login-bg.jpg Image & Chamber Identity */}
-            <div
-              className="relative md:w-5/12 bg-cover bg-center min-h-[220px] md:min-h-[580px] p-6 sm:p-8 flex flex-col justify-between text-white overflow-hidden"
-              style={{
-                backgroundImage: "url('/images/Login-bg.jpg')",
-              }}
-            >
+            <div className="relative md:w-5/12 min-h-[240px] md:min-h-[580px] p-6 sm:p-8 flex flex-col justify-between text-white overflow-hidden">
+              <img
+                src="/images/Login-bg.jpg"
+                alt="Law Firm Solutions Authentication"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
               {/* Atmospheric Overlay for maximum text contrast */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/40 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/45 pointer-events-none" />
 
               {/* Top: Dari-palla Logo & Seal */}
               <div className="relative z-10 space-y-2">

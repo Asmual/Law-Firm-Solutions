@@ -359,6 +359,7 @@ function CaseFormContent() {
   const [assignedAdvocateId, setAssignedAdvocateId] = useState("");
   const [assignedAssociateName, setAssignedAssociateName] = useState("");
   const [assignedAssociateId, setAssignedAssociateId] = useState("");
+  const [assignedAssociateCode, setAssignedAssociateCode] = useState("");
   const [dateAssigned, setDateAssigned] = useState(new Date().toISOString().split("T")[0]);
   const [internalRemarks, setInternalRemarks] = useState("");
 
@@ -516,6 +517,10 @@ function CaseFormContent() {
           if (c.assignedAssociate) {
             setAssignedAssociateName(c.assignedAssociate.associateName || "");
             setAssignedAssociateId(c.assignedAssociate.associateId || "");
+            setAssignedAssociateCode(c.assignedAssociate.associateCode || "");
+            if (c.assignedAssociate.internalRemarks) {
+              setInternalRemarks(c.assignedAssociate.internalRemarks);
+            }
           }
           if (c.statusUpdates && c.statusUpdates.length > 0) {
             setStatusUpdates(c.statusUpdates);
@@ -733,9 +738,10 @@ function CaseFormContent() {
       },
       assignedAssociate: (assignedAssociateId || assignedAssociateName) ? {
         associateId: assignedAssociateId || undefined,
+        associateCode: assignedAssociateCode || undefined,
         associateName: assignedAssociateName,
         dateAssigned,
-        internalRemarks: "Assisting Associate",
+        internalRemarks: internalRemarks || "Drafting and hearing",
       } : undefined,
       statusUpdates: statusUpdates.filter((s) => s.statusRemarks.trim() !== ""),
       status: caseStatus,
@@ -1037,20 +1043,28 @@ function CaseFormContent() {
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div className="md:col-span-4 space-y-1">
-              <label className="block text-xs font-semibold text-slate-300">
-                Chamber File No. <span className="text-rose-400">*</span>
-              </label>
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-semibold text-slate-300">
+                  Chamber File No. <span className="text-rose-400">*</span>
+                </label>
+                {currentUserRole === "associate" && !!editId && (
+                  <span className="text-[10px] font-semibold text-amber-400 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-800/40">
+                    Chamber Ledger Locked
+                  </span>
+                )}
+              </div>
               <input
                 type="text"
                 placeholder="e.g. 1224 or CF-2024/098"
                 value={chamberFileNo}
+                disabled={currentUserRole === "associate" && !!editId}
                 onChange={(e) => {
                   setChamberFileNo(e.target.value);
                   if (formErrors.chamberFileNo) {
                     setFormErrors((prev) => ({ ...prev, chamberFileNo: "" }));
                   }
                 }}
-                className={`w-full px-3 py-2 text-sm bg-slate-950 border rounded-lg text-white font-mono font-bold placeholder-slate-500 focus:outline-none transition-colors ${
+                className={`w-full px-3 py-2 text-sm bg-slate-950 border rounded-lg text-white font-mono font-bold placeholder-slate-500 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                   formErrors.chamberFileNo
                     ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
                     : "border-slate-700 focus:border-[#cca776]"
@@ -1063,7 +1077,9 @@ function CaseFormContent() {
                 </div>
               ) : (
                 <p className="text-[11px] text-slate-400">
-                  Unique chamber file binder number.
+                  {currentUserRole === "associate" && !!editId
+                    ? "Chamber File number is restricted to Partners & Lead Advocates."
+                    : "Unique chamber file binder number."}
                 </p>
               )}
             </div>
@@ -1505,13 +1521,19 @@ function CaseFormContent() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Assigned Advocate (Counsel) <span className="text-rose-400">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300">
+                  Assigned Advocate (Counsel) <span className="text-rose-400">*</span>
+                </label>
+                {currentUserRole === "associate" && (
+                  <span className="text-[10px] text-amber-400/90 font-mono">Lead Counsel</span>
+                )}
+              </div>
               <select
                 value={assignedAdvocateId || assignedAdvocateName}
                 onChange={handleAdvocateChange}
-                className={`w-full px-3 py-2 text-xs bg-slate-950 border rounded-lg text-slate-100 font-medium focus:outline-none transition-colors ${
+                disabled={currentUserRole === "associate"}
+                className={`w-full px-3 py-2 text-xs bg-slate-950 border rounded-lg text-slate-100 font-medium focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                   formErrors.assignedAdvocate
                     ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
                     : "border-slate-700 focus:border-[#cca776]"
@@ -1543,13 +1565,14 @@ function CaseFormContent() {
                   setAssignedAssociateId(selId);
                   const found = advocates.find((u) => (u._id || u.id) === selId);
                   setAssignedAssociateName(found ? found.name : "");
+                  setAssignedAssociateCode(found?.associateId || "");
                 }}
                 className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
               >
                 <option value="">None Assigned</option>
                 {advocates.map((u) => (
                   <option key={u._id || u.id} value={u._id || u.id}>
-                    {u.name} ({u.chamberDesignation || u.role})
+                    {u.associateId ? `[${u.associateId}] ` : ""}{u.name} ({u.chamberDesignation || u.role})
                   </option>
                 ))}
               </select>
@@ -1593,10 +1616,38 @@ function CaseFormContent() {
             </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1">
-              Internal Remarks / Instructions
-            </label>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-medium text-slate-400">
+                Internal Remarks / Instructions
+              </label>
+              <span className="text-[10px] text-slate-500 font-medium">Quick Law Presets</span>
+            </div>
+            {/* Quick Preset Buttons */}
+            <div className="flex flex-wrap gap-1.5 pb-1">
+              {[
+                "Drafting and hearing",
+                "Waiting for documents",
+                "Hearing scheduled",
+                "File under process",
+                "Notice issued",
+                "Research and draft",
+                "Initial review",
+              ].map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  onClick={() => setInternalRemarks(preset)}
+                  className={`text-[11px] px-2 py-0.5 rounded-full border transition-colors cursor-pointer ${
+                    internalRemarks === preset
+                      ? "bg-[#cca776] text-black border-[#cca776] font-semibold"
+                      : "bg-slate-950 border-slate-700/80 text-slate-300 hover:border-[#cca776]/60 hover:text-white"
+                  }`}
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
             <input
               type="text"
               placeholder="e.g. Drafting rejoinder and hearing before High Court Bench 14"

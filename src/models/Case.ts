@@ -21,6 +21,7 @@ export interface ICaseDocument extends Document {
   }>;
   parties: Array<{
     partyNo: number;
+    partyType?: string; // e.g. "Opposite Party", "Respondent", "Petitioner"
     partyNameDetails: string;
     caseReceivedDate?: string;
     searchListEntry?: string;
@@ -39,6 +40,7 @@ export interface ICaseDocument extends Document {
   };
   assignedAssociate?: {
     associateId?: mongoose.Types.ObjectId;
+    associateCode?: string; // e.g. "A-001"
     associateName: string;
     dateAssigned?: string;
     internalRemarks?: string;
@@ -117,6 +119,7 @@ const CaseSchema = new Schema<ICaseDocument>(
     parties: [
       {
         partyNo: { type: Number, default: 1 },
+        partyType: { type: String, default: "Petitioner", trim: true },
         partyNameDetails: { type: String, required: true, trim: true },
         caseReceivedDate: { type: String, default: "" },
         searchListEntry: { type: String, default: "" },
@@ -136,6 +139,7 @@ const CaseSchema = new Schema<ICaseDocument>(
     },
     assignedAssociate: {
       associateId: { type: Schema.Types.ObjectId, ref: "User" },
+      associateCode: { type: String, default: "", trim: true },
       associateName: { type: String, default: "", trim: true },
       dateAssigned: { type: String, default: "" },
       internalRemarks: { type: String, default: "" },

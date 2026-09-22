@@ -105,6 +105,7 @@ export async function GET(req: NextRequest) {
         role: "associate",
         chamberDesignation: "Associate Advocate",
         barEnrollmentNo: "HC-21204/2021",
+        associateId: "A-001",
         isActive: true,
       },
       {
@@ -115,6 +116,7 @@ export async function GET(req: NextRequest) {
         role: "associate",
         chamberDesignation: "Junior Associate Advocate",
         barEnrollmentNo: "DB-24110/2022",
+        associateId: "A-002",
         isActive: true,
       },
       {
@@ -125,6 +127,7 @@ export async function GET(req: NextRequest) {
         role: "associate",
         chamberDesignation: "Research Associate & Chamber Advocate",
         barEnrollmentNo: "DB-26514/2023",
+        associateId: "A-003",
         isActive: true,
       },
     ]);
@@ -581,6 +584,13 @@ export async function GET(req: NextRequest) {
           dateAssigned: "12.02.2024",
           internalRemarks: "Senior Lawyer note: Prepare application for vacating stay order with certified copy of mortgage deed and title deed search.",
         },
+        assignedAssociate: {
+          associateId: shakil._id,
+          associateCode: "A-001",
+          associateName: shakil.name,
+          dateAssigned: "12.02.2024",
+          internalRemarks: "Drafting and hearing",
+        },
         statusUpdates: [
           {
             updateDate: "20.02.2024",
@@ -661,6 +671,13 @@ export async function GET(req: NextRequest) {
           dateAssigned: "20.03.2024",
           internalRemarks: "Urgent CPLA moved before Appellate Division Chamber Judge; stay obtained in favor of bank.",
         },
+        assignedAssociate: {
+          associateId: shakil._id,
+          associateCode: "A-001",
+          associateName: shakil.name,
+          dateAssigned: "20.03.2024",
+          internalRemarks: "Waiting for documents",
+        },
         statusUpdates: [
           {
             updateDate: "25.03.2024",
@@ -726,6 +743,13 @@ export async function GET(req: NextRequest) {
           advocateName: asmual.name,
           dateAssigned: "06.01.2024",
           internalRemarks: "Case successfully decreeded and recovered. Prepare formal disposal certificate for Bank SAMD.",
+        },
+        assignedAssociate: {
+          associateId: sabrina._id,
+          associateCode: "A-002",
+          associateName: sabrina.name,
+          dateAssigned: "06.01.2024",
+          internalRemarks: "File under process",
         },
         statusUpdates: [
           {
@@ -809,6 +833,13 @@ export async function GET(req: NextRequest) {
           dateAssigned: "16.04.2024",
           internalRemarks: "Hearing preparation complete; rejoinder affidavit to be served on OP counsel.",
         },
+        assignedAssociate: {
+          associateId: sabrina._id,
+          associateCode: "A-002",
+          associateName: sabrina.name,
+          dateAssigned: "16.04.2024",
+          internalRemarks: "Notice issued",
+        },
         statusUpdates: [
           {
             updateDate: "24.04.2024",
@@ -816,49 +847,42 @@ export async function GET(req: NextRequest) {
             orderDetails: "Lower court records called for.",
             courtName: "High Court Division, Bench 21",
             enteredBy: asmual.name,
-            createdAt: new Date("2024-04-24T10:00:00Z"),
+            createdAt: new Date("2024-04-24T10:30:00Z"),
           },
           {
-            updateDate: "10.08.2024",
-            statusRemarks: "Process server report returned served on all 4 Opposite Parties.",
-            courtName: "High Court Division",
-            enteredBy: asmual.name,
-            createdAt: new Date("2024-08-10T11:00:00Z"),
-          },
-          {
-            updateDate: "15.09.2026",
-            statusRemarks: "Rule ready for hearing. Advocate Asmual submitted list of judicial precedents on Order VI Rule 17.",
-            nextHearingDate: "05.11.2026",
+            updateDate: "14.08.2024",
+            statusRemarks: "Stay extended by 6 months on petition moved by Advocate Asmual. Pending lower court records transmission.",
+            nextHearingDate: "18.11.2026",
             courtName: "High Court Division, Bench 21",
             enteredBy: asmual.name,
-            createdAt: new Date("2026-09-15T12:00:00Z"),
+            createdAt: new Date("2024-08-14T11:15:00Z"),
           },
         ],
-        status: "running",
+        status: "stay_granted",
       },
 
-      // Case 5: Pubali Bank PLC - Criminal Misc. Petition (Section 561A Defense) & NI Act 138
+      // Case 5: Pubali Bank PLC - Criminal Miscellaneous (Quashment under Section 561A)
       {
         chamberFileNo: "CF-2024/005",
         institutionId: pubali._id,
         institutionName: pubali.name,
-        matter: "Criminal Misc. Petition (Section 561A Quashment Defense) & NI Act 138",
-        branch: "Corporate Banking Wing, 26 Dilkusha C/A, Dhaka-1000",
+        matter: "Criminal Miscellaneous (Quashment under Section 561A of CrPC)",
+        branch: "Motijheel Corporate Branch",
         focalPerson: pubali.focalPerson,
         caseNumbers: [
           {
-            caseNumber: "Criminal Misc. Case No. 9104/2024",
-            caseType: "Criminal Miscellaneous",
+            caseNumber: "Criminal Misc. Case No. 9814/2024",
+            caseType: "Criminal Misc",
             year: "2024",
             courtDivision: "High Court Division (Bench 03)",
-            remarks: "Section 561A petition filed by defaulting borrower seeking quashment of trial",
+            remarks: "Petition by borrower seeking quashment of NI Act proceeding",
           },
           {
-            caseNumber: "Sessions Case No. 340/2023",
-            caseType: "C.R. Case (NI Act)",
+            caseNumber: "C.R. Case No. 412/2023",
+            caseType: "Other",
             year: "2023",
-            courtDivision: "Joint Metropolitan Sessions Judge Court No. 4, Dhaka",
-            remarks: "Cheque dishonour trial for BDT 6.25 Crore loan repayment",
+            courtDivision: "Metropolitan Magistrate Court No. 5, Dhaka",
+            remarks: "Dishonor of cheque BDT 6.25 Crore under Section 138 NI Act",
           },
         ],
         parties: [
@@ -886,6 +910,13 @@ export async function GET(req: NextRequest) {
           advocateName: asmual.name,
           dateAssigned: "01.06.2024",
           internalRemarks: "Outstanding victory: 561A quashment petition successfully discharged with BDT 25,000 punitive cost on borrower.",
+        },
+        assignedAssociate: {
+          associateId: tariqul._id,
+          associateCode: "A-003",
+          associateName: tariqul.name,
+          dateAssigned: "01.06.2024",
+          internalRemarks: "Research and draft",
         },
         statusUpdates: [
           {

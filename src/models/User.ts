@@ -10,6 +10,7 @@ export interface IUserDocument extends Document {
   role: UserRole;
   chamberDesignation: string;
   barEnrollmentNo?: string;
+  associateId?: string; // e.g. "A-001", "A-002"
   avatarUrl?: string;
   bio?: string;
   authProvider: "credentials" | "google";
@@ -38,6 +39,7 @@ const UserSchema = new Schema<IUserDocument>(
     },
     chamberDesignation: { type: String, default: "Legal Practitioner" },
     barEnrollmentNo: { type: String, default: "" },
+    associateId: { type: String, default: "", trim: true, index: true },
     avatarUrl: { type: String, default: "" },
     bio: { type: String, default: "" },
     authProvider: { type: String, enum: ["credentials", "google"], default: "credentials" },

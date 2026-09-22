@@ -9,6 +9,7 @@ export interface User {
   role: UserRole;
   chamberDesignation: string;
   barEnrollmentNo?: string;
+  associateId?: string; // e.g. "A-001"
   avatarUrl?: string;
   bio?: string;
   authProvider?: "credentials" | "google";
@@ -82,6 +83,7 @@ export interface AssignedAdvocate {
 
 export interface AssignedAssociate {
   associateId?: string;
+  associateCode?: string; // e.g. "A-001"
   associateName: string;
   dateAssigned?: string;
   internalRemarks?: string;

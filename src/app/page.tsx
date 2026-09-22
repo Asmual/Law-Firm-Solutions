@@ -195,17 +195,17 @@ export default function HomePage() {
       </div>
 
       {/* TOP NAVIGATION BAR: No underline, fully transparent & clean */}
-      <header className="relative z-20 w-full px-3.5 sm:px-8 md:px-12 py-3 sm:py-4 lg:py-5 flex items-center justify-between shrink-0">
+      <header className="relative z-20 w-full px-4 sm:px-8 md:px-12 py-3 sm:py-4 lg:py-5 flex items-center justify-between shrink-0">
         {/* Top Left: Dari-palla (Scales of Justice) Logo + System Name */}
         <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg sm:rounded-xl bg-[#cca776]/20 text-[#cca776] ring-1 ring-[#cca776]/40 shadow-lg backdrop-blur-md">
-            <Scale className="h-4 w-4 sm:h-6 sm:w-6" />
+          <div className="flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-xl bg-[#cca776]/20 text-[#cca776] ring-1 ring-[#cca776]/40 shadow-lg backdrop-blur-md">
+            <Scale className="h-5 w-5 sm:h-6 sm:w-6" />
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="text-xs sm:text-base md:text-lg font-black tracking-wider text-white uppercase drop-shadow-sm truncate">
+            <span className="text-sm sm:text-base md:text-lg font-black tracking-wider text-white uppercase drop-shadow-sm truncate">
               {BRANDING.brandName}
             </span>
-            <span className="text-[9px] sm:text-[11px] text-[#cca776] font-semibold tracking-wide truncate">
+            <span className="text-[10px] sm:text-xs text-[#cca776] font-semibold tracking-wide truncate">
               {BRANDING.tagline}
             </span>
           </div>
@@ -216,50 +216,50 @@ export default function HomePage() {
           <button
             type="button"
             onClick={handleOpenSignIn}
-            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-bold text-white bg-slate-900/80 hover:bg-[#cca776] hover:text-slate-950 border border-[#cca776]/40 shadow-xl backdrop-blur-md transition-all cursor-pointer group"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-slate-900/80 hover:bg-[#cca776] hover:text-slate-950 border border-[#cca776]/40 shadow-xl backdrop-blur-md transition-all cursor-pointer group"
           >
-            <LogIn className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#cca776] group-hover:text-slate-950 transition-colors" />
+            <LogIn className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#cca776] group-hover:text-slate-950 transition-colors" />
             <span>Sign In</span>
           </button>
         </div>
       </header>
 
-      {/* HERO CONTENT: Left side kept open for the Lady Justice statue focal point */}
-      <main className="relative z-20 flex-1 flex items-center px-3.5 sm:px-8 md:px-12 py-2 sm:py-4 lg:py-6 min-h-0">
+      {/* HERO CONTENT: Vertically & horizontally centered in the middle on mobile, right-aligned on desktop */}
+      <main className="relative z-20 flex-1 flex flex-col justify-center items-center px-4 sm:px-8 md:px-12 py-4 sm:py-6 min-h-0">
         <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-center">
-          {/* Left Column (Clear of text to let Lady Justice shine through without obstruction) */}
+          {/* Left Column (Clear of text on desktop to let Lady Justice statue shine through unobstructed) */}
           <div className="hidden lg:block lg:col-span-6 xl:col-span-6 pointer-events-none" />
 
-          {/* Right Column: Project Title & Join Actions */}
-          <div className="lg:col-span-6 xl:col-span-6 flex flex-col items-start lg:pl-8 space-y-2.5 sm:space-y-4 lg:space-y-6">
+          {/* Right Column: Project Title & Join Actions - Centered in middle on Mobile, Left on Desktop */}
+          <div className="lg:col-span-6 xl:col-span-6 flex flex-col items-center text-center lg:items-start lg:text-left lg:pl-8 space-y-3.5 sm:space-y-5 lg:space-y-6">
             {/* Chamber Authority Pill */}
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full bg-slate-900/80 border border-[#cca776]/40 text-[#cca776] text-[9px] sm:text-xs font-semibold backdrop-blur-md shadow-md">
-              <ShieldCheck className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#cca776]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/80 border border-[#cca776]/40 text-[#cca776] text-xs sm:text-sm font-semibold backdrop-blur-md shadow-md">
+              <ShieldCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#cca776]" />
               <span className="tracking-wide">Legal Practice & Litigation Suite</span>
             </div>
 
-            {/* 1-2 Line Project-wise Title */}
-            <div className="space-y-1 sm:space-y-2">
-              <h1 className="text-xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-white tracking-tight leading-[1.18] sm:leading-[1.15] drop-shadow-md">
+            {/* 1-2 Line Project-wise Title - BOLD & ENLARGED ON ALL SCREENS */}
+            <div className="space-y-2 sm:space-y-3">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-black text-white tracking-tight leading-[1.2] sm:leading-[1.15] drop-shadow-md">
                 Smart Legal Solutions <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#cca776] via-[#f3ddb3] to-[#cca776]">
                   For Modern Chambers
                 </span>
               </h1>
-              <p className="text-[11px] sm:text-xs md:text-sm text-slate-300 max-w-lg leading-normal sm:leading-relaxed pt-0.5 sm:pt-1">
+              <p className="text-xs sm:text-sm md:text-base text-slate-200 max-w-lg leading-relaxed mx-auto lg:mx-0">
                 Centralized litigation database, daily cause list synchronizer, high court stay order tracking, and institutional bank brief management.
               </p>
             </div>
 
             {/* 2 Primary Action Buttons: Join as Advocate & Join as Associate */}
-            <div className="flex flex-row items-center gap-2 sm:gap-3.5 w-full sm:w-auto pt-1 sm:pt-2">
+            <div className="flex flex-row items-center justify-center lg:justify-start gap-2.5 sm:gap-3.5 w-full sm:w-auto pt-1 sm:pt-2">
               {/* Button 1: Join as Advocate */}
               <button
                 type="button"
                 onClick={() => handleOpenJoin("advocate")}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl bg-[#cca776] text-slate-950 font-extrabold text-[11px] sm:text-sm shadow-xl shadow-[#cca776]/20 hover:bg-[#b8935f] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl bg-[#cca776] text-slate-950 font-black text-xs sm:text-sm shadow-xl shadow-[#cca776]/20 hover:bg-[#b8935f] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
               >
-                <Briefcase className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <Briefcase className="h-4 w-4" />
                 <span>Join as Advocate</span>
               </button>
 
@@ -267,15 +267,15 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => handleOpenJoin("associate")}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg sm:rounded-xl bg-slate-900/80 hover:bg-slate-800 text-white font-bold text-[11px] sm:text-sm border border-[#cca776]/50 hover:border-[#cca776] shadow-xl backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 sm:py-3.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm border border-[#cca776]/50 hover:border-[#cca776] shadow-xl backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap"
               >
-                <UserPlus className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#cca776]" />
+                <UserPlus className="h-4 w-4 text-[#cca776]" />
                 <span>Join as Associate</span>
               </button>
             </div>
 
             {/* Direct Sign In Link */}
-            <div className="pt-0.5 sm:pt-1 flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-slate-300">
+            <div className="pt-1 flex items-center justify-center lg:justify-start gap-2 text-xs sm:text-sm text-slate-300">
               <span>Already registered in this chamber?</span>
               <button
                 type="button"
@@ -291,7 +291,7 @@ export default function HomePage() {
 
       {/* FOOTER: Minimal, elegant, and unobtrusive */}
       <footer
-        className="relative z-20 w-full px-3 sm:px-8 py-2 sm:py-3 text-center text-[9px] sm:text-[11px] text-slate-400 select-none shrink-0"
+        className="relative z-20 w-full px-4 sm:px-8 py-2.5 sm:py-3 text-center text-[10px] sm:text-xs text-slate-400 select-none shrink-0"
         suppressHydrationWarning
       >
         © {new Date().getFullYear()} {BRANDING.brandName} • {BRANDING.tagline}. All Rights Reserved.
@@ -371,19 +371,17 @@ export default function HomePage() {
 
             {/* RIGHT PANEL: Modern Glassy Tabbed Authentication Form */}
             <div className="relative z-10 w-full md:w-7/12 p-4 sm:p-6 md:p-8 flex flex-col justify-center bg-slate-950/40 md:bg-slate-900/60 backdrop-blur-xl overflow-y-auto">
-              {/* Mobile-Only Header: Dari-palla Logo & Chamber Title */}
-              <div className="md:hidden flex items-center gap-2.5 pb-2.5 mb-3 border-b border-white/10">
-                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#cca776]/20 text-[#cca776] ring-1 ring-[#cca776]/40 shadow-md backdrop-blur-md shrink-0">
-                  <Scale className="h-4 w-4" />
+              {/* Mobile-Only Header: Dari-palla Logo & Chamber Title (Centered in Middle) */}
+              <div className="md:hidden flex flex-col items-center justify-center text-center pb-3 mb-3.5 border-b border-white/10">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#cca776]/20 text-[#cca776] ring-1 ring-[#cca776]/40 shadow-md backdrop-blur-md mb-2">
+                  <Scale className="h-5 w-5" />
                 </div>
-                <div>
-                  <h3 className="text-xs font-black tracking-wide text-white uppercase">
-                    {BRANDING.brandName}
-                  </h3>
-                  <p className="text-[10px] text-[#cca776] font-medium">
-                    {BRANDING.tagline}
-                  </p>
-                </div>
+                <h3 className="text-sm sm:text-base font-black tracking-wide text-white uppercase">
+                  {BRANDING.brandName}
+                </h3>
+                <p className="text-[11px] sm:text-xs text-[#cca776] font-semibold">
+                  {BRANDING.tagline}
+                </p>
               </div>
 
               {/* Dual Tabs: Sign In vs Register Account */}
@@ -391,7 +389,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("signin")}
-                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex-1 rounded-lg py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                     activeTab === "signin"
                       ? "bg-[#cca776] text-slate-950 shadow-md"
                       : "text-slate-400 hover:text-white"
@@ -402,7 +400,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("signup")}
-                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex-1 rounded-lg py-2 sm:py-2.5 text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                     activeTab === "signup"
                       ? "bg-[#cca776] text-slate-950 shadow-md"
                       : "text-slate-400 hover:text-white"
@@ -416,41 +414,41 @@ export default function HomePage() {
               {activeTab === "signin" && (
                 <form onSubmit={handleLogin} className="space-y-3.5 animate-in fade-in duration-200">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className="block text-xs sm:text-sm font-semibold text-slate-200 mb-1.5">
                       Official Email Address *
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+                      <Mail className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                       <input
                         type="email"
                         required
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         placeholder="advocate@chamber.com"
-                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    <label className="block text-xs sm:text-sm font-semibold text-slate-200 mb-1.5">
                       Chamber Password *
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
+                      <Lock className="absolute left-3.5 top-3.5 h-4 w-4 text-slate-400" />
                       <input
                         type={showLoginPassword ? "text" : "password"}
                         required
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-10 py-2.5 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-10 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                       {/* Password Show/Hide Toggle Icon */}
                       <button
                         type="button"
                         onClick={() => setShowLoginPassword((prev) => !prev)}
-                        className="absolute right-3 top-2.5 text-slate-400 hover:text-[#cca776] transition-colors p-0.5 cursor-pointer"
+                        className="absolute right-3 top-3 text-slate-400 hover:text-[#cca776] transition-colors p-0.5 cursor-pointer"
                         title={showLoginPassword ? "Hide password" : "Show password"}
                       >
                         {showLoginPassword ? (
@@ -466,7 +464,7 @@ export default function HomePage() {
                   <button
                     type="submit"
                     disabled={loading || demoAdminLoading}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-2.5 sm:py-3 text-xs font-bold text-slate-950 shadow-lg shadow-[#cca776]/20 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-1"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-3 text-xs sm:text-sm font-black text-slate-950 shadow-lg shadow-[#cca776]/20 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-1"
                   >
                     <span>{loading ? "Authenticating..." : "Sign In to Chamber Portal"}</span>
                     <ArrowRight className="h-4 w-4" />
@@ -476,7 +474,7 @@ export default function HomePage() {
                   <div className="pt-2">
                     <div className="relative flex py-1.5 items-center">
                       <div className="flex-grow border-t border-white/10"></div>
-                      <span className="flex-shrink mx-2.5 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                      <span className="flex-shrink mx-2.5 text-[10px] sm:text-xs uppercase font-bold text-slate-400 tracking-wider">
                         Instant Access
                       </span>
                       <div className="flex-grow border-t border-white/10"></div>
@@ -486,7 +484,7 @@ export default function HomePage() {
                       type="button"
                       onClick={handleDemoAdminLogin}
                       disabled={loading || demoAdminLoading}
-                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl py-2.5 px-3.5 text-xs font-bold text-[#f5dfb8] hover:text-white bg-gradient-to-r from-amber-500/20 via-[#cca776]/25 to-amber-600/20 hover:from-amber-500/35 hover:via-[#cca776]/40 hover:to-amber-600/35 border border-[#cca776]/50 hover:border-[#cca776] shadow-lg shadow-[#cca776]/10 backdrop-blur-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl py-2.5 sm:py-3 px-3.5 text-xs sm:text-sm font-bold text-[#f5dfb8] hover:text-white bg-gradient-to-r from-amber-500/20 via-[#cca776]/25 to-amber-600/20 hover:from-amber-500/35 hover:via-[#cca776]/40 hover:to-amber-600/35 border border-[#cca776]/50 hover:border-[#cca776] shadow-lg shadow-[#cca776]/10 backdrop-blur-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
                       title="1-Click Instant Login as Chamber Admin"
                     >
                       <ShieldCheck className="h-4 w-4 text-[#cca776]" />
@@ -500,13 +498,13 @@ export default function HomePage() {
 
               {/* REGISTER ACCOUNT FORM */}
               {activeTab === "signup" && (
-                <form onSubmit={handleSignup} className="space-y-3 animate-in fade-in duration-200">
+                <form onSubmit={handleSignup} className="space-y-3.5 animate-in fade-in duration-200">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    <label className="block text-xs sm:text-sm font-semibold text-slate-200 mb-1">
                       Full Legal Name *
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                      <User className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                       <input
                         type="text"
                         required
@@ -515,18 +513,18 @@ export default function HomePage() {
                           setSignupData({ ...signupData, name: e.target.value })
                         }
                         placeholder="Advocate / Associate Name"
-                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      <label className="block text-xs sm:text-sm font-semibold text-slate-200 mb-1">
                         Email Address *
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                        <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                         <input
                           type="email"
                           required
@@ -535,17 +533,17 @@ export default function HomePage() {
                             setSignupData({ ...signupData, email: e.target.value })
                           }
                           placeholder="name@chamber.com"
-                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-3.5 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      <label className="block text-xs sm:text-sm font-semibold text-slate-200 mb-1">
                         Password (Min 6 chars) *
                       </label>
                       <div className="relative">
-                        <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                        <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                         <input
                           type={showSignupPassword ? "text" : "password"}
                           required
@@ -555,19 +553,19 @@ export default function HomePage() {
                             setSignupData({ ...signupData, password: e.target.value })
                           }
                           placeholder="••••••••"
-                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-9 pr-9 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-10 py-2.5 sm:py-3 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                         />
                         {/* Password Show/Hide Toggle Icon */}
                         <button
                           type="button"
                           onClick={() => setShowSignupPassword((prev) => !prev)}
-                          className="absolute right-2.5 top-2 text-slate-400 hover:text-[#cca776] transition-colors p-0.5 cursor-pointer"
+                          className="absolute right-3 top-3 text-slate-400 hover:text-[#cca776] transition-colors p-0.5 cursor-pointer"
                           title={showSignupPassword ? "Hide password" : "Show password"}
                         >
                           {showSignupPassword ? (
-                            <EyeOff className="h-3.5 w-3.5" />
+                            <EyeOff className="h-4 w-4" />
                           ) : (
-                            <Eye className="h-3.5 w-3.5" />
+                            <Eye className="h-4 w-4" />
                           )}
                         </button>
                       </div>
@@ -576,10 +574,10 @@ export default function HomePage() {
 
                   {/* Chamber Role Selection: Advocate vs Associate */}
                   <div>
-                    <label className="block text-xs font-semibold text-[#cca776] mb-1.5">
+                    <label className="block text-xs sm:text-sm font-semibold text-[#cca776] mb-1.5">
                       Chamber Position & Role *
                     </label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2.5">
                       {SIGNUP_ROLES.map((r) => {
                         const isSelected = signupData.role === r.value;
                         return (
@@ -594,7 +592,7 @@ export default function HomePage() {
                                   r.value === "advocate" ? "Advocate" : "Associate Advocate",
                               })
                             }
-                            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer backdrop-blur-md ${
+                            className={`p-3 rounded-xl border text-left transition-all cursor-pointer backdrop-blur-md ${
                               isSelected
                                 ? "border-[#cca776] bg-[#cca776]/20 shadow-md shadow-[#cca776]/10"
                                 : "border-white/10 bg-slate-950/50 hover:border-slate-600"
@@ -602,7 +600,7 @@ export default function HomePage() {
                           >
                             <div className="flex items-center justify-between">
                               <span
-                                className={`text-xs font-bold ${
+                                className={`text-xs sm:text-sm font-bold ${
                                   isSelected ? "text-white" : "text-slate-300"
                                 }`}
                               >
@@ -612,7 +610,7 @@ export default function HomePage() {
                                 <Award className="h-3.5 w-3.5 text-[#cca776]" />
                               )}
                             </div>
-                            <p className="text-[10px] text-slate-400 truncate mt-0.5">
+                            <p className="text-[10px] sm:text-xs text-slate-400 truncate mt-0.5">
                               {r.desc}
                             </p>
                           </button>
@@ -636,7 +634,7 @@ export default function HomePage() {
                           })
                         }
                         placeholder="Advocate / Associate"
-                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md px-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md px-3 py-2 sm:py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
 
@@ -654,7 +652,7 @@ export default function HomePage() {
                           })
                         }
                         placeholder="e.g. SC-1234/2015"
-                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md px-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md px-3 py-2 sm:py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
 
@@ -674,7 +672,7 @@ export default function HomePage() {
                             })
                           }
                           placeholder="+880 1..."
-                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-8 pr-2.5 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
+                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-8 pr-2.5 py-2 sm:py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -683,7 +681,7 @@ export default function HomePage() {
                   <button
                     type="submit"
                     disabled={loading || demoAdminLoading}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-2.5 sm:py-3 text-xs font-bold text-slate-950 shadow-lg shadow-[#cca776]/20 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-1"
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-3 text-xs sm:text-sm font-black text-slate-950 shadow-lg shadow-[#cca776]/20 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-1"
                   >
                     <span>{loading ? "Registering..." : "Create Account & Enter Chamber"}</span>
                     <ArrowRight className="h-4 w-4" />

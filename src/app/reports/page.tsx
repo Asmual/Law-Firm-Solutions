@@ -309,21 +309,21 @@ export default function ReportsPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-semibold uppercase tracking-wider text-[#cca776]">
-              Reports & Chamber Letterhead Engine
+              Reports &amp; Chamber Letterhead Engine
             </span>
             <span className="text-xs px-2 py-0.5 rounded-full bg-[#cca776]/10 text-[#cca776] border border-[#cca776]/30">
               Institutional Litigation Reports
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
             <FileSpreadsheet className="h-6 w-6 text-[#cca776]" />
-            Reports & Letterhead Exports
+            Reports &amp; Letterhead Exports
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Generate client-ready litigation reports for banks, senior partners, and associate workload tracking.
           </p>
         </div>
@@ -331,14 +331,14 @@ export default function ReportsPage() {
         <div className="flex items-center gap-2.5">
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-slate-900 border border-slate-700 text-slate-200 hover:bg-slate-800 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-sm"
           >
-            <Download className="h-4 w-4 text-emerald-400" />
+            <Download className="h-4 w-4 text-emerald-500" />
             <span>Export CSV / Excel</span>
           </button>
           <button
             onClick={handleExportPDF}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b8935f] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer"
           >
             <Printer className="h-4 w-4" />
             <span>Download Letterhead PDF</span>
@@ -347,7 +347,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Report Configuration Bar */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Report Type Radio Tabs */}
           <div
@@ -355,17 +355,17 @@ export default function ReportsPage() {
             className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
               reportType === "client_monthly"
                 ? "bg-[#cca776]/15 border-[#cca776] shadow-sm"
-                : "bg-slate-950 border-slate-800 hover:border-slate-700"
+                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
               <Building2 className={`h-4 w-4 ${reportType === "client_monthly" ? "text-[#cca776]" : "text-slate-400"}`} />
-              <span className={`text-xs font-bold ${reportType === "client_monthly" ? "text-white" : "text-slate-300"}`}>
+              <span className={`text-xs font-bold ${reportType === "client_monthly" ? "text-[#cca776] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
                 Client Monthly Report
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">
-              For Banks & Corporate clients with full court order history.
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              For Banks &amp; Corporate clients with full court order history.
             </p>
           </div>
 
@@ -374,17 +374,17 @@ export default function ReportsPage() {
             className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
               reportType === "associate_workload"
                 ? "bg-[#cca776]/15 border-[#cca776] shadow-sm"
-                : "bg-slate-950 border-slate-800 hover:border-slate-700"
+                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
               <Users2 className={`h-4 w-4 ${reportType === "associate_workload" ? "text-[#cca776]" : "text-slate-400"}`} />
-              <span className={`text-xs font-bold ${reportType === "associate_workload" ? "text-white" : "text-slate-300"}`}>
+              <span className={`text-xs font-bold ${reportType === "associate_workload" ? "text-[#cca776] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
                 Associate Workload Report
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">
-              Chamber distribution & pending briefs per advocate.
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              Chamber distribution &amp; pending briefs per advocate.
             </p>
           </div>
 
@@ -393,32 +393,32 @@ export default function ReportsPage() {
             className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
               reportType === "running_cases"
                 ? "bg-[#cca776]/15 border-[#cca776] shadow-sm"
-                : "bg-slate-950 border-slate-800 hover:border-slate-700"
+                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
               <Scale className={`h-4 w-4 ${reportType === "running_cases" ? "text-[#cca776]" : "text-slate-400"}`} />
-              <span className={`text-xs font-bold ${reportType === "running_cases" ? "text-white" : "text-slate-300"}`}>
-                Running & Stay Granted Cases
+              <span className={`text-xs font-bold ${reportType === "running_cases" ? "text-[#cca776] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
+                Running &amp; Stay Granted Cases
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               High Court interim stay orders requiring extension.
             </p>
           </div>
         </div>
 
         {/* Filter controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-2 border-t border-slate-800/80 items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 pt-2 border-t border-slate-200 dark:border-slate-800/80 items-center">
           {reportType === "client_monthly" && (
             <div className="sm:col-span-6">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+              <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
                 Target Financial Institution / Bank
               </label>
               <select
                 value={selectedInstId}
                 onChange={(e) => setSelectedInstId(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-medium focus:outline-none focus:border-[#cca776]"
               >
                 {institutions.map((i) => (
                   <option key={i._id || i.id} value={i._id || i.id}>
@@ -431,8 +431,8 @@ export default function ReportsPage() {
 
           <div className={`relative ${reportType === "client_monthly" ? "sm:col-span-6" : "sm:col-span-12"}`} ref={monthPickerRef}>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                Billing & Report Month
+              <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+                Billing &amp; Report Month
               </label>
               <button
                 type="button"
@@ -449,45 +449,45 @@ export default function ReportsPage() {
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(e.target.value)}
                 placeholder="e.g. September 2026"
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-medium focus:outline-none focus:border-[#cca776]"
               />
             ) : (
               <div>
                 <button
                   type="button"
                   onClick={() => setIsMonthPickerOpen((prev) => !prev)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs bg-slate-950 border border-slate-700 hover:border-[#cca776]/70 rounded-lg text-white font-medium transition-all cursor-pointer group shadow-sm focus:outline-none focus:border-[#cca776]"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 hover:border-[#cca776]/70 rounded-lg text-slate-900 dark:text-white font-medium transition-all cursor-pointer group shadow-sm focus:outline-none focus:border-[#cca776]"
                   title="Click to choose month from calendar dropdown"
                   aria-expanded={isMonthPickerOpen}
                 >
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-[#cca776]" />
-                    <span className="font-bold text-white text-xs sm:text-sm">{selectedMonth}</span>
+                    <span className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm">{selectedMonth}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="text-[10px] uppercase font-bold text-[#cca776] bg-[#cca776]/10 px-2 py-0.5 rounded border border-[#cca776]/30">
                       Change Month
                     </span>
-                    <ChevronDown className={`h-3.5 w-3.5 text-slate-400 group-hover:text-white transition-transform duration-200 ${isMonthPickerOpen ? "rotate-180 text-[#cca776]" : ""}`} />
+                    <ChevronDown className={`h-3.5 w-3.5 text-slate-400 group-hover:text-slate-700 dark:group-hover:text-white transition-transform duration-200 ${isMonthPickerOpen ? "rotate-180 text-[#cca776]" : ""}`} />
                   </div>
                 </button>
 
                 {/* Calendar / Month Dropdown Popover */}
                 {isMonthPickerOpen && (
-                  <div className="absolute right-0 sm:left-0 sm:right-auto mt-2 w-72 sm:w-80 rounded-xl border border-slate-800 bg-slate-900/98 p-4 shadow-2xl backdrop-blur-xl text-slate-200 animate-in fade-in zoom-in-95 duration-150 z-50">
+                  <div className="absolute right-0 sm:left-0 sm:right-auto mt-2 w-72 sm:w-80 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/98 p-4 shadow-2xl backdrop-blur-xl text-slate-800 dark:text-slate-200 animate-in fade-in zoom-in-95 duration-150 z-50">
                     {/* Header: Year Navigator */}
-                    <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
                       <button
                         type="button"
                         onClick={() => setPickerYear((y) => y - 1)}
-                        className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                         title="Previous Year"
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </button>
 
                       <div className="flex items-center gap-1.5">
-                        <span className="text-base font-bold text-white tracking-wide">{pickerYear}</span>
+                        <span className="text-base font-bold text-slate-900 dark:text-white tracking-wide">{pickerYear}</span>
                         <span className="text-[10px] text-[#cca776] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#cca776]/10 border border-[#cca776]/20">
                           Year
                         </span>
@@ -496,7 +496,7 @@ export default function ReportsPage() {
                       <button
                         type="button"
                         onClick={() => setPickerYear((y) => y + 1)}
-                        className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
                         title="Next Year"
                       >
                         <ChevronRight className="h-4 w-4" />
@@ -517,7 +517,7 @@ export default function ReportsPage() {
                             className={`px-2.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center ${
                               isSelected
                                 ? "bg-[#cca776] text-slate-950 font-bold shadow-md shadow-[#cca776]/30 ring-1 ring-[#cca776]"
-                                : "bg-slate-950/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700"
+                                : "bg-slate-50 dark:bg-slate-950/90 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                             }`}
                           >
                             <span className="block font-bold">{m.short}</span>
@@ -528,13 +528,13 @@ export default function ReportsPage() {
                     </div>
 
                     {/* Quick Presets Footer */}
-                    <div className="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
-                      <span className="text-slate-400 text-[10px] font-medium">Quick Pick:</span>
+                    <div className="pt-2.5 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-[11px]">
+                      <span className="text-slate-500 dark:text-slate-400 text-[10px] font-medium">Quick Pick:</span>
                       <div className="flex items-center gap-1">
                         <button
                           type="button"
                           onClick={handleSetPrevMonth}
-                          className="px-2 py-0.5 rounded bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white text-[10px] transition-colors cursor-pointer"
+                          className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white text-[10px] transition-colors cursor-pointer"
                         >
                           Prev Month
                         </button>
@@ -548,7 +548,7 @@ export default function ReportsPage() {
                         <button
                           type="button"
                           onClick={handleSetNextMonth}
-                          className="px-2 py-0.5 rounded bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white text-[10px] transition-colors cursor-pointer"
+                          className="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white text-[10px] transition-colors cursor-pointer"
                         >
                           Next Month
                         </button>
@@ -563,23 +563,23 @@ export default function ReportsPage() {
       </div>
 
       {/* Report Preview Table */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-        <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-xl">
+        <div className="p-4 bg-slate-50 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-[#cca776]" />
-            <h2 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h2 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               Report Data Preview ({cases.length} records) • Period: {selectedMonth}
             </h2>
           </div>
-          <span className="text-[11px] text-[#cca776] font-mono">
-            Ready for PDF & Excel Letterhead Print
+          <span className="text-[11px] text-[#cca776] font-mono font-semibold">
+            Ready for PDF &amp; Excel Letterhead Print
           </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/60 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
                 <th className="py-3 px-3 text-center w-10">SL</th>
                 <th className="py-3 px-3 w-28">File No.</th>
                 <th className="py-3 px-4">Case Number</th>
@@ -590,7 +590,7 @@ export default function ReportsPage() {
                 <th className="py-3 px-4">Latest Order Remarks</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {isLoading ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-400">
@@ -601,35 +601,35 @@ export default function ReportsPage() {
               ) : cases.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-500">
-                    <FileSpreadsheet className="h-10 w-10 text-slate-600 mx-auto mb-2 opacity-50" />
-                    <p className="font-semibold text-slate-400">No cases recorded for this selection.</p>
+                    <FileSpreadsheet className="h-10 w-10 text-slate-400 dark:text-slate-600 mx-auto mb-2 opacity-50" />
+                    <p className="font-semibold text-slate-700 dark:text-slate-400">No cases recorded for this selection.</p>
                   </td>
                 </tr>
               ) : (
                 cases.map((c, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3 px-3 text-center font-mono text-slate-400">{idx + 1}</td>
+                  <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                    <td className="py-3 px-3 text-center font-mono text-slate-500 dark:text-slate-400">{idx + 1}</td>
                     <td className="py-3 px-3 font-mono font-bold text-[#cca776]">{c.chamberFileNo}</td>
-                    <td className="py-3 px-4 font-mono font-medium text-white">
+                    <td className="py-3 px-4 font-mono font-medium text-slate-900 dark:text-white">
                       {c.caseNumbers?.[0]?.caseNumber || "N/A"}
                     </td>
-                    <td className="py-3 px-4 text-slate-200">
+                    <td className="py-3 px-4 text-slate-700 dark:text-slate-200">
                       <div className="truncate max-w-[200px]" title={c.parties?.[0]?.partyNameDetails}>
                         {c.parties?.[0]?.partyNameDetails || "N/A"}
                       </div>
                     </td>
-                    <td className="py-3 px-4 text-sky-400 font-medium">
+                    <td className="py-3 px-4 text-sky-600 dark:text-sky-400 font-medium">
                       {c.caseNumbers?.[0]?.courtDivision || "High Court"}
                     </td>
-                    <td className="py-3 px-4 text-slate-200 font-medium">
+                    <td className="py-3 px-4 text-slate-900 dark:text-slate-200 font-medium">
                       {c.assignedAdvocate?.advocateName || "Unassigned"}
                     </td>
                     <td className="py-3 px-4 text-center">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-800 text-slate-300 border border-slate-700">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
                         {c.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-slate-400">
+                    <td className="py-3 px-4 text-slate-600 dark:text-slate-400">
                       <div className="truncate max-w-[240px]">
                         {c.statusUpdates?.[c.statusUpdates.length - 1]?.statusRemarks || "Rule and stay active."}
                       </div>

@@ -108,13 +108,13 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
 
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-slate-800 bg-slate-950 text-slate-200 transition-all duration-300 ease-in-out select-none lg:static",
+          "fixed inset-y-0 left-0 z-50 flex flex-col border-r border-slate-200 bg-white text-slate-800 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 transition-all duration-300 ease-in-out select-none lg:static",
           collapsed ? "w-20" : "w-64",
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         {/* Brand Header */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-slate-800">
+        <div className="flex h-16 items-center justify-between px-4 border-b border-slate-200 dark:border-slate-800">
           <Link
             href="/dashboard"
             onClick={onCloseMobile}
@@ -125,7 +125,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
             </div>
             {!collapsed && (
               <div className="flex flex-col truncate">
-                <span className="text-sm font-bold tracking-wide text-slate-100 uppercase">
+                <span className="text-sm font-bold tracking-wide text-slate-950 dark:text-slate-100 uppercase">
                   {BRANDING.brandName}
                 </span>
                 <span className="text-[11px] text-[#cca776] font-medium">
@@ -139,7 +139,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
         {/* Navigation List */}
         <div className="flex-1 overflow-y-auto px-2.5 py-4 space-y-1">
           <div className={cn("px-2.5 mb-2", collapsed && "text-center")}>
-            <p className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+            <p className="text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase">
               {collapsed ? "—" : "Chamber Modules"}
             </p>
           </div>
@@ -181,20 +181,22 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                     "group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors",
                     isActive
                       ? "bg-[#cca776]/15 text-[#cca776] font-semibold shadow-sm ring-1 ring-[#cca776]/30"
-                      : "text-slate-400 hover:bg-slate-900 hover:text-slate-100"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
                   )}
                 >
                   <Icon
                     className={cn(
                       "h-4 w-4 shrink-0 transition-transform group-hover:scale-105",
-                      isActive ? "text-[#cca776]" : "text-slate-400 group-hover:text-slate-200"
+                      isActive
+                        ? "text-[#cca776]"
+                        : "text-slate-500 group-hover:text-slate-900 dark:text-slate-400 dark:group-hover:text-slate-200"
                     )}
                   />
                   {!collapsed && (
                     <div className="flex flex-1 items-center justify-between truncate">
                       <span className="truncate">{item.label}</span>
                       {item.badge && (
-                        <span className="ml-auto rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-[#cca776] border border-[#cca776]/30">
+                        <span className="ml-auto rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-semibold text-[#cca776] border border-[#cca776]/30">
                           {item.badge}
                         </span>
                       )}
@@ -207,16 +209,16 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
 
         {/* Chamber Status Info */}
         {!collapsed && (
-          <div className="p-3 mx-2.5 mb-3 rounded-xl bg-slate-900/80 border border-slate-800/80">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-300">
-              <ShieldCheck className="h-4 w-4 text-emerald-400" />
+          <div className="p-3 mx-2.5 mb-3 rounded-xl bg-slate-50 border border-slate-200 dark:bg-slate-900/80 dark:border-slate-800/80">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-300">
+              <ShieldCheck className="h-4 w-4 text-emerald-500 dark:text-emerald-400" />
               <span>Chamber System Active</span>
             </div>
-            <p className="mt-1 text-[11px] text-slate-400">
+            <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
               Role: <strong className="text-[#cca776] uppercase">{userRole || "User"}</strong>
             </p>
             {BRANDING.poweredByEnabled && (
-              <p className="mt-1.5 text-[10px] text-slate-500 border-t border-slate-800 pt-1.5">
+              <p className="mt-1.5 text-[10px] text-slate-400 dark:text-slate-500 border-t border-slate-200 dark:border-slate-800 pt-1.5">
                 Powered by {BRANDING.poweredByName}
               </p>
             )}
@@ -224,14 +226,14 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
         )}
 
         {/* Collapse Toggle Button */}
-        <div className="p-3 border-t border-slate-800 hidden lg:flex items-center justify-between">
+        <div className="p-3 border-t border-slate-200 dark:border-slate-800 hidden lg:flex items-center justify-between">
           {!collapsed && (
-            <span className="text-[11px] text-slate-500">v1.0 • Formal Edition</span>
+            <span className="text-[11px] text-slate-400 dark:text-slate-500">v1.0 • Formal Edition</span>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="ml-auto flex h-7 w-7 items-center justify-center rounded-md bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-slate-100 transition-colors cursor-pointer"
+            className="ml-auto flex h-7 w-7 items-center justify-center rounded-md bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100 transition-colors cursor-pointer"
           >
             {collapsed ? (
               <ChevronRight className="h-4 w-4" />

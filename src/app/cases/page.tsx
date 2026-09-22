@@ -197,11 +197,11 @@ export default function CasesRegistryPage() {
               {cases.length} Records Found
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
             <Briefcase className="h-6 w-6 text-[#cca776]" />
             Litigation Case Registry
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Master repository for all bank, corporate, and High Court briefs managed across our chambers.
           </p>
         </div>
@@ -209,14 +209,14 @@ export default function CasesRegistryPage() {
         <div className="flex items-center gap-2.5">
           <Link
             href="/reports"
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-sm"
           >
             <FileSpreadsheet className="h-3.5 w-3.5 text-[#cca776]" />
             <span>Generate Reports</span>
           </Link>
           <Link
             href="/cases/new"
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b8935f] shadow-md shadow-[#cca776]/20 transition-all"
           >
             <Plus className="h-4 w-4" />
             <span>Add New Case File</span>
@@ -232,7 +232,7 @@ export default function CasesRegistryPage() {
           className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
             filterScope === "all"
               ? "bg-[#cca776] text-slate-950 font-bold shadow-sm"
-              : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+              : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           All Chamber Cases
@@ -243,7 +243,7 @@ export default function CasesRegistryPage() {
           className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
             filterScope === "my"
               ? "bg-[#cca776] text-slate-950 font-bold shadow-sm"
-              : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+              : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
           }`}
         >
           My Assigned Cases Only
@@ -251,7 +251,7 @@ export default function CasesRegistryPage() {
       </div>
 
       {/* Filter and Search Bar matching Blueprint specifications */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
         <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
           {/* Search Box */}
           <div className="sm:col-span-5 relative">
@@ -261,7 +261,7 @@ export default function CasesRegistryPage() {
               placeholder="Search by File No, Case No, Party Name, Matter, or Advocate..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]"
             />
           </div>
 
@@ -270,7 +270,7 @@ export default function CasesRegistryPage() {
             <select
               value={selectedInstId}
               onChange={(e) => setSelectedInstId(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-200 focus:outline-none focus:border-[#cca776]"
             >
               <option value="all">All Financial Institutions & Clients</option>
               {institutions.map((i) => (
@@ -286,7 +286,7 @@ export default function CasesRegistryPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-200 focus:outline-none focus:border-[#cca776]"
             >
               <option value="all">All Statuses</option>
               <option value="running">Running</option>
@@ -301,7 +301,7 @@ export default function CasesRegistryPage() {
           <div className="sm:col-span-1">
             <button
               type="submit"
-              className="w-full py-2 text-xs font-bold rounded-lg bg-slate-800 hover:bg-slate-700 text-[#cca776] border border-[#cca776]/30 transition-colors cursor-pointer"
+              className="w-full py-2 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#cca776] border border-[#cca776]/30 transition-colors cursor-pointer"
             >
               Filter
             </button>
@@ -310,12 +310,12 @@ export default function CasesRegistryPage() {
       </div>
 
       {/* Case Table */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               {/* Case Table Header */}
-              <tr className="border-b border-slate-800 bg-slate-950/70 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/70 text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
                 <th className="py-3 px-3 w-28 whitespace-nowrap">File No.</th>
                 <th className="py-3 px-3 min-w-[140px]">Client / Institution</th>
                 <th className="py-3 px-3 min-w-[150px]">Case No. &amp; Court</th>
@@ -326,7 +326,7 @@ export default function CasesRegistryPage() {
                 <th className="py-3 px-3 text-right w-20 whitespace-nowrap">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {isLoading ? (
                 <tr>
                   <td colSpan={8} className="p-0">
@@ -336,14 +336,14 @@ export default function CasesRegistryPage() {
               ) : cases.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-500">
-                    <Briefcase className="h-10 w-10 text-slate-600 mx-auto mb-2 opacity-50" />
-                    <p className="font-semibold text-slate-400">No litigation files match current filters</p>
+                    <Briefcase className="h-10 w-10 text-slate-400 dark:text-slate-600 mx-auto mb-2 opacity-50" />
+                    <p className="font-semibold text-slate-700 dark:text-slate-400">No litigation files match current filters</p>
                     {currentUserRole !== "admin" ? (
-                      <p className="text-[11px] mt-1">
+                      <p className="text-[11px] mt-1 text-slate-500 dark:text-slate-400">
                         Click <Link href="/cases/new" className="text-[#cca776] underline">Add New Case File</Link> to enroll the first case.
                       </p>
                     ) : (
-                      <p className="text-[11px] mt-1 text-slate-400">
+                      <p className="text-[11px] mt-1 text-slate-500 dark:text-slate-400">
                         Awaiting brief submissions from Chamber Advocates &amp; Associates.
                       </p>
                     )}
@@ -353,7 +353,7 @@ export default function CasesRegistryPage() {
                 cases.map((c) => {
                   const caseId = c._id || c.id || "";
                   return (
-                    <tr key={caseId} className="hover:bg-slate-800/40 transition-colors group">
+                    <tr key={caseId} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors group">
                       {/* Chamber File No */}
                       <td className="py-3 px-3 font-mono font-bold text-[#cca776] whitespace-nowrap">
                         <Link href={`/cases/${caseId}`} className="hover:underline" title="View Case Dossier">
@@ -363,11 +363,11 @@ export default function CasesRegistryPage() {
 
                       {/* Institution */}
                       <td className="py-3 px-3">
-                        <div className="font-semibold text-white truncate max-w-[160px]" title={c.institutionName}>
+                        <div className="font-semibold text-slate-900 dark:text-white truncate max-w-[160px]" title={c.institutionName}>
                           {c.institutionName}
                         </div>
                         {c.branch && (
-                          <div className="text-[10px] text-slate-400 truncate max-w-[160px]">
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[160px]">
                             Branch: {c.branch}
                           </div>
                         )}
@@ -379,7 +379,7 @@ export default function CasesRegistryPage() {
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1 flex-wrap">
                               <span
-                                className="font-mono text-[11px] font-semibold text-slate-200 bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-700/80 truncate max-w-[140px]"
+                                className="font-mono text-[11px] font-semibold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/80 truncate max-w-[140px]"
                                 title={c.caseNumbers[0].caseNumber}
                               >
                                 {c.caseNumbers[0].caseNumber}
@@ -390,12 +390,12 @@ export default function CasesRegistryPage() {
                                 </span>
                               )}
                             </div>
-                            <span className="text-[10px] text-slate-400 block truncate max-w-[160px]">
+                            <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate max-w-[160px]">
                               {c.caseNumbers[0].courtDivision} • {c.caseNumbers[0].caseType}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-slate-500 italic text-[11px]">Unspecified</span>
+                          <span className="text-slate-400 dark:text-slate-500 italic text-[11px]">Unspecified</span>
                         )}
                       </td>
 
@@ -403,29 +403,29 @@ export default function CasesRegistryPage() {
                       <td className="py-3 px-3">
                         {c.parties && c.parties.length > 0 ? (
                           <div className="max-w-[160px]" title={c.parties[0].partyNameDetails}>
-                            <span className="text-slate-200 font-medium truncate block text-xs">
+                            <span className="text-slate-900 dark:text-slate-200 font-medium truncate block text-xs">
                               {c.parties[0].partyNameDetails}
                             </span>
                             {c.parties.length > 1 && (
-                              <span className="text-[10px] text-slate-400 truncate block">
+                              <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate block">
                                 &amp; {c.parties.length - 1} others
                               </span>
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-500 italic text-[11px]">None</span>
+                          <span className="text-slate-400 dark:text-slate-500 italic text-[11px]">None</span>
                         )}
                       </td>
 
                       {/* Matter */}
-                      <td className="py-3 px-3 text-slate-300">
+                      <td className="py-3 px-3 text-slate-700 dark:text-slate-300">
                         <div className="truncate max-w-[130px] text-xs" title={c.matter}>
                           {c.matter || "—"}
                         </div>
                       </td>
 
                       {/* Advocate */}
-                      <td className="py-3 px-3 text-slate-300 font-medium whitespace-nowrap">
+                      <td className="py-3 px-3 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap">
                         <div className="truncate max-w-[120px]" title={c.assignedAdvocate?.advocateName}>
                           {c.assignedAdvocate?.advocateName || "Unassigned"}
                         </div>
@@ -442,14 +442,14 @@ export default function CasesRegistryPage() {
                           <Link
                             href={`/cases/${caseId}`}
                             title="View Case Dossier"
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-blue-400 hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           >
                             <Eye className="h-4 w-4" />
                           </Link>
                           <Link
                             href={`/cases/new?id=${caseId}`}
                             title="Edit Case File"
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-[#cca776] hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-[#cca776] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           >
                             <Edit className="h-4 w-4" />
                           </Link>
@@ -465,7 +465,7 @@ export default function CasesRegistryPage() {
                                 })
                               }
                               title="Delete Case File"
-                              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-950/40 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>

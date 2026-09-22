@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { User as UserType } from "@/types";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface HeaderProps {
   onOpenSearch?: () => void;
@@ -82,12 +83,12 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-800 bg-slate-950/90 px-4 sm:px-6 backdrop-blur text-slate-100">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-200 bg-white/95 px-4 sm:px-6 backdrop-blur text-slate-900 dark:border-slate-800 dark:bg-slate-950/90 dark:text-slate-100 transition-colors duration-200">
       {/* Left: Mobile Menu Toggle, Global Search Bar & Bold Date */}
       <div className="flex items-center gap-2 sm:gap-3 shrink min-w-0">
         <button
           onClick={onOpenMobileMenu}
-          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white cursor-pointer shrink-0"
+          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 hover:text-slate-900 hover:border-[#cca776]/60 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer shrink-0"
           title="Open Navigation"
         >
           <Menu className="h-5 w-5" />
@@ -96,7 +97,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         {/* Mobile Search Icon Trigger */}
         <button
           onClick={onOpenSearch}
-          className="sm:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:border-[#cca776]/60 transition-colors cursor-pointer shrink-0"
+          className="sm:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-100 text-slate-600 hover:text-[#cca776] hover:border-[#cca776]/60 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer shrink-0"
           title="Search"
         >
           <Search className="h-4 w-4" />
@@ -105,40 +106,40 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         {/* Desktop / Tablet Expanded Search Bar */}
         <button
           onClick={onOpenSearch}
-          className="hidden sm:flex group h-9 w-60 md:w-72 lg:w-96 items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-3 text-xs text-slate-400 hover:border-[#cca776]/60 hover:text-slate-200 transition-all cursor-pointer shrink-0"
+          className="hidden sm:flex group h-9 w-60 md:w-72 lg:w-96 items-center justify-between rounded-lg border border-slate-200 bg-slate-100/90 px-3 text-xs text-slate-600 hover:border-[#cca776]/60 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition-all cursor-pointer shrink-0"
         >
           <div className="flex items-center gap-2 truncate">
-            <Search className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#cca776] transition-colors shrink-0" />
+            <Search className="h-3.5 w-3.5 text-slate-500 group-hover:text-[#cca776] dark:text-slate-400 transition-colors shrink-0" />
             <span className="truncate">Search File No, Case, Bank, Party...</span>
           </div>
-          <kbd className="hidden rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 md:inline-block">
+          <kbd className="hidden rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-400 md:inline-block">
             Ctrl K
           </kbd>
         </button>
 
         {/* Prominent & Modern Bold Date Display (e.g. 21 Sep 2026) */}
         <div
-          className="hidden xl:flex items-center gap-2 text-xs border-l border-slate-800/80 pl-3.5 py-1 select-none shrink-0"
+          className="hidden xl:flex items-center gap-2 text-xs border-l border-slate-200 dark:border-slate-800/80 pl-3.5 py-1 select-none shrink-0"
           suppressHydrationWarning
         >
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#cca776]/10 text-[#cca776] ring-1 ring-[#cca776]/30">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30">
             <Calendar className="h-3.5 w-3.5" />
           </div>
           <div className="flex items-baseline gap-1.5 font-sans" suppressHydrationWarning>
-            <span className="text-sm font-extrabold text-white tracking-tight" suppressHydrationWarning>
+            <span className="text-sm font-extrabold text-slate-950 dark:text-white tracking-tight" suppressHydrationWarning>
               {dateParts.day}
             </span>
             <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider" suppressHydrationWarning>
               {dateParts.month}
             </span>
-            <span className="text-xs font-semibold text-slate-400" suppressHydrationWarning>
+            <span className="text-xs font-semibold text-slate-500 dark:text-slate-400" suppressHydrationWarning>
               {dateParts.year}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Right: Quick Actions & Profile Trigger */}
+      {/* Right: Quick Actions, Theme Toggle & Profile Trigger */}
       <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         {/* Quick Add Case Button */}
         <Link
@@ -150,10 +151,13 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
           <span className="hidden sm:inline whitespace-nowrap">Add Case</span>
         </Link>
 
+        {/* Light / Dark Mode Toggle */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <button
           title="Upcoming Court Hearings"
-          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 hover:border-[#cca776]/50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
         >
           <Bell className="h-4 w-4" />
           <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
@@ -164,7 +168,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
 
         {/* User Avatar & Role Trigger (Name hidden by default, opens dropdown on click) */}
         {currentUser ? (
-          <div className="relative pl-1 sm:pl-2 border-l border-slate-800 shrink-0" ref={dropdownRef}>
+          <div className="relative pl-1 sm:pl-2 border-l border-slate-200 dark:border-slate-800 shrink-0" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setDropdownOpen((prev) => !prev)}
@@ -193,13 +197,13 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
 
             {/* Profile Dropdown Menu */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-800 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl text-slate-200 animate-in fade-in zoom-in-95 duration-150 z-50">
+              <div className="absolute right-0 mt-2 w-56 rounded-xl border border-slate-200 bg-white/98 p-2 shadow-2xl backdrop-blur-xl text-slate-800 dark:border-slate-800 dark:bg-slate-900/95 dark:text-slate-200 animate-in fade-in zoom-in-95 duration-150 z-50">
                 {/* Header in Dropdown with User Full Name & Email */}
-                <div className="px-3 py-2.5 border-b border-slate-800">
-                  <p className="text-xs font-bold text-white truncate">
+                <div className="px-3 py-2.5 border-b border-slate-200 dark:border-slate-800">
+                  <p className="text-xs font-bold text-slate-950 dark:text-white truncate">
                     {currentUser.name}
                   </p>
-                  <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                     {currentUser.email}
                   </p>
                   <div className="mt-1.5 flex items-center gap-1 text-[10px] text-[#cca776] font-semibold">
@@ -213,7 +217,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
                   <Link
                     href="/profile"
                     onClick={() => setDropdownOpen(false)}
-                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-200 hover:bg-[#cca776]/15 hover:text-[#cca776] transition-colors cursor-pointer"
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:bg-[#cca776]/15 hover:text-[#cca776] dark:text-slate-200 dark:hover:bg-[#cca776]/15 transition-colors cursor-pointer"
                   >
                     <User className="h-3.5 w-3.5 text-[#cca776]" />
                     <span>View Profile</span>
@@ -222,7 +226,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-rose-400 hover:bg-rose-950/40 hover:text-rose-300 transition-colors cursor-pointer"
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 hover:text-rose-700 dark:hover:text-rose-300 transition-colors cursor-pointer"
                   >
                     <LogOut className="h-3.5 w-3.5" />
                     <span>Logout</span>
@@ -234,7 +238,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         ) : (
           <Link
             href="/"
-            className="flex items-center gap-2 pl-2 border-l border-slate-800 text-xs font-semibold text-[#cca776] hover:text-[#b8935f]"
+            className="flex items-center gap-2 pl-2 border-l border-slate-200 dark:border-slate-800 text-xs font-semibold text-[#cca776] hover:text-[#b8935f]"
           >
             <UserCircle2 className="h-5 w-5" />
             <span className="hidden sm:inline">Sign In</span>

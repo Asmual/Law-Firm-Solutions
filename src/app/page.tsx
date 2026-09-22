@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { BRANDING } from "@/config/branding";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string; desc: string }[] = [
   {
@@ -225,8 +226,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Top Right: Chamber Sign In Trigger */}
+        {/* Top Right: Chamber Sign In Trigger & Theme Toggle */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <ThemeToggle />
           <button
             type="button"
             onClick={handleOpenSignIn}

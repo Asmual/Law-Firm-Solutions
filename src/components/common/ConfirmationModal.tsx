@@ -61,7 +61,7 @@ export function ConfirmationModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
       <div
-        className="relative w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl text-slate-100 animate-in zoom-in-95 duration-150"
+        className="relative w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl text-slate-900 dark:text-slate-100 animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -70,7 +70,7 @@ export function ConfirmationModal({
           onClick={onClose}
           disabled={isLoading}
           aria-label="Close modal"
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 transition-colors disabled:opacity-50 cursor-pointer"
         >
           <X className="h-4 w-4" />
         </button>
@@ -84,18 +84,18 @@ export function ConfirmationModal({
           </div>
 
           <div className="space-y-1 pr-4">
-            <h3 className="text-base font-bold text-white tracking-tight">{title}</h3>
-            <p className="text-xs text-slate-300 leading-relaxed">{message}</p>
+            <h3 className="text-base font-bold text-slate-900 dark:text-white tracking-tight">{title}</h3>
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">{message}</p>
           </div>
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-slate-800/80">
+        <div className="mt-6 flex items-center justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800/80">
           <button
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="rounded-xl border border-slate-700 bg-slate-800/80 px-4 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-800 hover:text-white transition-colors disabled:opacity-50 cursor-pointer"
+            className="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 px-4 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition-colors disabled:opacity-50 cursor-pointer"
           >
             {cancelText}
           </button>

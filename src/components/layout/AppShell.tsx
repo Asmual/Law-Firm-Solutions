@@ -6,6 +6,7 @@ import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { GlobalSearchModal } from "../common/GlobalSearchModal";
 import { Toaster, toast } from "sonner";
+import { useTheme } from "@/context/ThemeContext";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -77,6 +78,8 @@ export function AppShell({ children }: AppShellProps) {
     };
   }, [pathname, handleAutoLogout]);
 
+  const { theme } = useTheme();
+
   // If on Landing / Website Home page, render full width without internal app shell
   if (pathname === "/") {
     return (
@@ -84,12 +87,12 @@ export function AppShell({ children }: AppShellProps) {
         <main className="w-full">
           {children}
         </main>
-        <Toaster position="top-right" richColors />
+        <Toaster position="top-right" richColors theme={theme} />
       </div>
     );
   }
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-50 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100">
+    <div className="flex h-screen w-full overflow-hidden bg-slate-100/70 dark:bg-slate-950 font-sans text-slate-900 dark:text-slate-100 chamber-app">
       {/* Sidebar */}
       <Sidebar
         mobileOpen={isMobileMenuOpen}
@@ -114,7 +117,7 @@ export function AppShell({ children }: AppShellProps) {
       />
 
       {/* Toast Notification Provider */}
-      <Toaster position="top-right" richColors />
+      <Toaster position="top-right" richColors theme={theme} />
     </div>
   );
 }

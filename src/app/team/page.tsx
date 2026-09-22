@@ -205,13 +205,13 @@ export default function TeamPage() {
         {/* View Mode & Admin Status */}
         <div className="flex items-center gap-2">
           {/* View Toggle */}
-          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
+          <div className="flex items-center gap-1 bg-white dark:bg-slate-900 p-1 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <button
               onClick={() => setViewMode("directory")}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                 viewMode === "directory"
                   ? "bg-[#cca776] text-slate-950 font-bold shadow"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white"
               }`}
             >
               <LayoutGrid className="h-3.5 w-3.5" />
@@ -222,7 +222,7 @@ export default function TeamPage() {
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
                 viewMode === "table"
                   ? "bg-[#cca776] text-slate-950 font-bold shadow"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white"
               }`}
             >
               <List className="h-3.5 w-3.5" />
@@ -234,32 +234,32 @@ export default function TeamPage() {
 
       {/* Metrics Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/80">
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
+          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
             Total Practitioners
           </span>
-          <span className="text-2xl font-bold text-white mt-1 block">
+          <span className="text-2xl font-bold text-slate-900 dark:text-white mt-1 block">
             {users.length}
           </span>
         </div>
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/80">
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
+          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
             Advocates
           </span>
-          <span className="text-2xl font-bold text-blue-400 mt-1 block">
+          <span className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1 block">
             {totalAdvocates}
           </span>
         </div>
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/80">
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
+          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
             Associates
           </span>
-          <span className="text-2xl font-bold text-emerald-400 mt-1 block">
+          <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1 block">
             {totalAssociates}
           </span>
         </div>
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/80">
-          <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
+          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
             Admins
           </span>
           <span className="text-2xl font-bold text-[#cca776] mt-1 block">
@@ -269,7 +269,7 @@ export default function TeamPage() {
       </div>
 
       {/* Search & Filters */}
-      <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/90 flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Search */}
         <div className="relative w-full md:w-80">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
@@ -278,12 +278,12 @@ export default function TeamPage() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search practitioner by name, email, roll no..."
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-9 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
+            className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3 py-1.5 text-xs text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
           />
         </div>
 
         {/* Role Filter Pills */}
-        <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-lg border border-slate-800 text-xs w-full md:w-auto overflow-x-auto">
+        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs w-full md:w-auto overflow-x-auto">
           <span className="text-slate-500 px-2 font-medium shrink-0">Role:</span>
           {["all", "advocate", "associate", "admin"].map((r) => (
             <button
@@ -292,7 +292,7 @@ export default function TeamPage() {
               className={`px-3 py-1 rounded-md text-xs font-medium transition-colors capitalize shrink-0 cursor-pointer ${
                 roleFilter === r
                   ? "bg-[#cca776] text-slate-950 font-bold"
-                  : "text-slate-400 hover:text-white"
+                  : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white"
               }`}
             >
               {r === "all" ? "All Profiles" : r}
@@ -306,9 +306,9 @@ export default function TeamPage() {
         loading ? (
           <CardSkeleton count={6} />
         ) : filteredUsers.length === 0 ? (
-          <div className="py-16 text-center border border-slate-800 rounded-xl bg-slate-900/60">
-            <Users className="h-10 w-10 text-slate-600 mx-auto mb-2" />
-            <p className="text-sm font-semibold text-slate-300">No practitioners found</p>
+          <div className="py-16 text-center border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900/60 shadow-sm">
+            <Users className="h-10 w-10 text-slate-400 dark:text-slate-600 mx-auto mb-2" />
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">No practitioners found</p>
             <p className="text-xs text-slate-500 mt-1">Try changing your search keywords or role filters.</p>
           </div>
         ) : (
@@ -320,13 +320,13 @@ export default function TeamPage() {
               return (
                 <div
                   key={userId}
-                  className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 shadow-lg hover:border-[#cca776]/50 transition-all group flex flex-col justify-between"
+                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-5 shadow-sm dark:shadow-lg hover:border-[#cca776]/50 transition-all group flex flex-col justify-between"
                 >
                   <div className="space-y-4">
                     {/* Top Row: Avatar & Role */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="relative">
-                        <div className="h-14 w-14 rounded-full overflow-hidden bg-slate-800 border-2 border-[#cca776]/40 flex items-center justify-center font-bold text-lg text-[#cca776] shadow-md">
+                        <div className="h-14 w-14 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-[#cca776]/40 flex items-center justify-center font-bold text-lg text-[#cca776] shadow-md">
                           {user.avatarUrl ? (
                             <img
                               src={user.avatarUrl}
@@ -339,7 +339,7 @@ export default function TeamPage() {
                         </div>
                         {/* Online/Active status dot */}
                         <span
-                          className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-slate-900 ${
+                          className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white dark:border-slate-900 ${
                             user.isActive !== false ? "bg-emerald-400" : "bg-rose-500"
                           }`}
                           title={user.isActive !== false ? "Active Member" : "Suspended"}
@@ -362,7 +362,7 @@ export default function TeamPage() {
 
                     {/* Member Details */}
                     <div>
-                      <h3 className="text-base font-bold text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5">
+                      <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5">
                         <span>{user.name}</span>
                         {user.authProvider === "google" && (
                           <span className="rounded bg-blue-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-blue-400 border border-blue-500/30">
@@ -370,7 +370,7 @@ export default function TeamPage() {
                           </span>
                         )}
                       </h3>
-                      <p className="text-xs text-slate-300 font-medium mt-0.5">
+                      <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-0.5">
                         {user.chamberDesignation || "Chamber Practitioner"}
                       </p>
                       {user.barEnrollmentNo && (
@@ -397,10 +397,10 @@ export default function TeamPage() {
                   </div>
 
                   {/* Card Footer: View Progress Button */}
-                  <div className="pt-4 mt-4 border-t border-slate-800">
+                  <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
                     <Link
                       href={`/team/${userId}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-800 hover:bg-[#cca776] hover:text-slate-950 text-xs font-semibold text-slate-200 border border-slate-700 hover:border-[#cca776] transition-all cursor-pointer group-hover:shadow-md"
+                      className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-100 hover:bg-[#cca776] text-slate-800 hover:text-slate-950 border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 hover:border-[#cca776] text-xs font-semibold transition-all cursor-pointer group-hover:shadow-md"
                     >
                       <Briefcase className="h-3.5 w-3.5 text-[#cca776] group-hover:text-slate-950 transition-colors" />
                       <span>View Profile &amp; Work Progress</span>
@@ -414,10 +414,10 @@ export default function TeamPage() {
         )
       ) : (
         /* View Mode: Management Table */
-        <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/90 shadow-xl">
+        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-sm dark:shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+              <thead className="bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
                   <th className="px-4 py-3">Advocate / Member</th>
                   <th className="px-4 py-3">Designation</th>
@@ -428,7 +428,7 @@ export default function TeamPage() {
                   <th className="px-4 py-3 text-right">Access &amp; Role Control</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800 text-slate-300">
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-800 text-slate-700 dark:text-slate-300">
                 {loading ? (
                   <tr>
                     <td colSpan={7} className="p-0">
@@ -449,7 +449,7 @@ export default function TeamPage() {
                     return (
                       <tr
                         key={userId}
-                        className="hover:bg-slate-800/40 transition-colors"
+                        className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
                       >
                         {/* Name & Email */}
                         <td className="px-4 py-3.5 whitespace-nowrap">
@@ -457,19 +457,19 @@ export default function TeamPage() {
                             href={`/team/${userId}`}
                             className="flex items-center gap-2.5 group"
                           >
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-slate-200 font-bold border border-slate-700 group-hover:border-[#cca776] transition-colors shrink-0">
+                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold border border-slate-200 dark:border-slate-700 group-hover:border-[#cca776] transition-colors shrink-0">
                               {user.name.charAt(0).toUpperCase()}
                             </div>
                             <div className="min-w-0">
-                              <div className="font-semibold text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                              <div className="font-semibold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                                 <span>{user.name}</span>
                                 {user.authProvider === "google" && (
-                                  <span className="rounded bg-blue-500/10 px-1.5 py-0.2 text-[9px] font-medium text-blue-400 border border-blue-500/20">
+                                  <span className="rounded bg-blue-500/10 px-1.5 py-0.2 text-[9px] font-medium text-blue-500 dark:text-blue-400 border border-blue-500/20">
                                     Google
                                   </span>
                                 )}
                               </div>
-                              <span className="text-[11px] text-slate-400 whitespace-nowrap block">
+                              <span className="text-[11px] text-slate-500 dark:text-slate-400 whitespace-nowrap block">
                                 {user.email}
                               </span>
                             </div>
@@ -477,12 +477,12 @@ export default function TeamPage() {
                         </td>
 
                         {/* Designation */}
-                        <td className="px-4 py-3.5 font-medium text-slate-200 whitespace-nowrap">
+                        <td className="px-4 py-3.5 font-medium text-slate-700 dark:text-slate-200 whitespace-nowrap">
                           {user.chamberDesignation || "Legal Practitioner"}
                         </td>
 
                         {/* Contact */}
-                        <td className="px-4 py-3.5 text-slate-400 whitespace-nowrap">
+                        <td className="px-4 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap">
                           {user.phone ? (
                             <div className="flex items-center gap-1 text-[11px] whitespace-nowrap">
                               <Phone className="h-3 w-3 text-slate-400" />
@@ -505,12 +505,12 @@ export default function TeamPage() {
                         {/* Account Status Badge */}
                         <td className="px-4 py-3.5 whitespace-nowrap">
                           {user.isActive !== false ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
                               <CheckCircle className="h-3 w-3" />
                               <span>Active</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-400 border border-rose-500/30 whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-600 dark:text-rose-400 border border-rose-500/30 whitespace-nowrap">
                               <Ban className="h-3 w-3" />
                               <span>Blocked</span>
                             </span>
@@ -518,7 +518,7 @@ export default function TeamPage() {
                         </td>
 
                         {/* Bar Roll */}
-                        <td className="px-4 py-3.5 text-slate-400 whitespace-nowrap font-mono">
+                        <td className="px-4 py-3.5 text-slate-500 dark:text-slate-400 whitespace-nowrap font-mono">
                           {user.barEnrollmentNo || "—"}
                         </td>
 
@@ -544,7 +544,7 @@ export default function TeamPage() {
                                   onChange={(e) =>
                                     handleRoleChange(userId!, e.target.value as UserRole)
                                   }
-                                  className="rounded-lg border border-slate-700 bg-slate-800 px-2 py-1 text-xs font-semibold text-slate-200 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none cursor-pointer whitespace-nowrap uppercase"
+                                  className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-2 py-1 text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-sm hover:border-[#cca776] focus:border-[#cca776] focus:outline-none cursor-pointer whitespace-nowrap uppercase"
                                 >
                                   {ALL_ROLES.map((r) => (
                                     <option key={r} value={r}>

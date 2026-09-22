@@ -99,7 +99,7 @@ export default function CauseListPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-semibold uppercase tracking-wider text-[#cca776]">
@@ -109,11 +109,11 @@ export default function CauseListPage() {
               Daily Roster
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
             <CalendarDays className="h-6 w-6 text-[#cca776]" />
             Daily Chamber Cause List
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             High Court Division, Appellate Division, and Artha Rin Adalat cause list & hearing tracker.
           </p>
         </div>
@@ -121,7 +121,7 @@ export default function CauseListPage() {
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-sm"
           >
             <Printer className="h-4 w-4 text-[#cca776]" />
             <span>Print Cause List</span>
@@ -130,11 +130,11 @@ export default function CauseListPage() {
       </div>
 
       {/* Date Picker & Filter Controls */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 shadow-sm">
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
           {/* Date Picker */}
           <div className="sm:col-span-3">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
               Select Cause Date
             </label>
             <LegalDatePicker
@@ -146,13 +146,13 @@ export default function CauseListPage() {
 
           {/* Court Filter */}
           <div className="sm:col-span-3">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
               Court / Division
             </label>
             <select
               value={courtFilter}
               onChange={(e) => setCourtFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-200 focus:outline-none focus:border-[#cca776]"
             >
               <option value="all">All Courts & Benches</option>
               <option value="Appellate">Appellate Division</option>
@@ -164,13 +164,13 @@ export default function CauseListPage() {
 
           {/* Institution Filter */}
           <div className="sm:col-span-3">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
               Institution / Bank
             </label>
             <select
               value={selectedInstId}
               onChange={(e) => setSelectedInstId(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-200 focus:outline-none focus:border-[#cca776]"
             >
               <option value="all">All Institutions</option>
               {institutions.map((i) => (
@@ -183,7 +183,7 @@ export default function CauseListPage() {
 
           {/* Search Query */}
           <div className="sm:col-span-3">
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+            <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-1">
               Search Keywords
             </label>
             <div className="relative">
@@ -193,7 +193,7 @@ export default function CauseListPage() {
                 placeholder="Case number, advocate..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
               />
             </div>
           </div>
@@ -201,13 +201,13 @@ export default function CauseListPage() {
       </div>
 
       {/* Cause List Schedule Table */}
-      <div className="bg-slate-900/90 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
-        <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-xl">
+        <div className="p-4 bg-slate-50 dark:bg-slate-950/80 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-bold text-white uppercase tracking-wider">
+            <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
               Hearing Roster for {selectedDate || "All Scheduled Dates"}
             </h2>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               Sorted by Court Bench and Seniority
             </p>
           </div>
@@ -219,18 +219,18 @@ export default function CauseListPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/60 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/60 text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
                 <th className="py-3 px-3 text-center w-12">Item</th>
                 <th className="py-3 px-3 w-28">File No.</th>
                 <th className="py-3 px-4">Court / Division</th>
-                <th className="py-3 px-4">Case Number & Type</th>
+                <th className="py-3 px-4">Case Number &amp; Type</th>
                 <th className="py-3 px-4">Bank / Institution</th>
                 <th className="py-3 px-4">Parties Involved</th>
                 <th className="py-3 px-4">Assigned Counsel</th>
                 <th className="py-3 px-4">Docket Remarks / Stage</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60">
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
               {isLoading ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-400">
@@ -241,8 +241,8 @@ export default function CauseListPage() {
               ) : filteredHearings.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-500">
-                    <CalendarDays className="h-10 w-10 text-slate-600 mx-auto mb-2 opacity-50" />
-                    <p className="font-semibold text-slate-400">
+                    <CalendarDays className="h-10 w-10 text-slate-400 dark:text-slate-600 mx-auto mb-2 opacity-50" />
+                    <p className="font-semibold text-slate-700 dark:text-slate-400">
                       No court matters scheduled for {selectedDate}
                     </p>
                     <p className="text-[11px] mt-1 text-slate-500">
@@ -252,32 +252,32 @@ export default function CauseListPage() {
                 </tr>
               ) : (
                 filteredHearings.map((h, idx) => (
-                  <tr key={idx} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3.5 px-3 text-center font-mono font-bold text-slate-400">
+                  <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                    <td className="py-3.5 px-3 text-center font-mono font-bold text-slate-500 dark:text-slate-400">
                       {idx + 1}
                     </td>
                     <td className="py-3.5 px-3 font-mono font-bold text-[#cca776]">
                       {h.caseFileNo}
                     </td>
-                    <td className="py-3.5 px-4 font-semibold text-sky-400">
+                    <td className="py-3.5 px-4 font-semibold text-sky-600 dark:text-sky-400">
                       {h.courtDivision}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-white">
+                    <td className="py-3.5 px-4 font-mono text-slate-900 dark:text-white">
                       <div className="font-bold">{h.caseNumber}</div>
-                      <div className="text-[10px] text-slate-400 font-sans">{h.caseType}</div>
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-sans">{h.caseType}</div>
                     </td>
-                    <td className="py-3.5 px-4 font-medium text-slate-200">
+                    <td className="py-3.5 px-4 font-medium text-slate-900 dark:text-slate-200">
                       {h.institutionName}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-300">
+                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
                       <div className="truncate max-w-[200px]" title={h.parties}>
                         {h.parties}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-200 font-medium">
+                    <td className="py-3.5 px-4 text-slate-900 dark:text-slate-200 font-medium">
                       {h.advocateName}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-400">
+                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400">
                       <div className="truncate max-w-[220px]" title={h.remarks}>
                         {h.remarks || "Regular Hearing / Appearance"}
                       </div>

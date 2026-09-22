@@ -14,7 +14,6 @@ import {
   Printer,
   Eye,
   ArrowLeft,
-  X,
   User,
   Scale,
   AlertCircle,

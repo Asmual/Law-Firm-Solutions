@@ -39,8 +39,6 @@ const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string; desc: stri
 export default function HomePage() {
   const router = useRouter();
 
-  // Auth check state
-  const [checkingAuth, setCheckingAuth] = useState(true);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
   const [loading, setLoading] = useState(false);
@@ -64,33 +62,21 @@ export default function HomePage() {
     phone: "",
   });
 
-  // Verify existing user session
+  // Verify existing user session in background
   useEffect(() => {
     let isMounted = true;
-    const timeout = setTimeout(() => {
-      if (isMounted) setCheckingAuth(false);
-    }, 1000);
-
     fetch("/api/auth/me")
       .then((res) => res.json())
       .then((data) => {
         if (!isMounted) return;
-        clearTimeout(timeout);
         if (data.authenticated && data.user) {
           router.replace("/dashboard");
-        } else {
-          setCheckingAuth(false);
         }
       })
-      .catch(() => {
-        if (!isMounted) return;
-        clearTimeout(timeout);
-        setCheckingAuth(false);
-      });
+      .catch(() => {});
 
     return () => {
       isMounted = false;
-      clearTimeout(timeout);
     };
   }, [router]);
 
@@ -169,17 +155,6 @@ export default function HomePage() {
       setLoading(false);
     }
   };
-
-  if (checkingAuth) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950 text-slate-400 text-xs">
-        <div className="flex items-center gap-2.5">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-[#cca776] border-t-transparent" />
-          <span className="font-medium text-slate-300">Verifying chamber credentials...</span>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen relative flex flex-col justify-between overflow-x-hidden text-slate-100 selection:bg-[#cca776]/30 selection:text-[#cca776]">
@@ -291,7 +266,10 @@ export default function HomePage() {
       </main>
 
       {/* FOOTER: Minimal, elegant, and unobtrusive */}
-      <footer className="relative z-20 w-full px-4 sm:px-8 py-4 text-center text-[11px] text-slate-400">
+      <footer
+        className="relative z-20 w-full px-4 sm:px-8 py-4 text-center text-[11px] text-slate-400 select-none"
+        suppressHydrationWarning
+      >
         © {new Date().getFullYear()} {BRANDING.brandName} • {BRANDING.tagline}. All Rights Reserved.
       </footer>
 

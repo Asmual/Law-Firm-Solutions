@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useState, useEffect, useRef, useSyncExternalStore } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -17,8 +17,6 @@ import {
 import { toast } from "sonner";
 import { User as UserType } from "@/types";
 
-const emptySubscribe = () => () => {};
-
 interface HeaderProps {
   onOpenSearch?: () => void;
   onOpenMobileMenu?: () => void;
@@ -29,21 +27,12 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Safe client-side check to prevent React hydration mismatch
-  const isClient = useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
-
   const now = new Date();
-  const dateParts = isClient
-    ? {
-        day: now.getDate().toString().padStart(2, "0"),
-        month: now.toLocaleString("en-GB", { month: "short" }),
-        year: now.getFullYear().toString(),
-      }
-    : null;
+  const dateParts = {
+    day: now.getDate().toString().padStart(2, "0"),
+    month: now.toLocaleString("en-GB", { month: "short" }),
+    year: now.getFullYear().toString(),
+  };
 
   // Fetch current user & listen for profile updates
   useEffect(() => {
@@ -128,25 +117,24 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         </button>
 
         {/* Prominent & Modern Bold Date Display (e.g. 21 Sep 2026) */}
-        <div className="hidden xl:flex items-center gap-2 text-xs border-l border-slate-800/80 pl-3.5 py-1 select-none shrink-0">
+        <div
+          className="hidden xl:flex items-center gap-2 text-xs border-l border-slate-800/80 pl-3.5 py-1 select-none shrink-0"
+          suppressHydrationWarning
+        >
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#cca776]/10 text-[#cca776] ring-1 ring-[#cca776]/30">
             <Calendar className="h-3.5 w-3.5" />
           </div>
-          {dateParts ? (
-            <div className="flex items-baseline gap-1.5 font-sans">
-              <span className="text-sm font-extrabold text-white tracking-tight">
-                {dateParts.day}
-              </span>
-              <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider">
-                {dateParts.month}
-              </span>
-              <span className="text-xs font-semibold text-slate-400">
-                {dateParts.year}
-              </span>
-            </div>
-          ) : (
-            <div className="h-4 w-20 bg-slate-800/50 rounded animate-pulse" />
-          )}
+          <div className="flex items-baseline gap-1.5 font-sans" suppressHydrationWarning>
+            <span className="text-sm font-extrabold text-white tracking-tight" suppressHydrationWarning>
+              {dateParts.day}
+            </span>
+            <span className="text-xs font-bold text-[#cca776] uppercase tracking-wider" suppressHydrationWarning>
+              {dateParts.month}
+            </span>
+            <span className="text-xs font-semibold text-slate-400" suppressHydrationWarning>
+              {dateParts.year}
+            </span>
+          </div>
         </div>
       </div>
 

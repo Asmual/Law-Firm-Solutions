@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
 
     const defaultPasswordHash = hashPassword("password123");
 
-    // 1. Seed Chamber Users (Admin, Advocate Asmual, Associate, Viewer)
+    // 1. Seed Chamber Users (1 Admin, 5 Advocates, 3 Associates)
     const users = await UserModel.create([
       {
         name: "Advocate Asmual",
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest) {
         phone: "+8801711000001",
         passwordHash: defaultPasswordHash,
         role: "admin",
-        chamberDesignation: "Managing Partner & Senior Lawyer",
+        chamberDesignation: "Managing Partner & Senior Counsel",
         barEnrollmentNo: "SC-4521/1998",
         isActive: true,
       },
@@ -62,9 +62,39 @@ export async function GET(req: NextRequest) {
         email: "farhana@chamber.com",
         phone: "+8801912000003",
         passwordHash: defaultPasswordHash,
-        role: "associate",
-        chamberDesignation: "Associate Advocate",
-        barEnrollmentNo: "DB-14251/2019",
+        role: "advocate",
+        chamberDesignation: "Advocate, High Court Division",
+        barEnrollmentNo: "HC-14251/2018",
+        isActive: true,
+      },
+      {
+        name: "Advocate Kazi Tanvir Ahmed",
+        email: "tanvir@chamber.com",
+        phone: "+8801714000006",
+        passwordHash: defaultPasswordHash,
+        role: "advocate",
+        chamberDesignation: "Advocate, Supreme Court of Bangladesh",
+        barEnrollmentNo: "SC-12044/2017",
+        isActive: true,
+      },
+      {
+        name: "Advocate Mahmudul Hasan Chowdhury",
+        email: "mahmudul@chamber.com",
+        phone: "+8801715000007",
+        passwordHash: defaultPasswordHash,
+        role: "advocate",
+        chamberDesignation: "Advocate, Corporate & Artha Rin Specialist",
+        barEnrollmentNo: "HC-16520/2019",
+        isActive: true,
+      },
+      {
+        name: "Advocate Nusrat Jahan Rimi",
+        email: "nusrat@chamber.com",
+        phone: "+8801716000008",
+        passwordHash: defaultPasswordHash,
+        role: "advocate",
+        chamberDesignation: "Advocate, Civil & Constitutional Litigation",
+        barEnrollmentNo: "HC-18933/2020",
         isActive: true,
       },
       {
@@ -73,17 +103,28 @@ export async function GET(req: NextRequest) {
         phone: "+8801615000004",
         passwordHash: defaultPasswordHash,
         role: "associate",
-        chamberDesignation: "Junior Associate",
-        barEnrollmentNo: "HC-11204/2021",
+        chamberDesignation: "Associate Advocate",
+        barEnrollmentNo: "HC-21204/2021",
         isActive: true,
       },
       {
-        name: "Nurul Amin",
-        email: "clerk@chamber.com",
-        phone: "+8801811000005",
+        name: "Advocate Sabrina Yasmin",
+        email: "sabrina@chamber.com",
+        phone: "+8801817000009",
         passwordHash: defaultPasswordHash,
         role: "associate",
-        chamberDesignation: "Chamber Records Associate",
+        chamberDesignation: "Junior Associate Advocate",
+        barEnrollmentNo: "DB-24110/2022",
+        isActive: true,
+      },
+      {
+        name: "Advocate Tariqul Islam",
+        email: "tariqul@chamber.com",
+        phone: "+8801918000010",
+        passwordHash: defaultPasswordHash,
+        role: "associate",
+        chamberDesignation: "Research Associate & Chamber Advocate",
+        barEnrollmentNo: "DB-26514/2023",
         isActive: true,
       },
     ]);
@@ -91,6 +132,12 @@ export async function GET(req: NextRequest) {
     const asmual = users[0];
     const adminUser = users[1];
     const farhana = users[2];
+    const tanvir = users[3];
+    const mahmudul = users[4];
+    const nusrat = users[5];
+    const shakil = users[6];
+    const sabrina = users[7];
+    const tariqul = users[8];
 
     // 2. Seed 15 Bangladeshi Banking Institutions
     const institutions = await InstitutionModel.create([
@@ -304,9 +351,183 @@ export async function GET(req: NextRequest) {
         },
         isActive: true,
       },
+      // Corporate Clients (Different Sectors)
+      {
+        name: "Square Pharmaceuticals PLC",
+        shortCode: "SQUARE",
+        category: "Corporate Client",
+        branch: "Corporate Headquarters, Uttara",
+        address: "Square Centre, 48 Mohakhali C/A, Dhaka-1212",
+        focalPerson: {
+          name: "Barrister Ashiqur Rahman",
+          designation: "Chief Legal Officer",
+          phone: "+8801716000606",
+          email: "legal.affairs@squaregroup.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Beximco Group Ltd",
+        shortCode: "BEXIMCO",
+        category: "Corporate Client",
+        branch: "BEXIMCO Industrial Park, Gazipur",
+        address: "17 Dhanmondi R/A, Road No. 2, Dhaka-1205",
+        focalPerson: {
+          name: "Barrister Zillur Rahman",
+          designation: "Head of Corporate & Regulatory Affairs",
+          phone: "+8801717000707",
+          email: "zillur@beximco.net",
+        },
+        isActive: true,
+      },
+      {
+        name: "Bashundhara Group",
+        shortCode: "BG",
+        category: "Corporate Client",
+        branch: "Industrial Headquarters, Baridhara",
+        address: "Plot 3, Block G, Umme Kulsum Road, Bashundhara R/A, Dhaka",
+        focalPerson: {
+          name: "Maj. (Retd.) Mahfuzul Alam",
+          designation: "Executive Director (Legal & Land Matters)",
+          phone: "+8801718000808",
+          email: "legal@bg.com.bd",
+        },
+        isActive: true,
+      },
+      {
+        name: "Apex Footwear Ltd",
+        shortCode: "APEX",
+        category: "Corporate Client",
+        branch: "Apex Centre, Gulshan",
+        address: "House 6, Road 137, Block SE(D), Gulshan-1, Dhaka-1212",
+        focalPerson: {
+          name: "Mr. Moniruzzaman Tareq",
+          designation: "General Manager (Legal Affairs)",
+          phone: "+8801719000910",
+          email: "legal@apexfootwearltd.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Grameenphone Ltd",
+        shortCode: "GP",
+        category: "Corporate Client",
+        branch: "GPHouse, Bashundhara",
+        address: "GPHouse, Bashundhara Residential Area, Baridhara, Dhaka-1229",
+        focalPerson: {
+          name: "Syed Tanveer Hossain",
+          designation: "Director & Head of Litigation",
+          phone: "+8801711554433",
+          email: "litigation@grameenphone.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Akij Group Ltd",
+        shortCode: "AKIJ",
+        category: "Corporate Client",
+        branch: "Akij House, Tejgaon",
+        address: "198 Bir Uttam Mir Shawkat Sarak, Tejgaon I/A, Dhaka-1208",
+        focalPerson: {
+          name: "Mr. Shamsuddin Ahmed",
+          designation: "Head of Legal & Compliance",
+          phone: "+8801712889900",
+          email: "legal@akij.net",
+        },
+        isActive: true,
+      },
+      // 6 Individual Litigants
+      {
+        name: "Al-Haj Mohammad Nurul Islam",
+        shortCode: "IND-01",
+        category: "Individual Client",
+        branch: "Chittagong Commercial Center",
+        address: "Agrabad Commercial Area, Chittagong",
+        focalPerson: {
+          name: "Mohammad Nurul Islam",
+          designation: "Individual Litigant / Proprietor",
+          phone: "+8801819000909",
+          email: "nurul.islam@gmail.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Dr. Tahmina Akter",
+        shortCode: "IND-02",
+        category: "Individual Client",
+        branch: "Dhanmondi, Dhaka",
+        address: "Road 7/A, Dhanmondi R/A, Dhaka-1209",
+        focalPerson: {
+          name: "Dr. Tahmina Akter",
+          designation: "Individual Petitioner / Professor",
+          phone: "+8801911000888",
+          email: "tahmina.akter@yahoo.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Kazi Mozammel Hossain",
+        shortCode: "IND-03",
+        category: "Individual Client",
+        branch: "Banani, Dhaka",
+        address: "Road 11, Block D, Banani, Dhaka-1213",
+        focalPerson: {
+          name: "Kazi Mozammel Hossain",
+          designation: "Managing Director & Personal Guarantor",
+          phone: "+8801711223344",
+          email: "mozammel.hossain@outlook.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Engr. Faruque Ahmed",
+        shortCode: "IND-04",
+        category: "Individual Client",
+        branch: "Mirpur, Dhaka",
+        address: "Section 10, Mirpur, Dhaka-1216",
+        focalPerson: {
+          name: "Engr. Faruque Ahmed",
+          designation: "Managing Partner, Ahmed Construction",
+          phone: "+8801715443322",
+          email: "faruque.engineer@gmail.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Begum Rokeya Sultana",
+        shortCode: "IND-05",
+        category: "Individual Client",
+        branch: "Uttara, Dhaka",
+        address: "Sector 4, Uttara Model Town, Dhaka-1230",
+        focalPerson: {
+          name: "Begum Rokeya Sultana",
+          designation: "Landowner & Civil Appellant",
+          phone: "+8801817665544",
+          email: "rokeya.sultana@hotmail.com",
+        },
+        isActive: true,
+      },
+      {
+        name: "Al-Amin Chowdhury",
+        shortCode: "IND-06",
+        category: "Individual Client",
+        branch: "Narayanganj Port",
+        address: "B.B. Road, Narayanganj-1400",
+        focalPerson: {
+          name: "Al-Amin Chowdhury",
+          designation: "Importer & Commercial Litigant",
+          phone: "+8801913778899",
+          email: "alamin.chy@gmail.com",
+        },
+        isActive: true,
+      },
     ]);
 
     const [nrb, brac, city, ebl, pubali, ibbl, dbbl] = institutions;
+    const square = institutions.find((i) => i.shortCode === "SQUARE") || institutions[15];
+    const beximco = institutions.find((i) => i.shortCode === "BEXIMCO") || institutions[16];
+    const indNurul = institutions.find((i) => i.shortCode === "IND-01") || institutions[21];
+    const indTahmina = institutions.find((i) => i.shortCode === "IND-02") || institutions[22];
 
     // 3. Seed 5 COMPLETE Case Files specifically assigned to ADVOCATE ASMUAL
     const asmualCases = [
@@ -777,6 +998,12 @@ export async function GET(req: NextRequest) {
           dateAssigned: "15.01.2024",
           internalRemarks: "Managing Partner oversight.",
         },
+        assignedAssociate: {
+          associateId: shakil._id,
+          associateName: shakil.name,
+          dateAssigned: "15.01.2024",
+          internalRemarks: "Associate Shakil assisting with lower court records.",
+        },
         statusUpdates: [
           {
             updateDate: "20.02.2024",
@@ -787,23 +1014,258 @@ export async function GET(req: NextRequest) {
         ],
         status: "running",
       },
+      // Case for Advocate Kazi Tanvir Ahmed with Corporate Client: Square Pharmaceuticals
+      {
+        chamberFileNo: "CF-2024/008",
+        institutionId: square._id,
+        institutionName: square.name,
+        matter: "Commercial Patent & Trademark Infringement Injunction",
+        branch: "Corporate Headquarters, Uttara",
+        focalPerson: square.focalPerson,
+        caseNumbers: [
+          {
+            caseNumber: "Title Suit No. 89/2024",
+            caseType: "Title Suit",
+            year: "2024",
+            courtDivision: "Joint District Judge Court No. 1, Dhaka",
+            remarks: "Commercial trademark defense and perpetual injunction against counterfeit products",
+          },
+        ],
+        parties: [
+          {
+            partyNo: 1,
+            partyNameDetails: "Square Pharmaceuticals PLC (Plaintiff)\nRepresented by Chief Legal Officer",
+            caseReceivedDate: "10.02.2024",
+            searchListEntry: "SL-2024/88",
+          },
+          {
+            partyNo: 2,
+            partyNameDetails: "Delta Pharma Laboratories & Anr. (Defendants)",
+            caseReceivedDate: "10.02.2024",
+            searchListEntry: "SL-2024/89",
+          },
+        ],
+        specialNotes: {
+          wokalatnamaNote: "Corporate resolution and power of attorney filed.",
+          mainPetitionNote: "Ad-interim injunction granted restraining defendant from packaging violation.",
+          extensionNote: "Injunction extended till next hearing date.",
+        },
+        assignedAdvocate: {
+          advocateId: tanvir._id,
+          advocateName: tanvir.name,
+          dateAssigned: "12.02.2024",
+          internalRemarks: "Lead counsel: Advocate Kazi Tanvir Ahmed handling High Court & District Court proceedings.",
+        },
+        assignedAssociate: {
+          associateId: sabrina._id,
+          associateName: sabrina.name,
+          dateAssigned: "12.02.2024",
+          internalRemarks: "Assisting with evidentiary affidavits and certified copies.",
+        },
+        statusUpdates: [
+          {
+            updateDate: "18.03.2024",
+            statusRemarks: "Court granted ad-interim temporary injunction against unauthorized brand usage.",
+            courtName: "Joint District Judge Court No. 1, Dhaka",
+            enteredBy: tanvir.name,
+          },
+        ],
+        status: "stay_granted",
+      },
+      // Case for Advocate Mahmudul Hasan Chowdhury with Corporate Client: Beximco Group Ltd
+      {
+        chamberFileNo: "CF-2024/009",
+        institutionId: beximco._id,
+        institutionName: beximco.name,
+        matter: "Syndicated Loan Restructuring & Customs Bond Dispute",
+        branch: "BEXIMCO Industrial Park, Gazipur",
+        focalPerson: beximco.focalPerson,
+        caseNumbers: [
+          {
+            caseNumber: "Writ Petition No. 7412/2024",
+            caseType: "Writ Petition",
+            year: "2024",
+            courtDivision: "High Court Division (Annex 22)",
+            remarks: "Challenging National Board of Revenue regulatory assessment order",
+          },
+        ],
+        parties: [
+          {
+            partyNo: 1,
+            partyNameDetails: "Beximco Group Ltd (Petitioner)",
+            caseReceivedDate: "20.03.2024",
+            searchListEntry: "SL-2024/104",
+          },
+          {
+            partyNo: 2,
+            partyNameDetails: "Commissioner of Customs & NBR (Respondents)",
+            caseReceivedDate: "20.03.2024",
+            searchListEntry: "SL-2024/105",
+          },
+        ],
+        specialNotes: {
+          wokalatnamaNote: "Filed in High Court registry on 25.03.2024.",
+          mainPetitionNote: "Rule Nisi issued with directions upon respondents.",
+          generalRemarks: "Chamber managing High Court writ portfolio.",
+        },
+        assignedAdvocate: {
+          advocateId: mahmudul._id,
+          advocateName: mahmudul.name,
+          dateAssigned: "22.03.2024",
+          internalRemarks: "Advocate Mahmudul Hasan Chowdhury leading writ bench arguments.",
+        },
+        assignedAssociate: {
+          associateId: tariqul._id,
+          associateName: tariqul.name,
+          dateAssigned: "22.03.2024",
+          internalRemarks: "Research associate Tariqul compiling precedent judgments.",
+        },
+        statusUpdates: [
+          {
+            updateDate: "05.04.2024",
+            statusRemarks: "Rule Nisi issued calling upon NBR to explain legality of assessment.",
+            courtName: "High Court Division, Bench 22",
+            enteredBy: mahmudul.name,
+          },
+        ],
+        status: "running",
+      },
+      // Case for Advocate Nusrat Jahan Rimi with Individual Litigant: Dr. Tahmina Akter
+      {
+        chamberFileNo: "CF-2024/010",
+        institutionId: indTahmina._id,
+        institutionName: indTahmina.name,
+        matter: "Service Seniority & Higher Education Promotion Writ",
+        branch: "Dhanmondi, Dhaka",
+        focalPerson: indTahmina.focalPerson,
+        caseNumbers: [
+          {
+            caseNumber: "Writ Petition No. 3310/2024",
+            caseType: "Writ Petition",
+            year: "2024",
+            courtDivision: "High Court Division (Annex 07)",
+            remarks: "Constitutional writ petition under Article 102 for academic seniority restoration",
+          },
+        ],
+        parties: [
+          {
+            partyNo: 1,
+            partyNameDetails: "Dr. Tahmina Akter (Petitioner)\nAssociate Professor, Dhaka",
+            caseReceivedDate: "15.01.2024",
+            searchListEntry: "SL-2024/12",
+          },
+          {
+            partyNo: 2,
+            partyNameDetails: "Ministry of Education & Vice Chancellor (Respondents)",
+            caseReceivedDate: "15.01.2024",
+            searchListEntry: "SL-2024/13",
+          },
+        ],
+        specialNotes: {
+          wokalatnamaNote: "Wokalatnama executed on 18.01.2024.",
+          mainPetitionNote: "Grounds of violation of fundamental rights under Article 27 & 31.",
+        },
+        assignedAdvocate: {
+          advocateId: nusrat._id,
+          advocateName: nusrat.name,
+          dateAssigned: "18.01.2024",
+          internalRemarks: "Advocate Nusrat Jahan Rimi in charge of constitutional and service jurisprudence matters.",
+        },
+        assignedAssociate: {
+          associateId: sabrina._id,
+          associateName: sabrina.name,
+          dateAssigned: "18.01.2024",
+          internalRemarks: "Assisting with list of dates and synopsis preparation.",
+        },
+        statusUpdates: [
+          {
+            updateDate: "28.01.2024",
+            statusRemarks: "Motion moved successfully. Rule issued upon Ministry with 4-week returnable date.",
+            courtName: "High Court Division, Bench 07",
+            enteredBy: nusrat.name,
+          },
+        ],
+        status: "running",
+      },
+      // Case with Individual Litigant: Al-Haj Mohammad Nurul Islam
+      {
+        chamberFileNo: "CF-2024/011",
+        institutionId: indNurul._id,
+        institutionName: indNurul.name,
+        matter: "Arbitration Execution & Pre-decree Property Attachment Challenge",
+        branch: "Chittagong Commercial Center",
+        focalPerson: indNurul.focalPerson,
+        caseNumbers: [
+          {
+            caseNumber: "Arbitration Miscellaneous Case No. 44/2024",
+            caseType: "Arbitration Matter",
+            year: "2024",
+            courtDivision: "District Judge Court, Chittagong",
+            remarks: "Dispute arising from commercial warehouse leasing agreement",
+          },
+        ],
+        parties: [
+          {
+            partyNo: 1,
+            partyNameDetails: "Al-Haj Mohammad Nurul Islam (Petitioner / Claimant)",
+            caseReceivedDate: "02.02.2024",
+            searchListEntry: "SL-2024/22",
+          },
+          {
+            partyNo: 2,
+            partyNameDetails: "Bay Logistics Shipping Co. Ltd. (Opposite Party)",
+            caseReceivedDate: "02.02.2024",
+            searchListEntry: "SL-2024/23",
+          },
+        ],
+        specialNotes: {
+          wokalatnamaNote: "Executed and verified through Chittagong Bar Association.",
+          generalRemarks: "Settlement arbitration scheduled for mediation.",
+        },
+        assignedAdvocate: {
+          advocateId: asmual._id,
+          advocateName: asmual.name,
+          dateAssigned: "05.02.2024",
+          internalRemarks: "Senior Advocate Asmual representing claimant in arbitration settlement.",
+        },
+        assignedAssociate: {
+          associateId: shakil._id,
+          associateName: shakil.name,
+          dateAssigned: "05.02.2024",
+          internalRemarks: "Associate Shakil maintaining court dates.",
+        },
+        statusUpdates: [
+          {
+            updateDate: "15.02.2024",
+            statusRemarks: "Mediation process commenced with mediator appointment.",
+            courtName: "Chittagong ADR Cell",
+            enteredBy: asmual.name,
+          },
+        ],
+        status: "running",
+      },
     ];
 
     await CaseModel.insertMany([...asmualCases, ...otherCases]);
 
     return NextResponse.json({
       success: true,
-      message: "Database seeded successfully! Created 5 comprehensive demo case files specifically for Advocate Asmual, 15 Bangladeshi banks, and chamber team accounts.",
+      message: "Database seeded successfully! Created complete chamber data with 1 Admin, 5 Advocates, 3 Associates, diverse institutions/clients, and realistic case files.",
       seeded: {
         advocateAsmualCasesCount: asmualCases.length,
         totalCasesCount: asmualCases.length + otherCases.length,
         institutionsCount: institutions.length,
         usersCount: users.length,
         demoLoginAccounts: [
-          { role: "advocate", name: "Advocate Asmual", email: "asmual@chamber.com", password: "password123" },
           { role: "admin", name: "Barrister Rafiqul Islam", email: "admin@chamber.com", password: "password123" },
-          { role: "associate", name: "Advocate Farhana Kabir", email: "farhana@chamber.com", password: "password123" },
-          { role: "viewer", name: "Nurul Amin", email: "viewer@chamber.com", password: "password123" },
+          { role: "advocate", name: "Advocate Asmual", email: "asmual@chamber.com", password: "password123" },
+          { role: "advocate", name: "Advocate Farhana Kabir", email: "farhana@chamber.com", password: "password123" },
+          { role: "advocate", name: "Advocate Kazi Tanvir Ahmed", email: "tanvir@chamber.com", password: "password123" },
+          { role: "advocate", name: "Advocate Mahmudul Hasan Chowdhury", email: "mahmudul@chamber.com", password: "password123" },
+          { role: "advocate", name: "Advocate Nusrat Jahan Rimi", email: "nusrat@chamber.com", password: "password123" },
+          { role: "associate", name: "Advocate Shakil Ahmed", email: "shakil@chamber.com", password: "password123" },
+          { role: "associate", name: "Advocate Sabrina Yasmin", email: "sabrina@chamber.com", password: "password123" },
+          { role: "associate", name: "Advocate Tariqul Islam", email: "tariqul@chamber.com", password: "password123" },
         ],
       },
     });

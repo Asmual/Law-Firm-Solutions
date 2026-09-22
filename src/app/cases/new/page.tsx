@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense, useMemo } from "react";
+import React, { useState, useEffect, useRef, Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -17,6 +17,7 @@ import {
   X,
   User,
   Scale,
+  AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Institution, CaseNumberItem, PartyItem, StatusHearingUpdate, User as UserType } from "@/types";
@@ -146,11 +147,56 @@ const DEFAULT_CLIENTS: Institution[] = [
     isActive: true,
   },
   {
+    id: "demo-client-corp-4",
+    _id: "demo-client-corp-4",
+    name: "Apex Footwear Ltd",
+    shortCode: "APEX",
+    category: "Corporate Client",
+    branch: "Apex Centre, Gulshan",
+    focalPerson: {
+      name: "Mr. Moniruzzaman Tareq",
+      designation: "General Manager (Legal Affairs)",
+      phone: "+8801719000910",
+      email: "legal@apexfootwearltd.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-corp-5",
+    _id: "demo-client-corp-5",
+    name: "Grameenphone Ltd",
+    shortCode: "GP",
+    category: "Corporate Client",
+    branch: "GPHouse, Bashundhara",
+    focalPerson: {
+      name: "Syed Tanveer Hossain",
+      designation: "Director & Head of Litigation",
+      phone: "+8801711554433",
+      email: "litigation@grameenphone.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-corp-6",
+    _id: "demo-client-corp-6",
+    name: "Akij Group Ltd",
+    shortCode: "AKIJ",
+    category: "Corporate Client",
+    branch: "Akij House, Tejgaon",
+    focalPerson: {
+      name: "Mr. Shamsuddin Ahmed",
+      designation: "Head of Legal & Compliance",
+      phone: "+8801712889900",
+      email: "legal@akij.net",
+    },
+    isActive: true,
+  },
+  {
     id: "demo-client-ind-1",
     _id: "demo-client-ind-1",
     name: "Al-Haj Mohammad Nurul Islam",
     shortCode: "IND",
-    category: "Individual",
+    category: "Individual Client",
     branch: "Chittagong Commercial Center",
     focalPerson: {
       name: "Mohammad Nurul Islam",
@@ -165,11 +211,11 @@ const DEFAULT_CLIENTS: Institution[] = [
     _id: "demo-client-ind-2",
     name: "Dr. Tahmina Akter",
     shortCode: "IND",
-    category: "Individual",
+    category: "Individual Client",
     branch: "Dhanmondi, Dhaka",
     focalPerson: {
       name: "Dr. Tahmina Akter",
-      designation: "Individual Petitioner",
+      designation: "Individual Petitioner / Professor",
       phone: "+8801911000888",
       email: "tahmina.akter@yahoo.com",
     },
@@ -180,13 +226,58 @@ const DEFAULT_CLIENTS: Institution[] = [
     _id: "demo-client-ind-3",
     name: "Kazi Mozammel Hossain",
     shortCode: "IND",
-    category: "Individual",
+    category: "Individual Client",
     branch: "Banani, Dhaka",
     focalPerson: {
       name: "Kazi Mozammel Hossain",
       designation: "Managing Director & Individual Guarantor",
       phone: "+8801711223344",
       email: "mozammel.hossain@outlook.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-ind-4",
+    _id: "demo-client-ind-4",
+    name: "Engr. Faruque Ahmed",
+    shortCode: "IND",
+    category: "Individual Client",
+    branch: "Mirpur, Dhaka",
+    focalPerson: {
+      name: "Engr. Faruque Ahmed",
+      designation: "Managing Partner, Ahmed Construction",
+      phone: "+8801715443322",
+      email: "faruque.engineer@gmail.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-ind-5",
+    _id: "demo-client-ind-5",
+    name: "Begum Rokeya Sultana",
+    shortCode: "IND",
+    category: "Individual Client",
+    branch: "Uttara, Dhaka",
+    focalPerson: {
+      name: "Begum Rokeya Sultana",
+      designation: "Landowner & Civil Appellant",
+      phone: "+8801817665544",
+      email: "rokeya.sultana@hotmail.com",
+    },
+    isActive: true,
+  },
+  {
+    id: "demo-client-ind-6",
+    _id: "demo-client-ind-6",
+    name: "Al-Amin Chowdhury",
+    shortCode: "IND",
+    category: "Individual Client",
+    branch: "Narayanganj Port",
+    focalPerson: {
+      name: "Al-Amin Chowdhury",
+      designation: "Importer & Commercial Litigant",
+      phone: "+8801913778899",
+      email: "alamin.chy@gmail.com",
     },
     isActive: true,
   },
@@ -206,6 +297,25 @@ function CaseFormContent() {
   const [searchInstQuery, setSearchInstQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedInst, setSelectedInst] = useState<Institution | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Form Validation Errors state
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  // Confirmation modal state for removing repeater rows
+  const [deleteRowModal, setDeleteRowModal] = useState<{
+    isOpen: boolean;
+    type: "caseNumber" | "party" | "status";
+    index: number;
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: "caseNumber",
+    index: -1,
+    title: "",
+    message: "",
+  });
 
   // Advocates & Associates list
   const [advocates, setAdvocates] = useState<UserType[]>([]);
@@ -269,6 +379,7 @@ function CaseFormContent() {
     setSelectedInst(inst);
     setIsDropdownOpen(false);
     setSearchInstQuery("");
+    setFormErrors((prev) => ({ ...prev, institution: "" }));
     if (inst.focalPerson) {
       if (inst.focalPerson.name) setContactName(inst.focalPerson.name);
       if (inst.focalPerson.designation) setContactDesignation(inst.focalPerson.designation);
@@ -276,6 +387,28 @@ function CaseFormContent() {
       if (inst.focalPerson.email) setContactEmail(inst.focalPerson.email);
     }
   };
+
+  // Close dropdown on outside click or Escape key
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   // Check user role
   useEffect(() => {
@@ -410,12 +543,21 @@ function CaseFormContent() {
     ]);
   };
 
-  const removeCaseNumberRow = (index: number) => {
+  const promptRemoveCaseNumberRow = (index: number) => {
     if (caseNumbers.length <= 1) {
       toast.info("At least one Case Number entry is required.");
       return;
     }
-    setCaseNumbers(caseNumbers.filter((_, idx) => idx !== index));
+    const targetCase = caseNumbers[index];
+    setDeleteRowModal({
+      isOpen: true,
+      type: "caseNumber",
+      index,
+      title: "Remove Court Case Number Entry",
+      message: `Are you sure you want to remove Case Number row #${index + 1}${
+        targetCase.caseNumber ? ` ("${targetCase.caseNumber}")` : ""
+      }? This court record will be removed from this case file.`,
+    });
   };
 
   const updateCaseNumber = (index: number, field: keyof CaseNumberItem, value: string) => {
@@ -438,14 +580,20 @@ function CaseFormContent() {
     ]);
   };
 
-  const removePartyRow = (index: number) => {
+  const promptRemovePartyRow = (index: number) => {
     if (parties.length <= 1) {
       toast.info("At least one Litigating Party entry is required.");
       return;
     }
-    const filtered = parties.filter((_, idx) => idx !== index);
-    const reindexed = filtered.map((p, i) => ({ ...p, partyNo: i + 1 }));
-    setParties(reindexed);
+    const targetParty = parties[index];
+    const preview = targetParty.partyNameDetails ? ` ("${targetParty.partyNameDetails.split("\n")[0]}")` : "";
+    setDeleteRowModal({
+      isOpen: true,
+      type: "party",
+      index,
+      title: "Remove Litigating Party Entry",
+      message: `Are you sure you want to remove Party #${index + 1}${preview}? Remaining parties will be automatically renumbered.`,
+    });
   };
 
   const updateParty = (index: number, field: keyof PartyItem, value: string | number) => {
@@ -467,12 +615,18 @@ function CaseFormContent() {
     ]);
   };
 
-  const removeStatusRow = (index: number) => {
+  const promptRemoveStatusRow = (index: number) => {
     if (statusUpdates.length <= 1) {
       toast.info("At least one Status / Remark history row must remain.");
       return;
     }
-    setStatusUpdates(statusUpdates.filter((_, idx) => idx !== index));
+    setDeleteRowModal({
+      isOpen: true,
+      type: "status",
+      index,
+      title: "Remove Status / Remark History Entry",
+      message: `Are you sure you want to remove Status Update row #${index + 1}?`,
+    });
   };
 
   const updateStatus = (index: number, field: keyof StatusHearingUpdate, value: string) => {
@@ -481,9 +635,30 @@ function CaseFormContent() {
     setStatusUpdates(updated);
   };
 
+  // Row removal confirmation execution
+  const handleConfirmDeleteRow = () => {
+    if (deleteRowModal.type === "caseNumber") {
+      setCaseNumbers((prev) => prev.filter((_, idx) => idx !== deleteRowModal.index));
+      toast.success("Case number entry removed successfully.");
+    } else if (deleteRowModal.type === "party") {
+      setParties((prev) => {
+        const filtered = prev.filter((_, idx) => idx !== deleteRowModal.index);
+        return filtered.map((p, i) => ({ ...p, partyNo: i + 1 }));
+      });
+      toast.success("Litigating party entry removed successfully.");
+    } else if (deleteRowModal.type === "status") {
+      setStatusUpdates((prev) => prev.filter((_, idx) => idx !== deleteRowModal.index));
+      toast.success("Status update entry removed successfully.");
+    }
+    setDeleteRowModal((prev) => ({ ...prev, isOpen: false }));
+  };
+
   // Advocate selector change handler
   const handleAdvocateChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
+    if (formErrors.assignedAdvocate) {
+      setFormErrors((prev) => ({ ...prev, assignedAdvocate: "" }));
+    }
     if (val === "Unassigned") {
       setAssignedAdvocateName("Unassigned");
       setAssignedAdvocateId("");
@@ -507,18 +682,26 @@ function CaseFormContent() {
       return;
     }
 
+    const errors: Record<string, string> = {};
     if (!selectedInst) {
-      toast.error("Please select an Institution / Client from the top selector.");
-      return;
+      errors.institution = "Please select an Institution or Client.";
     }
-
     if (!chamberFileNo.trim()) {
-      toast.error("File No. is required.");
-      return;
+      errors.chamberFileNo = "Chamber File No. is required.";
+    }
+    if (!matter.trim()) {
+      errors.matter = "Matter / Subject description is required.";
+    }
+    if (!assignedAdvocateName || assignedAdvocateName === "Unassigned") {
+      errors.assignedAdvocate = "Please assign a lead Advocate to this case.";
     }
 
-    if (!matter.trim()) {
-      toast.error("Matter / Subject is required.");
+    if (!selectedInst || Object.keys(errors).length > 0) {
+      if (!selectedInst) {
+        errors.institution = "Please select an Institution or Client.";
+      }
+      setFormErrors(errors);
+      toast.error("Please fill in all required fields highlighted in red.");
       return;
     }
 
@@ -686,7 +869,7 @@ function CaseFormContent() {
           </div>
 
           {!selectedInst ? (
-            <div className="relative">
+            <div ref={dropdownRef} className="relative">
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Select or Search Institution / Client <span className="text-rose-400">*</span>
               </label>
@@ -702,9 +885,20 @@ function CaseFormContent() {
                     setSearchInstQuery(e.target.value);
                     setIsDropdownOpen(true);
                   }}
-                  className="w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#cca776] transition-colors"
+                  className={`w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border rounded-lg text-white placeholder-slate-500 focus:outline-none transition-colors ${
+                    formErrors.institution
+                      ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
+                      : "border-slate-700 focus:border-[#cca776]"
+                  }`}
                 />
               </div>
+
+              {formErrors.institution && (
+                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1.5">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                  <span>{formErrors.institution}</span>
+                </div>
+              )}
 
               {/* Searchable Dropdown Overlay */}
               {isDropdownOpen && (
@@ -754,27 +948,27 @@ function CaseFormContent() {
                     {selectedInst.category}
                   </span>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                    {selectedInst.shortCode}
+                    CODE: {selectedInst.shortCode}
                   </span>
                 </div>
                 {selectedInst.branch && (
                   <p className="text-xs text-slate-400">
-                    Branch / Office: <strong className="text-slate-300">{selectedInst.branch}</strong>
+                    Branch: {selectedInst.branch}
+                  </p>
+                )}
+                {selectedInst.address && (
+                  <p className="text-[11px] text-slate-500">
+                    Address: {selectedInst.address}
                   </p>
                 )}
               </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedInst(null);
-                  setIsDropdownOpen(true);
-                }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-300 hover:bg-slate-700 hover:text-white transition-colors self-start md:self-center cursor-pointer"
-              >
-                <X className="h-3.5 w-3.5" />
-                <span>Change Client</span>
-              </button>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg font-medium">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Active Institution Record Selected
+                </span>
+              </div>
             </div>
           )}
 
@@ -849,12 +1043,28 @@ function CaseFormContent() {
                 type="text"
                 placeholder="e.g. 1224 or CF-2024/098"
                 value={chamberFileNo}
-                onChange={(e) => setChamberFileNo(e.target.value)}
-                className="w-full px-3 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white font-mono font-bold placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                onChange={(e) => {
+                  setChamberFileNo(e.target.value);
+                  if (formErrors.chamberFileNo) {
+                    setFormErrors((prev) => ({ ...prev, chamberFileNo: "" }));
+                  }
+                }}
+                className={`w-full px-3 py-2 text-sm bg-slate-950 border rounded-lg text-white font-mono font-bold placeholder-slate-500 focus:outline-none transition-colors ${
+                  formErrors.chamberFileNo
+                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
+                    : "border-slate-700 focus:border-[#cca776]"
+                }`}
               />
-              <p className="text-[11px] text-slate-400">
-                Unique chamber file binder number.
-              </p>
+              {formErrors.chamberFileNo ? (
+                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                  <span>{formErrors.chamberFileNo}</span>
+                </div>
+              ) : (
+                <p className="text-[11px] text-slate-400">
+                  Unique chamber file binder number.
+                </p>
+              )}
             </div>
 
             <div className="md:col-span-8 space-y-1">
@@ -865,12 +1075,28 @@ function CaseFormContent() {
                 type="text"
                 placeholder="e.g. Artha Rin Suit, Stay Vacation, Writ Petition No. 1204/2024"
                 value={matter}
-                onChange={(e) => setMatter(e.target.value)}
-                className="w-full px-3 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                onChange={(e) => {
+                  setMatter(e.target.value);
+                  if (formErrors.matter) {
+                    setFormErrors((prev) => ({ ...prev, matter: "" }));
+                  }
+                }}
+                className={`w-full px-3 py-2 text-sm bg-slate-950 border rounded-lg text-white placeholder-slate-500 focus:outline-none transition-colors ${
+                  formErrors.matter
+                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
+                    : "border-slate-700 focus:border-[#cca776]"
+                }`}
               />
-              <p className="text-[11px] text-slate-400">
-                Litigation subject, relief sought, and legal issue summary.
-              </p>
+              {formErrors.matter ? (
+                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                  <span>{formErrors.matter}</span>
+                </div>
+              ) : (
+                <p className="text-[11px] text-slate-400">
+                  Litigation subject, relief sought, and legal issue summary.
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -964,7 +1190,7 @@ function CaseFormContent() {
                     <td className="py-2 px-2 text-center">
                       <button
                         type="button"
-                        onClick={() => removeCaseNumberRow(idx)}
+                        onClick={() => promptRemoveCaseNumberRow(idx)}
                         className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
                         title="Remove row"
                       >
@@ -1005,30 +1231,39 @@ function CaseFormContent() {
                   <th className="py-2 px-2 w-32">Party Type</th>
                   <th className="py-2 px-2">Party Name &amp; Address Details</th>
                   <th className="py-2 px-2 w-36">Received Date</th>
-                  <th className="py-2 px-2 w-32">Search List</th>
-                  <th className="py-2 px-2 text-center w-12">Action</th>
+                  <th className="py-2 px-2 w-36">Search List / SL Entry</th>
+                  <th className="py-2 px-2 text-center w-16">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {parties.map((p, idx) => (
                   <tr key={idx} className="hover:bg-slate-800/30">
-                    <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
-                    <td className="py-2 px-2">
-                      <input
-                        type="text"
-                        placeholder="Petitioner / Opp. Party"
-                        value={p.partyNo === 1 ? "Petitioner No. 1" : `Opposite Party No. 0${p.partyNo - 1}`}
-                        onChange={() => updateParty(idx, "partyNo", idx + 1)}
-                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-300 focus:outline-none focus:border-[#cca776]"
-                      />
+                    <td className="py-2 px-2 text-center font-mono font-bold text-slate-400">
+                      {p.partyNo || idx + 1}
                     </td>
                     <td className="py-2 px-2">
-                      <input
-                        type="text"
-                        placeholder="e.g. Luxury Agro Limited / NRB Bank Limited Gulshan Branch"
+                      <select
+                        value={p.partyType || "Petitioner"}
+                        onChange={(e) => updateParty(idx, "partyType", e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      >
+                        <option value="Petitioner">Petitioner</option>
+                        <option value="Appellant">Appellant</option>
+                        <option value="Plaintiff">Plaintiff</option>
+                        <option value="Decree Holder">Decree Holder</option>
+                        <option value="Opposite Party">Opposite Party</option>
+                        <option value="Respondent">Respondent</option>
+                        <option value="Defendant">Defendant</option>
+                        <option value="Judgment Debtor">Judgment Debtor</option>
+                      </select>
+                    </td>
+                    <td className="py-2 px-2">
+                      <textarea
+                        rows={2}
+                        placeholder="e.g. M/S Bengal Agro Trade Ltd. Represented by MD, 45 Dilkusha C/A, Dhaka"
                         value={p.partyNameDetails}
                         onChange={(e) => updateParty(idx, "partyNameDetails", e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2 min-w-[140px]">
@@ -1050,7 +1285,7 @@ function CaseFormContent() {
                     <td className="py-2 px-2 text-center">
                       <button
                         type="button"
-                        onClick={() => removePartyRow(idx)}
+                        onClick={() => promptRemovePartyRow(idx)}
                         className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
                         title="Remove row"
                       >
@@ -1086,7 +1321,11 @@ function CaseFormContent() {
               <select
                 value={assignedAdvocateId || assignedAdvocateName}
                 onChange={handleAdvocateChange}
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                className={`w-full px-3 py-2 text-xs bg-slate-950 border rounded-lg text-slate-100 font-medium focus:outline-none transition-colors ${
+                  formErrors.assignedAdvocate
+                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
+                    : "border-slate-700 focus:border-[#cca776]"
+                }`}
               >
                 <option value="Unassigned">Unassigned (Chamber Pool)</option>
                 {advocates.map((adv) => (
@@ -1095,6 +1334,12 @@ function CaseFormContent() {
                   </option>
                 ))}
               </select>
+              {formErrors.assignedAdvocate && (
+                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                  <span>{formErrors.assignedAdvocate}</span>
+                </div>
+              )}
             </div>
 
             <div>
@@ -1178,16 +1423,16 @@ function CaseFormContent() {
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 text-[#cca776]" />
               <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
-                6. Proceedings &amp; Status Remarks (Chronological History)
+                6. Court Proceedings &amp; Status Updates
               </h2>
             </div>
             <button
               type="button"
               onClick={addStatusRow}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b89360] bg-[#cca776]/10 border border-[#cca776]/30 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
-              <span>Add New Status / Hearing</span>
+              <span>Add Progress Entry</span>
             </button>
           </div>
 
@@ -1195,28 +1440,26 @@ function CaseFormContent() {
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
-                  <th className="py-2 px-2 text-center w-10">SL</th>
                   <th className="py-2 px-2 w-36">Date</th>
-                  <th className="py-2 px-2">Status / Remarks / Order Details</th>
+                  <th className="py-2 px-2">Order / Step / Status Description</th>
                   <th className="py-2 px-2 w-48">Court / Bench</th>
-                  <th className="py-2 px-2 w-36">Next Fixed Date</th>
-                  <th className="py-2 px-2 text-center w-12">Action</th>
+                  <th className="py-2 px-2 w-36">Next Date</th>
+                  <th className="py-2 px-2 text-center w-16">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {statusUpdates.map((su, idx) => (
                   <tr key={idx} className="hover:bg-slate-800/30">
-                    <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
                     <td className="py-2 px-2">
                       <LegalDatePicker
-                        value={su.updateDate}
+                        value={su.updateDate || ""}
                         onChange={(val) => updateStatus(idx, "updateDate", val)}
                         placeholder="DD.MM.YYYY"
                       />
                     </td>
                     <td className="py-2 px-2">
-                      <textarea
-                        rows={2}
+                      <input
+                        type="text"
                         placeholder="e.g. First Order: Rule and Stay for 06 Months on 12.08.2024 before Bijoy-09"
                         value={su.statusRemarks}
                         onChange={(e) => updateStatus(idx, "statusRemarks", e.target.value)}
@@ -1242,7 +1485,7 @@ function CaseFormContent() {
                     <td className="py-2 px-2 text-center">
                       <button
                         type="button"
-                        onClick={() => removeStatusRow(idx)}
+                        onClick={() => promptRemoveStatusRow(idx)}
                         className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
                         title="Remove status update"
                       >
@@ -1354,6 +1597,18 @@ function CaseFormContent() {
         confirmText="Discard & Return"
         cancelText="Stay on Form"
         variant="warning"
+      />
+
+      {/* Delete Repeater Row Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={deleteRowModal.isOpen}
+        onClose={() => setDeleteRowModal((prev) => ({ ...prev, isOpen: false }))}
+        onConfirm={handleConfirmDeleteRow}
+        title={deleteRowModal.title}
+        message={deleteRowModal.message}
+        confirmText="Remove Entry"
+        cancelText="Keep Entry"
+        variant="danger"
       />
     </div>
   );

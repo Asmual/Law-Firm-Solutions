@@ -23,7 +23,8 @@ export type InstitutionCategory =
   | "Shariah Islamic Bank"
   | "Non-Banking Financial Institution (NBFI)"
   | "Corporate Client"
-  | "Individual";
+  | "Individual"
+  | "Individual Client";
 
 export interface Institution {
   _id?: string;
@@ -59,6 +60,7 @@ export interface CaseNumberItem {
 export interface PartyItem {
   id?: string;
   partyNo: number;
+  partyType?: string;
   partyNameDetails: string;
   caseReceivedDate?: string;
   searchListEntry?: string;

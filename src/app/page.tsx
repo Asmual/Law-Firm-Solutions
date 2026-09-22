@@ -46,6 +46,7 @@ export default function HomePage() {
   // Password visibility states
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [demoAdminLoading, setDemoAdminLoading] = useState(false);
 
   // Sign In Form State
   const [loginEmail, setLoginEmail] = useState("");
@@ -94,6 +95,29 @@ export default function HomePage() {
   const handleOpenSignIn = () => {
     setActiveTab("signin");
     setAuthModalOpen(true);
+  };
+
+  // Demo Admin 1-Click Instant Login
+  const handleDemoAdminLogin = async () => {
+    setDemoAdminLoading(true);
+    try {
+      const res = await fetch("/api/auth/demo-admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        toast.success(`Welcome, ${data.user.name}! (Chamber Admin Access)`);
+        router.replace("/dashboard");
+      } else {
+        toast.error(data.error || "Demo admin login failed.");
+      }
+    } catch {
+      toast.error("Network error during demo login. Please try again.");
+    } finally {
+      setDemoAdminLoading(false);
+    }
   };
 
   // Login handler
@@ -273,23 +297,33 @@ export default function HomePage() {
         © {new Date().getFullYear()} {BRANDING.brandName} • {BRANDING.tagline}. All Rights Reserved.
       </footer>
 
-      {/* MODERN DUAL-PANEL AUTH MODAL (Login-bg.jpg on Left, Tabbed Forms on Right) */}
+      {/* MODERN GLASSMORPHIC AUTH MODAL (Login-bg.jpg Image & Chamber Forms) */}
       {authModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-black/85 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
-          {/* Modal Card */}
-          <div className="relative w-full max-w-4xl max-h-[92vh] sm:max-h-[88vh] rounded-xl sm:rounded-2xl border border-slate-800 bg-slate-900/95 shadow-2xl overflow-hidden flex flex-col md:flex-row my-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-5 bg-black/80 backdrop-blur-md overflow-y-auto animate-in fade-in duration-200">
+          {/* Modal Card with Frosted Glassmorphism */}
+          <div className="relative w-full max-w-4xl max-h-[94vh] sm:max-h-[90vh] rounded-2xl border border-white/15 bg-slate-950/75 backdrop-blur-2xl shadow-[0_25px_60px_rgba(0,0,0,0.85)] overflow-hidden flex flex-col md:flex-row my-auto">
+            {/* Ambient Background Image with Dark Glass Gradient (Mobile & Backdrop) */}
+            <div className="absolute inset-0 z-0 pointer-events-none md:hidden">
+              <img
+                src="/images/Login-bg.jpg"
+                alt=""
+                className="w-full h-full object-cover opacity-20 filter blur-[2px]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/85 to-slate-950/95" />
+            </div>
+
             {/* Close Button */}
             <button
               type="button"
               onClick={() => setAuthModalOpen(false)}
-              className="absolute top-2.5 right-2.5 sm:top-3.5 sm:right-3.5 z-30 p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-slate-950/80 border border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+              className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-30 p-1.5 sm:p-2 rounded-xl bg-slate-950/70 border border-white/15 text-slate-400 hover:text-white hover:bg-slate-800/80 backdrop-blur-md transition-all cursor-pointer"
               title="Close"
             >
               <X className="h-4 w-4" />
             </button>
 
-            {/* LEFT PANEL: Login-bg.jpg Image & Chamber Identity */}
-            <div className="relative md:w-5/12 h-24 sm:h-32 md:min-h-[520px] p-3.5 sm:p-6 md:p-8 flex flex-row md:flex-col justify-between items-center md:items-start text-white overflow-hidden shrink-0">
+            {/* LEFT PANEL: Login-bg.jpg Image & Chamber Identity (Hidden on Mobile, Displayed on md+) */}
+            <div className="hidden md:flex md:w-5/12 relative min-h-[550px] p-6 sm:p-8 flex-col justify-between text-white overflow-hidden shrink-0">
               <img
                 src="/images/Login-bg.jpg"
                 alt="Law Firm Solutions Authentication"
@@ -299,20 +333,20 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/45 pointer-events-none" />
 
               {/* Top: Dari-palla Logo & Seal */}
-              <div className="relative z-10 space-y-1 sm:space-y-2">
-                <div className="inline-flex h-8 w-8 sm:h-11 sm:w-11 items-center justify-center rounded-lg sm:rounded-xl bg-[#cca776]/25 text-[#cca776] ring-1 ring-[#cca776]/50 shadow-lg backdrop-blur-md">
-                  <Scale className="h-4 w-4 sm:h-6 sm:w-6" />
+              <div className="relative z-10 space-y-2">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#cca776]/25 text-[#cca776] ring-1 ring-[#cca776]/50 shadow-lg backdrop-blur-md">
+                  <Scale className="h-6 w-6" />
                 </div>
-                <h3 className="text-xs sm:text-base md:text-lg font-black tracking-wide text-white uppercase">
+                <h3 className="text-lg font-black tracking-wide text-white uppercase">
                   {BRANDING.brandName}
                 </h3>
-                <p className="text-[10px] sm:text-xs text-[#cca776] font-medium hidden sm:block">
+                <p className="text-xs text-[#cca776] font-medium">
                   {BRANDING.tagline}
                 </p>
               </div>
 
-              {/* Bottom: Chamber Quote & Pillars (Hidden on small mobile banner to maximize form room) */}
-              <div className="relative z-10 space-y-3 pt-6 hidden md:block">
+              {/* Bottom: Chamber Quote & Pillars */}
+              <div className="relative z-10 space-y-3 pt-6">
                 <div className="p-3.5 rounded-xl bg-slate-950/70 border border-[#cca776]/30 backdrop-blur-sm space-y-1.5">
                   <p className="text-[11px] text-slate-300 italic">
                     &ldquo;Fiat Justitia Ruat Caelum — Let justice be done though the heavens fall.&rdquo;
@@ -322,7 +356,7 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                <div className="space-y-1 text-[11px] text-slate-300">
+                <div className="space-y-1.5 text-[11px] text-slate-300">
                   <div className="flex items-center gap-1.5">
                     <CheckCircle2 className="h-3.5 w-3.5 text-[#cca776] shrink-0" />
                     <span>Bank & Financial Litigation Management</span>
@@ -335,14 +369,29 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* RIGHT PANEL: Modern Tabbed Authentication Form */}
-            <div className="md:w-7/12 p-3.5 sm:p-6 md:p-8 flex flex-col justify-center bg-slate-900/98 overflow-y-auto">
+            {/* RIGHT PANEL: Modern Glassy Tabbed Authentication Form */}
+            <div className="relative z-10 w-full md:w-7/12 p-4 sm:p-6 md:p-8 flex flex-col justify-center bg-slate-950/40 md:bg-slate-900/60 backdrop-blur-xl overflow-y-auto">
+              {/* Mobile-Only Header: Dari-palla Logo & Chamber Title */}
+              <div className="md:hidden flex items-center gap-2.5 pb-2.5 mb-3 border-b border-white/10">
+                <div className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-[#cca776]/20 text-[#cca776] ring-1 ring-[#cca776]/40 shadow-md backdrop-blur-md shrink-0">
+                  <Scale className="h-4 w-4" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black tracking-wide text-white uppercase">
+                    {BRANDING.brandName}
+                  </h3>
+                  <p className="text-[10px] text-[#cca776] font-medium">
+                    {BRANDING.tagline}
+                  </p>
+                </div>
+              </div>
+
               {/* Dual Tabs: Sign In vs Register Account */}
-              <div className="flex rounded-lg sm:rounded-xl bg-slate-950 p-1 border border-slate-800 mb-3.5 sm:mb-6">
+              <div className="flex rounded-xl bg-slate-950/70 p-1 border border-white/10 backdrop-blur-md mb-3.5 sm:mb-5 shadow-inner">
                 <button
                   type="button"
                   onClick={() => setActiveTab("signin")}
-                  className={`flex-1 rounded-md sm:rounded-lg py-1.5 sm:py-2.5 text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition-all cursor-pointer ${
                     activeTab === "signin"
                       ? "bg-[#cca776] text-slate-950 shadow-md"
                       : "text-slate-400 hover:text-white"
@@ -353,7 +402,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setActiveTab("signup")}
-                  className={`flex-1 rounded-md sm:rounded-lg py-1.5 sm:py-2.5 text-[11px] sm:text-xs font-bold transition-all cursor-pointer ${
+                  className={`flex-1 rounded-lg py-2 text-xs font-bold transition-all cursor-pointer ${
                     activeTab === "signup"
                       ? "bg-[#cca776] text-slate-950 shadow-md"
                       : "text-slate-400 hover:text-white"
@@ -365,20 +414,20 @@ export default function HomePage() {
 
               {/* SIGN IN FORM */}
               {activeTab === "signin" && (
-                <form onSubmit={handleLogin} className="space-y-4 animate-in fade-in duration-200">
+                <form onSubmit={handleLogin} className="space-y-3.5 animate-in fade-in duration-200">
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                       Official Email Address *
                     </label>
                     <div className="relative">
-                      <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+                      <Mail className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                       <input
                         type="email"
                         required
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         placeholder="advocate@chamber.com"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-3.5 py-2.5 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -388,14 +437,14 @@ export default function HomePage() {
                       Chamber Password *
                     </label>
                     <div className="relative">
-                      <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-500" />
+                      <Lock className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
                       <input
                         type={showLoginPassword ? "text" : "password"}
                         required
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-10 pr-10 py-2.5 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-10 pr-10 py-2.5 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                       {/* Password Show/Hide Toggle Icon */}
                       <button
@@ -413,26 +462,51 @@ export default function HomePage() {
                     </div>
                   </div>
 
+                  {/* Standard Sign In Button */}
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-3 text-xs font-bold text-slate-950 shadow-lg shadow-[#cca776]/15 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-2"
+                    disabled={loading || demoAdminLoading}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-2.5 sm:py-3 text-xs font-bold text-slate-950 shadow-lg shadow-[#cca776]/20 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-1"
                   >
                     <span>{loading ? "Authenticating..." : "Sign In to Chamber Portal"}</span>
                     <ArrowRight className="h-4 w-4" />
                   </button>
+
+                  {/* Instant 1-Click Demo Admin Login (Home Page only, not in dashboard) */}
+                  <div className="pt-2">
+                    <div className="relative flex py-1.5 items-center">
+                      <div className="flex-grow border-t border-white/10"></div>
+                      <span className="flex-shrink mx-2.5 text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                        Instant Access
+                      </span>
+                      <div className="flex-grow border-t border-white/10"></div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleDemoAdminLogin}
+                      disabled={loading || demoAdminLoading}
+                      className="w-full inline-flex items-center justify-center gap-2 rounded-xl py-2.5 px-3.5 text-xs font-bold text-[#f5dfb8] hover:text-white bg-gradient-to-r from-amber-500/20 via-[#cca776]/25 to-amber-600/20 hover:from-amber-500/35 hover:via-[#cca776]/40 hover:to-amber-600/35 border border-[#cca776]/50 hover:border-[#cca776] shadow-lg shadow-[#cca776]/10 backdrop-blur-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer"
+                      title="1-Click Instant Login as Chamber Admin"
+                    >
+                      <ShieldCheck className="h-4 w-4 text-[#cca776]" />
+                      <span>
+                        {demoAdminLoading ? "Signing in as Admin..." : "⚡ Demo Admin Login (1-Click)"}
+                      </span>
+                    </button>
+                  </div>
                 </form>
               )}
 
               {/* REGISTER ACCOUNT FORM */}
               {activeTab === "signup" && (
-                <form onSubmit={handleSignup} className="space-y-3.5 animate-in fade-in duration-200">
+                <form onSubmit={handleSignup} className="space-y-3 animate-in fade-in duration-200">
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
                       Full Legal Name *
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
+                      <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
                       <input
                         type="text"
                         required
@@ -441,7 +515,7 @@ export default function HomePage() {
                           setSignupData({ ...signupData, name: e.target.value })
                         }
                         placeholder="Advocate / Associate Name"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
                   </div>
@@ -452,7 +526,7 @@ export default function HomePage() {
                         Email Address *
                       </label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
+                        <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
                         <input
                           type="email"
                           required
@@ -461,7 +535,7 @@ export default function HomePage() {
                             setSignupData({ ...signupData, email: e.target.value })
                           }
                           placeholder="name@chamber.com"
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-9 pr-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -471,7 +545,7 @@ export default function HomePage() {
                         Password (Min 6 chars) *
                       </label>
                       <div className="relative">
-                        <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
+                        <Lock className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
                         <input
                           type={showSignupPassword ? "text" : "password"}
                           required
@@ -481,7 +555,7 @@ export default function HomePage() {
                             setSignupData({ ...signupData, password: e.target.value })
                           }
                           placeholder="••••••••"
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-9 pr-9 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-9 pr-9 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                         />
                         {/* Password Show/Hide Toggle Icon */}
                         <button
@@ -520,10 +594,10 @@ export default function HomePage() {
                                   r.value === "advocate" ? "Advocate" : "Associate Advocate",
                               })
                             }
-                            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                            className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer backdrop-blur-md ${
                               isSelected
-                                ? "border-[#cca776] bg-[#cca776]/15 shadow-sm"
-                                : "border-slate-800 bg-slate-950 hover:border-slate-700"
+                                ? "border-[#cca776] bg-[#cca776]/20 shadow-md shadow-[#cca776]/10"
+                                : "border-white/10 bg-slate-950/50 hover:border-slate-600"
                             }`}
                           >
                             <div className="flex items-center justify-between">
@@ -562,7 +636,7 @@ export default function HomePage() {
                           })
                         }
                         placeholder="Advocate / Associate"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md px-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
 
@@ -580,7 +654,7 @@ export default function HomePage() {
                           })
                         }
                         placeholder="e.g. SC-1234/2015"
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                        className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md px-3 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                       />
                     </div>
 
@@ -589,7 +663,7 @@ export default function HomePage() {
                         Phone (Optional)
                       </label>
                       <div className="relative">
-                        <Phone className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-500" />
+                        <Phone className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
                         <input
                           type="tel"
                           value={signupData.phone}
@@ -600,7 +674,7 @@ export default function HomePage() {
                             })
                           }
                           placeholder="+880 1..."
-                          className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-2.5 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                          className="w-full rounded-xl border border-white/15 bg-slate-950/60 backdrop-blur-md pl-8 pr-2.5 py-2 text-xs text-white placeholder-slate-400 focus:border-[#cca776] focus:bg-slate-950/80 focus:ring-1 focus:ring-[#cca776]/40 focus:outline-none transition-all"
                         />
                       </div>
                     </div>
@@ -608,8 +682,8 @@ export default function HomePage() {
 
                   <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-3 text-xs font-bold text-slate-950 shadow-lg shadow-[#cca776]/15 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-1"
+                    disabled={loading || demoAdminLoading}
+                    className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#cca776] py-2.5 sm:py-3 text-xs font-bold text-slate-950 shadow-lg shadow-[#cca776]/20 hover:bg-[#b8935f] transition-all disabled:opacity-50 cursor-pointer mt-1"
                   >
                     <span>{loading ? "Registering..." : "Create Account & Enter Chamber"}</span>
                     <ArrowRight className="h-4 w-4" />

@@ -4,32 +4,32 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #f8fafc;
-  --foreground: #090d16;
+  --background: #cbb292;
+  --foreground: #000000;
 
   /* Primary Legal Gold Tokens */
   --gold: #cca776;
   --gold-hover: #b8935f;
   --gold-dark: #8b6e40;
   --gold-light: #f6eedf;
-  --gold-muted: rgba(204, 167, 118, 0.15);
-  --gold-ring: rgba(204, 167, 118, 0.35);
+  --gold-muted: rgba(204, 167, 118, 0.2);
+  --gold-ring: rgba(204, 167, 118, 0.4);
 
-  /* Light Surfaces */
-  --surface-base: #f8fafc;
-  --surface-card: #ffffff;
-  --surface-border: #e2e8f0;
-  --surface-border-subtle: #cbd5e1;
+  /* Warm Legal Parchment Surfaces (NO WHITE in Light Mode) */
+  --surface-base: #cbb292;
+  --surface-card: #dfceb7;
+  --surface-border: #ab8c67;
+  --surface-border-subtle: #bfa078;
 
   /* Semantic Tokens for Light Mode */
-  --semantic-success: #059669;
-  --semantic-success-muted: rgba(5, 150, 105, 0.12);
-  --semantic-info: #2563eb;
-  --semantic-info-muted: rgba(37, 99, 235, 0.12);
-  --semantic-warning: #d97706;
-  --semantic-warning-muted: rgba(217, 119, 6, 0.12);
-  --semantic-danger: #dc2626;
-  --semantic-danger-muted: rgba(220, 38, 38, 0.12);
+  --semantic-success: #15803d;
+  --semantic-success-muted: rgba(21, 128, 61, 0.15);
+  --semantic-info: #1d4ed8;
+  --semantic-info-muted: rgba(29, 78, 216, 0.15);
+  --semantic-warning: #b45309;
+  --semantic-warning-muted: rgba(180, 83, 9, 0.15);
+  --semantic-danger: #b91c1c;
+  --semantic-danger-muted: rgba(185, 28, 28, 0.15);
 }
 
 .dark {
@@ -60,8 +60,8 @@
   --color-gold-hover: #b8935f;
   --color-gold-dark: #8b6e40;
   --color-gold-light: #f6eedf;
-  --color-gold-muted: rgba(204, 167, 118, 0.15);
-  --color-gold-ring: rgba(204, 167, 118, 0.35);
+  --color-gold-muted: rgba(204, 167, 118, 0.2);
+  --color-gold-ring: rgba(204, 167, 118, 0.4);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -95,7 +95,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   opacity: 0.85;
 }
 html:not(.dark) input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.3) sepia(60%) saturate(300%) hue-rotate(15deg);
+  filter: invert(0.1) sepia(50%) saturate(200%) hue-rotate(10deg);
 }
 input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
@@ -112,49 +112,82 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 
 /* =========================================================
    Light Theme System Overrides for Internal Chamber Apps
-   Ensures sharp black/dark-slate text (#0f172a), crisp white
-   cards, and signature gold (#cca776) accents.
+   Matches the warm parchment tan tone (#cbb292 / #cca776) 
+   from the official reference image with crisp black typography.
+   White background is strictly replaced with legal parchment tones.
    ========================================================= */
 html:not(.dark) .chamber-app {
-  background-color: #f8fafc;
-  color: #0f172a;
+  background-color: #cbb292;
+  color: #000000;
 }
 
+/* Primary cards & panels (Replacing slate-900 / white with rich parchment) */
 html:not(.dark) .chamber-app .bg-slate-900,
 html:not(.dark) .chamber-app .bg-slate-900\/90,
 html:not(.dark) .chamber-app .bg-slate-900\/80,
 html:not(.dark) .chamber-app .bg-slate-900\/95,
 html:not(.dark) .chamber-app .bg-slate-900\/50,
-html:not(.dark) .chamber-app .bg-slate-900\/60 {
-  background-color: #ffffff;
-  color: #0f172a;
+html:not(.dark) .chamber-app .bg-slate-900\/60,
+html:not(.dark) .chamber-app .bg-slate-900\/40,
+html:not(.dark) .chamber-app .bg-slate-900\/30,
+html:not(.dark) .chamber-app .bg-white,
+html:not(.dark) .chamber-app .bg-white\/95,
+html:not(.dark) .chamber-app .bg-white\/90 {
+  background-color: #dfceb7;
+  color: #000000;
+  border-color: #ab8c67;
 }
 
+/* Deeper inner surfaces, table headers & sub-cards */
 html:not(.dark) .chamber-app .bg-slate-950,
+html:not(.dark) .chamber-app .bg-slate-950\/90,
 html:not(.dark) .chamber-app .bg-slate-950\/80,
 html:not(.dark) .chamber-app .bg-slate-950\/70,
-html:not(.dark) .chamber-app .bg-slate-950\/60 {
-  background-color: #f1f5f9;
+html:not(.dark) .chamber-app .bg-slate-950\/60,
+html:not(.dark) .chamber-app .bg-slate-950\/50,
+html:not(.dark) .chamber-app .bg-slate-800,
+html:not(.dark) .chamber-app .bg-slate-800\/80,
+html:not(.dark) .chamber-app .bg-slate-800\/60,
+html:not(.dark) .chamber-app .bg-slate-800\/50,
+html:not(.dark) .chamber-app .bg-slate-800\/40 {
+  background-color: #cbb292;
+  color: #000000;
 }
 
+/* Subtle highlights & alternating row backgrounds */
+html:not(.dark) .chamber-app .bg-slate-800\/30,
+html:not(.dark) .chamber-app .bg-slate-800\/20,
+html:not(.dark) .chamber-app .bg-slate-100,
+html:not(.dark) .chamber-app .bg-slate-50 {
+  background-color: #d4c1a5;
+  color: #000000;
+}
+
+/* Borders in Light Mode */
 html:not(.dark) .chamber-app .border-slate-800,
 html:not(.dark) .chamber-app .border-slate-800\/80,
-html:not(.dark) .chamber-app .border-slate-700 {
-  border-color: #e2e8f0;
+html:not(.dark) .chamber-app .border-slate-800\/60,
+html:not(.dark) .chamber-app .border-slate-700,
+html:not(.dark) .chamber-app .border-slate-700\/80,
+html:not(.dark) .chamber-app .border-slate-700\/50,
+html:not(.dark) .chamber-app .border-slate-200 {
+  border-color: #ab8c67;
 }
 
 html:not(.dark) .chamber-app .divide-slate-800 > :not([hidden]) ~ :not([hidden]),
-html:not(.dark) .chamber-app .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]) {
-  border-color: #e2e8f0;
+html:not(.dark) .chamber-app .divide-slate-800\/60 > :not([hidden]) ~ :not([hidden]),
+html:not(.dark) .chamber-app .divide-slate-700 > :not([hidden]) ~ :not([hidden]),
+html:not(.dark) .chamber-app .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #ab8c67;
 }
 
-/* Form inputs, selects & textareas in Light Mode */
+/* Form inputs, selects & textareas in Light Mode (Warm cream parchment, NEVER pure white) */
 html:not(.dark) .chamber-app input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
 html:not(.dark) .chamber-app select,
 html:not(.dark) .chamber-app textarea {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
+  background-color: #f3ebd9 !important;
+  color: #000000 !important;
+  border-color: #ab8c67 !important;
 }
 
 html:not(.dark) .chamber-app input:focus,
@@ -162,30 +195,36 @@ html:not(.dark) .chamber-app select:focus,
 html:not(.dark) .chamber-app textarea:focus {
   border-color: #cca776 !important;
   outline: none;
-  box-shadow: 0 0 0 1px #cca776;
+  box-shadow: 0 0 0 2px rgba(204, 167, 118, 0.45) !important;
 }
 
 html:not(.dark) .chamber-app input::placeholder,
 html:not(.dark) .chamber-app textarea::placeholder {
-  color: #94a3b8 !important;
+  color: #6e5a44 !important;
 }
 
 /* Typography contrast in Light Mode */
-html:not(.dark) .chamber-app .text-white {
-  color: #0f172a;
+html:not(.dark) .chamber-app .text-white,
+html:not(.dark) .chamber-app .text-slate-100 {
+  color: #000000;
 }
 
 html:not(.dark) .chamber-app .text-slate-200,
 html:not(.dark) .chamber-app .text-slate-300 {
-  color: #334155;
+  color: #1c1712;
 }
 
-html:not(.dark) .chamber-app .text-slate-400 {
-  color: #64748b;
+html:not(.dark) .chamber-app .text-slate-400,
+html:not(.dark) .chamber-app .text-slate-500 {
+  color: #4a3e33;
 }
 
 /* Row & list hover transitions */
 html:not(.dark) .chamber-app .hover\:bg-slate-800\/40:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-800:hover {
-  background-color: #f1f5f9;
+html:not(.dark) .chamber-app .hover\:bg-slate-800:hover,
+html:not(.dark) .chamber-app .hover\:bg-slate-800\/60:hover,
+html:not(.dark) .chamber-app .hover\:bg-slate-800\/50:hover,
+html:not(.dark) .chamber-app .hover\:bg-slate-700:hover,
+html:not(.dark) .chamber-app .hover\:bg-slate-100:hover {
+  background-color: #cca776/30 !important;
 }

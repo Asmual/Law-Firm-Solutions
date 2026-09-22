@@ -88,30 +88,40 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-slate-800 bg-slate-950/90 px-4 sm:px-6 backdrop-blur text-slate-100">
       {/* Left: Mobile Menu Toggle, Global Search Bar & Bold Date */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3 shrink min-w-0">
         <button
           onClick={onOpenMobileMenu}
-          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white cursor-pointer"
+          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white cursor-pointer shrink-0"
           title="Open Navigation"
         >
           <Menu className="h-5 w-5" />
         </button>
 
+        {/* Mobile Search Icon Trigger */}
         <button
           onClick={onOpenSearch}
-          className="group flex h-9 w-52 sm:w-72 md:w-80 lg:w-96 items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-3 text-xs text-slate-400 hover:border-[#cca776]/60 hover:text-slate-200 transition-all cursor-pointer"
+          className="sm:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:border-[#cca776]/60 transition-colors cursor-pointer shrink-0"
+          title="Search"
+        >
+          <Search className="h-4 w-4" />
+        </button>
+
+        {/* Desktop / Tablet Expanded Search Bar */}
+        <button
+          onClick={onOpenSearch}
+          className="hidden sm:flex group h-9 w-60 md:w-72 lg:w-96 items-center justify-between rounded-lg border border-slate-800 bg-slate-900 px-3 text-xs text-slate-400 hover:border-[#cca776]/60 hover:text-slate-200 transition-all cursor-pointer shrink-0"
         >
           <div className="flex items-center gap-2 truncate">
             <Search className="h-3.5 w-3.5 text-slate-400 group-hover:text-[#cca776] transition-colors shrink-0" />
             <span className="truncate">Search File No, Case, Bank, Party...</span>
           </div>
-          <kbd className="hidden rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 sm:inline-block">
+          <kbd className="hidden rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-semibold text-slate-400 md:inline-block">
             Ctrl K
           </kbd>
         </button>
 
         {/* Prominent & Modern Bold Date Display (e.g. 21 Sep 2026) */}
-        <div className="hidden lg:flex items-center gap-2 text-xs border-l border-slate-800/80 pl-3.5 py-1 select-none">
+        <div className="hidden xl:flex items-center gap-2 text-xs border-l border-slate-800/80 pl-3.5 py-1 select-none shrink-0">
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#cca776]/10 text-[#cca776] ring-1 ring-[#cca776]/30">
             <Calendar className="h-3.5 w-3.5" />
           </div>
@@ -134,20 +144,21 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
       </div>
 
       {/* Right: Quick Actions & Profile Trigger */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
         {/* Quick Add Case Button */}
         <Link
           href="/cases/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-3 py-1.5 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] transition-colors shrink-0"
+          title="Add New Case File"
         >
-          <Plus className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Add Case</span>
+          <Plus className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+          <span className="hidden sm:inline whitespace-nowrap">Add Case</span>
         </Link>
 
         {/* Notifications */}
         <button
           title="Upcoming Court Hearings"
-          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer"
+          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-slate-800 bg-slate-900 text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
         >
           <Bell className="h-4 w-4" />
           <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
@@ -158,11 +169,11 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
 
         {/* User Avatar & Role Trigger (Name hidden by default, opens dropdown on click) */}
         {currentUser ? (
-          <div className="relative pl-2 border-l border-slate-800" ref={dropdownRef}>
+          <div className="relative pl-1 sm:pl-2 border-l border-slate-800 shrink-0" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-900/80 transition-all cursor-pointer group"
+              className="flex items-center gap-1.5 sm:gap-2 p-1 rounded-lg hover:bg-slate-900/80 transition-all cursor-pointer group"
               title="Click to view profile options"
               aria-expanded={dropdownOpen}
             >
@@ -181,7 +192,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
 
               {/* Only Current User Role Badge is shown (Full name is hidden by default) */}
               <div className="flex items-center gap-1">
-                <span className="rounded-md bg-[#cca776]/15 px-2 py-0.5 text-[10px] font-bold text-[#cca776] border border-[#cca776]/30 uppercase tracking-wider">
+                <span className="rounded-md bg-[#cca776]/15 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#cca776] border border-[#cca776]/30 uppercase tracking-wider whitespace-nowrap">
                   {currentUser.role}
                 </span>
                 <ChevronDown

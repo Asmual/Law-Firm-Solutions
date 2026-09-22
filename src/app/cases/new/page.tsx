@@ -784,47 +784,49 @@ function CaseFormContent() {
       {/* Top Header - Normal static flow (NOT sticky) so scrolling feels natural */}
       <header className="border-b border-slate-800 bg-slate-900/90 relative z-10 px-6 py-4">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <Link
               href="/cases"
-              className="h-9 w-9 rounded-lg border border-slate-800 bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors cursor-pointer"
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg border border-slate-800 bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors cursor-pointer shrink-0"
               title="Return to Case Registry"
             >
               <ArrowLeft className="h-4 w-4" />
             </Link>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-lg font-bold tracking-tight text-white uppercase">
-                  {editId ? `Edit Case File • ${chamberFileNo || "Loading..."}` : "Add New Case File"}
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h1 className="text-sm sm:text-lg font-bold tracking-tight text-white uppercase truncate">
+                  {editId ? `Edit Case • ${chamberFileNo || "Loading..."}` : "Add New Case File"}
                 </h1>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#cca776]/15 text-[#cca776] border border-[#cca776]/30 font-medium">
-                  Authoritative Litigation Entry
+                <span className="inline-flex items-center text-[9px] sm:text-xs px-2 py-0.5 rounded-full bg-[#cca776]/15 text-[#cca776] border border-[#cca776]/30 font-medium whitespace-nowrap">
+                  Litigation Entry
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-[10px] sm:text-xs text-slate-400 mt-0.5 truncate hidden sm:block">
                 All parameters integrated into one unified record • High Court &amp; Banking Practice
               </p>
             </div>
           </div>
 
           {/* Top Actions: Print / Export, View Dossier, Save Record */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
-              <Printer className="h-4 w-4 text-[#cca776]" />
-              <span>Print / Export PDF</span>
+              <Printer className="h-3.5 w-3.5 text-[#cca776]" />
+              <span className="hidden sm:inline">Print / Export PDF</span>
+              <span className="sm:hidden">Print</span>
             </button>
 
             {editId && (
               <Link
                 href={`/cases/${editId}`}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
-                <Eye className="h-4 w-4 text-blue-400" />
-                <span>View Case Dossier</span>
+                <Eye className="h-3.5 w-3.5 text-blue-400" />
+                <span className="hidden sm:inline">View Dossier</span>
+                <span className="sm:hidden">Dossier</span>
               </Link>
             )}
 
@@ -832,9 +834,9 @@ function CaseFormContent() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex items-center gap-2 px-5 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
             >
-              <Save className="h-4 w-4" />
+              <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               <span>{isSaving ? "Saving..." : "Save Record"}</span>
             </button>
           </div>
@@ -1101,25 +1103,27 @@ function CaseFormContent() {
         </div>
 
         {/* ================= SECTION 3: CASE NUMBER(S) & COURTS ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <Scale className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <Scale className="h-4 w-4 text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
                 3. Case Number(s) &amp; Court Filings
               </h2>
             </div>
             <button
               type="button"
               onClick={addCaseNumberRow}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Plus className="h-3.5 w-3.5" />
-              <span>Add Another Court / Case No.</span>
+              <span className="hidden sm:inline">Add Another Court / Case No.</span>
+              <span className="sm:hidden">Add Case No.</span>
             </button>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Desktop View: Wide Table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
@@ -1201,28 +1205,129 @@ function CaseFormContent() {
               </tbody>
             </table>
           </div>
+
+          {/* Mobile View: Stacked Cards for Case Numbers */}
+          <div className="md:hidden space-y-3">
+            {caseNumbers.map((cn, idx) => (
+              <div key={idx} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5 shadow-sm">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                  <span className="text-xs font-bold text-[#cca776] flex items-center gap-1.5">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#cca776]/15 text-[11px] font-mono text-[#cca776]">
+                      {idx + 1}
+                    </span>
+                    Case Record #{idx + 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => promptRemoveCaseNumberRow(idx)}
+                    className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
+                    title="Remove entry"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>Remove</span>
+                  </button>
+                </div>
+
+                <div className="space-y-2.5">
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Case Number <span className="text-rose-400">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. C.P. No. 3727/2023"
+                      value={cn.caseNumber}
+                      onChange={(e) => updateCaseNumber(idx, "caseNumber", e.target.value)}
+                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                        Case Type
+                      </label>
+                      <select
+                        value={cn.caseType}
+                        onChange={(e) => updateCaseNumber(idx, "caseType", e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      >
+                        <option value="Civil Petition">Civil Petition</option>
+                        <option value="Writ Petition">Writ Petition</option>
+                        <option value="Artha Rin Suit">Artha Rin Suit</option>
+                        <option value="Civil Revision">Civil Revision</option>
+                        <option value="First Appeal">First Appeal</option>
+                        <option value="Criminal Misc">Criminal Misc</option>
+                        <option value="Execution Case">Execution Case</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                        Filing Year
+                      </label>
+                      <input
+                        type="text"
+                        value={cn.year}
+                        onChange={(e) => updateCaseNumber(idx, "year", e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs text-center bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 font-mono focus:outline-none focus:border-[#cca776]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Court / Division / Bench
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Appellate / High Court / Artha Rin Adalat"
+                      value={cn.courtDivision}
+                      onChange={(e) => updateCaseNumber(idx, "courtDivision", e.target.value)}
+                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Remarks / Notes
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Arising out of W.P. No. 1220"
+                      value={cn.remarks || ""}
+                      onChange={(e) => updateCaseNumber(idx, "remarks", e.target.value)}
+                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ================= SECTION 4: LITIGATING PARTIES ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
-                4. Litigating Parties (Petitioner / Opposite Party)
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <User className="h-4 w-4 text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
+                4. Litigating Parties
               </h2>
             </div>
             <button
               type="button"
               onClick={addPartyRow}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Plus className="h-3.5 w-3.5" />
-              <span>Add Another Party</span>
+              <span className="hidden sm:inline">Add Another Party</span>
+              <span className="sm:hidden">Add Party</span>
             </button>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Desktop View: Wide Table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
@@ -1295,6 +1400,92 @@ function CaseFormContent() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile View: Stacked Cards for Litigating Parties */}
+          <div className="md:hidden space-y-3">
+            {parties.map((p, idx) => (
+              <div key={idx} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5 shadow-sm">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+                  <span className="text-xs font-bold text-[#cca776] flex items-center gap-1.5">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#cca776]/15 text-[11px] font-mono text-[#cca776]">
+                      {p.partyNo || idx + 1}
+                    </span>
+                    Party #{p.partyNo || idx + 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => promptRemovePartyRow(idx)}
+                    className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
+                    title="Remove party"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>Remove</span>
+                  </button>
+                </div>
+
+                <div className="space-y-2.5">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                        Party Type
+                      </label>
+                      <select
+                        value={p.partyType || "Petitioner"}
+                        onChange={(e) => updateParty(idx, "partyType", e.target.value)}
+                        className="w-full px-2 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      >
+                        <option value="Petitioner">Petitioner</option>
+                        <option value="Appellant">Appellant</option>
+                        <option value="Plaintiff">Plaintiff</option>
+                        <option value="Decree Holder">Decree Holder</option>
+                        <option value="Opposite Party">Opposite Party</option>
+                        <option value="Respondent">Respondent</option>
+                        <option value="Defendant">Defendant</option>
+                        <option value="Judgment Debtor">Judgment Debtor</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                        Received Date
+                      </label>
+                      <LegalDatePicker
+                        value={p.caseReceivedDate || ""}
+                        onChange={(val) => updateParty(idx, "caseReceivedDate", val)}
+                        placeholder="DD.MM.YYYY"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Party Name &amp; Full Address Details
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="e.g. M/S Bengal Agro Trade Ltd. Represented by MD, 45 Dilkusha C/A, Dhaka"
+                      value={p.partyNameDetails}
+                      onChange={(e) => updateParty(idx, "partyNameDetails", e.target.value)}
+                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Search List / SL Entry
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="SL-12345/23"
+                      value={p.searchListEntry || ""}
+                      onChange={(e) => updateParty(idx, "searchListEntry", e.target.value)}
+                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-300 font-mono focus:outline-none focus:border-[#cca776]"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -1417,25 +1608,27 @@ function CaseFormContent() {
         </div>
 
         {/* ================= SECTION 6: PROCEEDINGS & CHRONOLOGICAL STATUS ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <Clock className="h-4 w-4 text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
                 6. Court Proceedings &amp; Status Updates
               </h2>
             </div>
             <button
               type="button"
               onClick={addStatusRow}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b89360] bg-[#cca776]/10 border border-[#cca776]/30 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b89360] bg-[#cca776]/10 border border-[#cca776]/30 px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               <Plus className="h-3.5 w-3.5" />
-              <span>Add Progress Entry</span>
+              <span className="hidden sm:inline">Add Progress Entry</span>
+              <span className="sm:hidden">Add Entry</span>
             </button>
           </div>
 
-          <div className="overflow-x-auto">
+          {/* Desktop View: Wide Table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
@@ -1496,10 +1689,88 @@ function CaseFormContent() {
               </tbody>
             </table>
           </div>
+
+          {/* Mobile View: Clean Stacked Fields Per Proceeding Entry */}
+          <div className="md:hidden space-y-3.5">
+            {statusUpdates.map((su, idx) => (
+              <div
+                key={idx}
+                className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 shadow-md"
+              >
+                <div className="flex items-center justify-between pb-2.5 border-b border-slate-800/80">
+                  <span className="text-xs font-bold text-[#cca776] flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#cca776]/15 text-[11px] font-mono text-[#cca776]">
+                      {idx + 1}
+                    </span>
+                    Proceeding Entry #{idx + 1}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => promptRemoveStatusRow(idx)}
+                    className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
+                    title="Remove status update"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    <span>Remove</span>
+                  </button>
+                </div>
+
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Date of Proceeding / Hearing
+                    </label>
+                    <LegalDatePicker
+                      value={su.updateDate || ""}
+                      onChange={(val) => updateStatus(idx, "updateDate", val)}
+                      placeholder="DD.MM.YYYY"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Order / Step / Status Description <span className="text-rose-400">*</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="e.g. First Order: Rule and Stay for 06 Months on 12.08.2024 before Bijoy-09"
+                      value={su.statusRemarks}
+                      onChange={(e) => updateStatus(idx, "statusRemarks", e.target.value)}
+                      className="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Court / Bench / Chamber Room
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Annex-14 / Court 03 / Bench 22"
+                      value={su.courtName || ""}
+                      onChange={(e) => updateStatus(idx, "courtName", e.target.value)}
+                      className="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      Next Fixed Hearing Date
+                    </label>
+                    <LegalDatePicker
+                      value={su.nextHearingDate || ""}
+                      onChange={(val) => updateStatus(idx, "nextHearingDate", val)}
+                      placeholder="DD.MM.YYYY"
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* ================= SECTION 7: SPECIAL CHAMBER NOTES ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
           <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
             <FileText className="h-4 w-4 text-[#cca776]" />
             <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
@@ -1550,25 +1821,25 @@ function CaseFormContent() {
         </div>
 
         {/* ================= FORM FOOTER ACTIONS ================= */}
-        <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 shadow-xl">
           <div className="text-xs text-slate-400">
             {selectedInst ? (
-              <span>
-                Case will be enrolled under{" "}
-                <strong className="text-[#cca776]">{selectedInst.name}</strong> ({selectedInst.category})
+              <span className="truncate block">
+                Case enrolled under{" "}
+                <strong className="text-[#cca776]">{selectedInst.name}</strong>
               </span>
             ) : (
-              <span className="text-amber-400 flex items-center gap-1">
-                ⚠️ Please select an Institution / Client above to save
+              <span className="text-amber-400 flex items-center gap-1 text-xs">
+                ⚠️ Select Institution / Client above to save
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-end gap-2 sm:gap-3">
             <button
               type="button"
               onClick={() => setShowDiscardConfirmModal(true)}
-              className="px-4 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
+              className="px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               Cancel &amp; Discard
             </button>
@@ -1577,10 +1848,10 @@ function CaseFormContent() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex items-center gap-2 px-6 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
             >
               <Save className="h-4 w-4" />
-              <span>{isSaving ? "Saving Record..." : "Save Record"}</span>
+              <span>{isSaving ? "Saving..." : "Save Record"}</span>
             </button>
           </div>
         </div>

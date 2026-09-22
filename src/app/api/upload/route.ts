@@ -50,33 +50,45 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    const uploadResult = await new Promise<{ secure_url: string; public_id: string }>(
-      (resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          {
-            folder: "law-firm-solutions/avatars",
-            resource_type: "image",
-            transformation: [
-              { width: 400, height: 400, crop: "fill", gravity: "face" },
-              { quality: "auto", fetch_format: "auto" },
-            ],
-          },
-          (error, result) => {
-            if (error || !result) {
-              reject(error || new Error("Upload failed"));
-            } else {
-              resolve(result);
+    let secureUrl = "";
+    let publicId = "";
+
+    try {
+      const uploadResult = await new Promise<{ secure_url: string; public_id: string }>(
+        (resolve, reject) => {
+          const uploadStream = cloudinary.uploader.upload_stream(
+            {
+              folder: "law-firm-solutions/avatars",
+              resource_type: "image",
+              transformation: [
+                { width: 400, height: 400, crop: "fill", gravity: "face" },
+                { quality: "auto", fetch_format: "auto" },
+              ],
+            },
+            (error, result) => {
+              if (error || !result) {
+                reject(error || new Error("Upload failed"));
+              } else {
+                resolve(result);
+              }
             }
-          }
-        );
-        uploadStream.end(buffer);
-      }
-    );
+          );
+          uploadStream.end(buffer);
+        }
+      );
+      secureUrl = uploadResult.secure_url;
+      publicId = uploadResult.public_id;
+    } catch (cloudinaryErr) {
+      console.warn("Cloudinary direct upload failed, fallback to base64 data url:", cloudinaryErr);
+      const base64Data = buffer.toString("base64");
+      secureUrl = `data:${file.type};base64,${base64Data}`;
+      publicId = `local_${Date.now()}`;
+    }
 
     return NextResponse.json({
       success: true,
-      url: uploadResult.secure_url,
-      publicId: uploadResult.public_id,
+      url: secureUrl,
+      publicId,
     });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Image upload failed";

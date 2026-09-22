@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   FileSpreadsheet,
   Download,
@@ -9,6 +9,10 @@ import {
   Users2,
   Scale,
   FileText,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  ChevronDown,
 } from "lucide-react";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
@@ -20,8 +24,81 @@ export default function ReportsPage() {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [selectedInstId, setSelectedInstId] = useState<string>("");
   const [selectedMonth, setSelectedMonth] = useState<string>("September 2026");
+  const [isMonthPickerOpen, setIsMonthPickerOpen] = useState(false);
+  const [isManualInput, setIsManualInput] = useState(false);
+  const [pickerYear, setPickerYear] = useState<number>(2026);
+  const monthPickerRef = useRef<HTMLDivElement>(null);
   const [cases, setCases] = useState<Case[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const months = [
+    { short: "Jan", full: "January" },
+    { short: "Feb", full: "February" },
+    { short: "Mar", full: "March" },
+    { short: "Apr", full: "April" },
+    { short: "May", full: "May" },
+    { short: "Jun", full: "June" },
+    { short: "Jul", full: "July" },
+    { short: "Aug", full: "August" },
+    { short: "Sep", full: "September" },
+    { short: "Oct", full: "October" },
+    { short: "Nov", full: "November" },
+    { short: "Dec", full: "December" },
+  ];
+
+  // Close month picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (monthPickerRef.current && !monthPickerRef.current.contains(e.target as Node)) {
+        setIsMonthPickerOpen(false);
+      }
+    };
+    if (isMonthPickerOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMonthPickerOpen]);
+
+  const handleSelectMonth = (monthFull: string) => {
+    const formatted = `${monthFull} ${pickerYear}`;
+    setSelectedMonth(formatted);
+    setIsMonthPickerOpen(false);
+    toast.success(`Report period set to ${formatted}`);
+  };
+
+  const handleSetCurrentMonth = () => {
+    const now = new Date();
+    const curYear = now.getFullYear();
+    const curMonth = months[now.getMonth()].full;
+    setPickerYear(curYear);
+    setSelectedMonth(`${curMonth} ${curYear}`);
+    setIsMonthPickerOpen(false);
+    toast.success(`Report period set to ${curMonth} ${curYear}`);
+  };
+
+  const handleSetPrevMonth = () => {
+    const now = new Date();
+    now.setMonth(now.getMonth() - 1);
+    const prevYear = now.getFullYear();
+    const prevMonth = months[now.getMonth()].full;
+    setPickerYear(prevYear);
+    setSelectedMonth(`${prevMonth} ${prevYear}`);
+    setIsMonthPickerOpen(false);
+    toast.success(`Report period set to ${prevMonth} ${prevYear}`);
+  };
+
+  const handleSetNextMonth = () => {
+    const now = new Date();
+    now.setMonth(now.getMonth() + 1);
+    const nextYear = now.getFullYear();
+    const nextMonth = months[now.getMonth()].full;
+    setPickerYear(nextYear);
+    setSelectedMonth(`${nextMonth} ${nextYear}`);
+    setIsMonthPickerOpen(false);
+    toast.success(`Report period set to ${nextMonth} ${nextYear}`);
+  };
 
   useEffect(() => {
     fetch("/api/institutions?limit=200")
@@ -352,16 +429,135 @@ export default function ReportsPage() {
             </div>
           )}
 
-          <div className={reportType === "client_monthly" ? "sm:col-span-6" : "sm:col-span-12"}>
-            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
-              Billing & Report Month
-            </label>
-            <input
-              type="text"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:border-[#cca776]"
-            />
+          <div className={`relative ${reportType === "client_monthly" ? "sm:col-span-6" : "sm:col-span-12"}`} ref={monthPickerRef}>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                Billing & Report Month
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsManualInput((prev) => !prev)}
+                className="text-[10px] text-[#cca776] hover:underline font-semibold cursor-pointer"
+              >
+                {isManualInput ? "Use Month Calendar" : "Edit Manually"}
+              </button>
+            </div>
+
+            {isManualInput ? (
+              <input
+                type="text"
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                placeholder="e.g. September 2026"
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white font-medium focus:outline-none focus:border-[#cca776]"
+              />
+            ) : (
+              <div>
+                <button
+                  type="button"
+                  onClick={() => setIsMonthPickerOpen((prev) => !prev)}
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs bg-slate-950 border border-slate-700 hover:border-[#cca776]/70 rounded-lg text-white font-medium transition-all cursor-pointer group shadow-sm focus:outline-none focus:border-[#cca776]"
+                  title="Click to choose month from calendar dropdown"
+                  aria-expanded={isMonthPickerOpen}
+                >
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-[#cca776]" />
+                    <span className="font-bold text-white text-xs sm:text-sm">{selectedMonth}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] uppercase font-bold text-[#cca776] bg-[#cca776]/10 px-2 py-0.5 rounded border border-[#cca776]/30">
+                      Change Month
+                    </span>
+                    <ChevronDown className={`h-3.5 w-3.5 text-slate-400 group-hover:text-white transition-transform duration-200 ${isMonthPickerOpen ? "rotate-180 text-[#cca776]" : ""}`} />
+                  </div>
+                </button>
+
+                {/* Calendar / Month Dropdown Popover */}
+                {isMonthPickerOpen && (
+                  <div className="absolute right-0 sm:left-0 sm:right-auto mt-2 w-72 sm:w-80 rounded-xl border border-slate-800 bg-slate-900/98 p-4 shadow-2xl backdrop-blur-xl text-slate-200 animate-in fade-in zoom-in-95 duration-150 z-50">
+                    {/* Header: Year Navigator */}
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+                      <button
+                        type="button"
+                        onClick={() => setPickerYear((y) => y - 1)}
+                        className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                        title="Previous Year"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-base font-bold text-white tracking-wide">{pickerYear}</span>
+                        <span className="text-[10px] text-[#cca776] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#cca776]/10 border border-[#cca776]/20">
+                          Year
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setPickerYear((y) => y + 1)}
+                        className="p-1.5 rounded-lg hover:bg-slate-800 text-slate-300 hover:text-white transition-colors cursor-pointer"
+                        title="Next Year"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </div>
+
+                    {/* 12 Months Grid */}
+                    <div className="grid grid-cols-3 gap-2 py-3">
+                      {months.map((m) => {
+                        const isSelected =
+                          selectedMonth.toLowerCase() === `${m.full} ${pickerYear}`.toLowerCase() ||
+                          selectedMonth.toLowerCase() === `${m.short} ${pickerYear}`.toLowerCase();
+                        return (
+                          <button
+                            key={m.short}
+                            type="button"
+                            onClick={() => handleSelectMonth(m.full)}
+                            className={`px-2.5 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center ${
+                              isSelected
+                                ? "bg-[#cca776] text-slate-950 font-bold shadow-md shadow-[#cca776]/30 ring-1 ring-[#cca776]"
+                                : "bg-slate-950/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700"
+                            }`}
+                          >
+                            <span className="block font-bold">{m.short}</span>
+                            <span className="block text-[9px] opacity-75 font-medium truncate">{m.full}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Quick Presets Footer */}
+                    <div className="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400 text-[10px] font-medium">Quick Pick:</span>
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={handleSetPrevMonth}
+                          className="px-2 py-0.5 rounded bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white text-[10px] transition-colors cursor-pointer"
+                        >
+                          Prev Month
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleSetCurrentMonth}
+                          className="px-2 py-0.5 rounded bg-[#cca776]/15 hover:bg-[#cca776]/25 text-[#cca776] font-bold text-[10px] transition-colors cursor-pointer border border-[#cca776]/30"
+                        >
+                          Current Month
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleSetNextMonth}
+                          className="px-2 py-0.5 rounded bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white text-[10px] transition-colors cursor-pointer"
+                        >
+                          Next Month
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -372,7 +568,7 @@ export default function ReportsPage() {
           <div className="flex items-center gap-2">
             <FileText className="h-4 w-4 text-[#cca776]" />
             <h2 className="text-xs font-bold text-white uppercase tracking-wider">
-              Report Data Preview ({cases.length} records)
+              Report Data Preview ({cases.length} records) • Period: {selectedMonth}
             </h2>
           </div>
           <span className="text-[11px] text-[#cca776] font-mono">

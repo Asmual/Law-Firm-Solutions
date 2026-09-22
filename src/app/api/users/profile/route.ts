@@ -58,13 +58,6 @@ export async function PUT(req: NextRequest) {
     const body = await req.json();
     const { name, phone, chamberDesignation, barEnrollmentNo, avatarUrl, bio } = body;
 
-    if (!name || !name.trim()) {
-      return NextResponse.json(
-        { success: false, error: "Legal name is required." },
-        { status: 400 }
-      );
-    }
-
     await connectToDatabase();
     const user = await UserModel.findById(session.userId);
     if (!user) {
@@ -75,7 +68,15 @@ export async function PUT(req: NextRequest) {
     }
 
     // Update allowed profile fields
-    user.name = name.trim();
+    if (name !== undefined) {
+      if (!name.trim()) {
+        return NextResponse.json(
+          { success: false, error: "Legal name cannot be empty." },
+          { status: 400 }
+        );
+      }
+      user.name = name.trim();
+    }
     if (phone !== undefined) user.phone = phone.trim();
     if (chamberDesignation !== undefined) user.chamberDesignation = chamberDesignation.trim();
     if (barEnrollmentNo !== undefined) user.barEnrollmentNo = barEnrollmentNo.trim();

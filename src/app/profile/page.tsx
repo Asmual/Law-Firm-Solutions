@@ -184,7 +184,7 @@ export default function ProfilePage() {
     }
   }, [activeTab, currentUserId]);
 
-  // Handle Image Upload directly to Cloudinary via /api/upload
+  // Handle Image Upload directly via /api/upload
   const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -200,7 +200,7 @@ export default function ProfilePage() {
     }
 
     setUploadingImage(true);
-    const toastId = toast.loading("Uploading image to Cloudinary...");
+    const toastId = toast.loading("Uploading image...");
 
     try {
       const formData = new FormData();
@@ -212,7 +212,7 @@ export default function ProfilePage() {
       });
 
       const data = await res.json();
-      if (!res.ok || !data.success) {
+      if (!res.ok || !data.success || !data.url) {
         throw new Error(data.error || "Upload failed");
       }
 
@@ -223,14 +223,21 @@ export default function ProfilePage() {
       const saveRes = await fetch("/api/users/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ avatarUrl: uploadedUrl }),
+        body: JSON.stringify({
+          name: profileData.name || undefined,
+          avatarUrl: uploadedUrl,
+        }),
       });
 
-      if (!saveRes.ok) {
-        throw new Error("Failed to save avatar URL to user profile");
+      const saveData = await saveRes.json();
+      if (!saveRes.ok || !saveData.success) {
+        throw new Error(saveData.error || "Failed to update profile photo");
       }
 
-      toast.success("Profile photo uploaded to Cloudinary successfully!", { id: toastId });
+      // Notify Header and other components to update avatar immediately
+      window.dispatchEvent(new Event("user-profile-updated"));
+
+      toast.success("Profile photo updated successfully!", { id: toastId });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error uploading image";
       toast.error(msg, { id: toastId });
@@ -249,10 +256,14 @@ export default function ProfilePage() {
       const res = await fetch("/api/users/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ avatarUrl: "" }),
+        body: JSON.stringify({
+          name: profileData.name || undefined,
+          avatarUrl: "",
+        }),
       });
       if (!res.ok) throw new Error("Failed to remove avatar");
       setProfileData((prev) => ({ ...prev, avatarUrl: "" }));
+      window.dispatchEvent(new Event("user-profile-updated"));
       toast.success("Profile photo removed.");
       setConfirmRemoveOpen(false);
     } catch {
@@ -285,6 +296,7 @@ export default function ProfilePage() {
         throw new Error(data.error || "Failed to update profile.");
       }
 
+      window.dispatchEvent(new Event("user-profile-updated"));
       toast.success("Profile details updated successfully!");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Failed to update profile";

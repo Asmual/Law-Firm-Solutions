@@ -11,7 +11,6 @@ import {
   Calendar,
   LogOut,
   Menu,
-  ChevronDown,
   User,
   ShieldCheck,
 } from "lucide-react";
@@ -46,16 +45,24 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
       }
     : null;
 
-  // Fetch current user
+  // Fetch current user & listen for profile updates
   useEffect(() => {
-    fetch("/api/auth/me")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.authenticated) {
-          setCurrentUser(data.user);
-        }
-      })
-      .catch(() => {});
+    const fetchUser = () => {
+      fetch("/api/auth/me")
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.authenticated) {
+            setCurrentUser(data.user);
+          }
+        })
+        .catch(() => {});
+    };
+
+    fetchUser();
+    window.addEventListener("user-profile-updated", fetchUser);
+    return () => {
+      window.removeEventListener("user-profile-updated", fetchUser);
+    };
   }, []);
 
   // Click outside to close profile dropdown
@@ -173,7 +180,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
             <button
               type="button"
               onClick={() => setDropdownOpen((prev) => !prev)}
-              className="flex items-center gap-1.5 sm:gap-2 p-1 rounded-lg hover:bg-slate-900/80 transition-all cursor-pointer group"
+              className="flex items-center gap-1.5 sm:gap-2 p-1 rounded-lg transition-colors cursor-pointer group focus:outline-none"
               title="Click to view profile options"
               aria-expanded={dropdownOpen}
             >
@@ -190,17 +197,10 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
                 </div>
               )}
 
-              {/* Only Current User Role Badge is shown (Full name is hidden by default) */}
-              <div className="flex items-center gap-1">
-                <span className="rounded-md bg-[#cca776]/15 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#cca776] border border-[#cca776]/30 uppercase tracking-wider whitespace-nowrap">
-                  {currentUser.role}
-                </span>
-                <ChevronDown
-                  className={`h-3 w-3 text-slate-400 group-hover:text-white transition-transform duration-200 ${
-                    dropdownOpen ? "rotate-180 text-[#cca776]" : ""
-                  }`}
-                />
-              </div>
+              {/* Current User Role Badge: Hidden on mobile, visible on sm and up, without any arrow */}
+              <span className="hidden sm:inline-block rounded-md bg-[#cca776]/15 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#cca776] border border-[#cca776]/30 uppercase tracking-wider whitespace-nowrap">
+                {currentUser.role}
+              </span>
             </button>
 
             {/* Profile Dropdown Menu */}

@@ -110,9 +110,23 @@ export default function HomePage() {
       if (data.success) {
         toast.success(`Welcome, ${data.user.name}! (Chamber Admin Access)`);
         router.replace("/dashboard");
-      } else {
-        toast.error(data.error || "Demo admin login failed.");
+        return;
       }
+
+      // Fallback: Attempt standard login with chamber admin credentials
+      const fallbackRes = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: "admin@chamber.com", password: "password123" }),
+      });
+      const fallbackData = await fallbackRes.json();
+      if (fallbackData.success) {
+        toast.success(`Welcome, ${fallbackData.user.name}! (Chamber Admin Access)`);
+        router.replace("/dashboard");
+        return;
+      }
+
+      toast.error(data.error || fallbackData.error || "Demo admin login failed.");
     } catch {
       toast.error("Network error during demo login. Please try again.");
     } finally {

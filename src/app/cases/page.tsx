@@ -147,37 +147,37 @@ export default function CasesRegistryPage() {
     switch (status) {
       case "running":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#724916] text-[#cca776] border border-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30">
             Running
           </span>
         );
       case "stay_granted":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#cca776]/20 text-[#cca776] border border-[#cca776]/40">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#724916]/80 text-[#cca776] border border-[#ab8c67] dark:bg-[#cca776]/20 dark:text-[#cca776] dark:border-[#cca776]/40">
             Stay Granted
           </span>
         );
       case "adjourned":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-950/60 text-amber-400 border border-amber-800/60">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#cbb292] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
             Adjourned
           </span>
         );
       case "disposed":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#dfceb7] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
             Disposed
           </span>
         );
       case "decreed":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-950/60 text-sky-400 border border-sky-800/60">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#724916] text-[#cca776] border border-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30">
             Decreed
           </span>
         );
       default:
         return (
-          <span className="px-2 py-0.5 rounded-full text-[11px] bg-slate-800 text-slate-400">
+          <span className="px-2 py-0.5 rounded-full text-[11px] font-bold bg-[#dfceb7] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-400">
             {status}
           </span>
         );
@@ -251,17 +251,17 @@ export default function CasesRegistryPage() {
       </div>
 
       {/* Filter and Search Bar matching Blueprint specifications */}
-      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
+      <div className="bg-[#dfceb7] dark:bg-slate-900/90 border border-[#ab8c67] dark:border-slate-800 rounded-xl p-4 shadow-sm">
         <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
           {/* Search Box */}
           <div className="sm:col-span-5 relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#724916] dark:text-slate-400" />
             <input
               type="text"
               placeholder="Search by File No, Case No, Party Name, Matter, or Advocate..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]"
+              className="w-full pl-9 pr-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-800 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] focus:ring-1 focus:ring-[#724916]"
             />
           </div>
 
@@ -270,9 +270,9 @@ export default function CasesRegistryPage() {
             <select
               value={selectedInstId}
               onChange={(e) => setSelectedInstId(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-200 focus:outline-none focus:border-[#cca776]"
+              className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-800 rounded-lg text-[#0F172B] dark:text-slate-200 focus:outline-none focus:border-[#724916]"
             >
-              <option value="all">All Financial Institutions & Clients</option>
+              <option value="all">All Financial Institutions &amp; Clients</option>
               {institutions.map((i) => (
                 <option key={i._id || i.id} value={i._id || i.id}>
                   {i.name} ({i.shortCode})
@@ -286,7 +286,7 @@ export default function CasesRegistryPage() {
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg text-slate-900 dark:text-slate-200 focus:outline-none focus:border-[#cca776]"
+              className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-800 rounded-lg text-[#0F172B] dark:text-slate-200 focus:outline-none focus:border-[#724916]"
             >
               <option value="all">All Statuses</option>
               <option value="running">Running</option>
@@ -301,7 +301,7 @@ export default function CasesRegistryPage() {
           <div className="sm:col-span-1">
             <button
               type="submit"
-              className="w-full py-2 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#cca776] border border-[#cca776]/30 transition-colors cursor-pointer"
+              className="w-full py-2 text-xs font-bold rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] transition-colors cursor-pointer"
             >
               Filter
             </button>
@@ -310,12 +310,12 @@ export default function CasesRegistryPage() {
       </div>
 
       {/* Case Table */}
-      <div className="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-xl">
+      <div className="bg-[#dfceb7] dark:bg-slate-900/90 border border-[#ab8c67] dark:border-slate-800 rounded-xl overflow-hidden shadow-sm dark:shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               {/* Case Table Header */}
-              <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/70 text-[10px] uppercase font-bold text-slate-600 dark:text-slate-400 tracking-wider">
+              <tr className="border-b border-[#ab8c67] dark:border-slate-800 bg-[#cbb292] dark:bg-slate-950/70 text-[10px] uppercase font-bold text-[#0F172B] dark:text-slate-400 tracking-wider">
                 <th className="py-3 px-3 w-28 whitespace-nowrap">File No.</th>
                 <th className="py-3 px-3 min-w-[140px]">Client / Institution</th>
                 <th className="py-3 px-3 min-w-[150px]">Case No. &amp; Court</th>
@@ -326,7 +326,7 @@ export default function CasesRegistryPage() {
                 <th className="py-3 px-3 text-right w-20 whitespace-nowrap">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
+            <tbody className="divide-y divide-[#ab8c67]/40 dark:divide-slate-800/60">
               {isLoading ? (
                 <tr>
                   <td colSpan={8} className="p-0">
@@ -335,15 +335,15 @@ export default function CasesRegistryPage() {
                 </tr>
               ) : cases.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-500">
-                    <Briefcase className="h-10 w-10 text-slate-400 dark:text-slate-600 mx-auto mb-2 opacity-50" />
-                    <p className="font-semibold text-slate-700 dark:text-slate-400">No litigation files match current filters</p>
+                  <td colSpan={8} className="py-12 text-center text-[#4a3e33]">
+                    <Briefcase className="h-10 w-10 text-[#724916] dark:text-slate-600 mx-auto mb-2 opacity-50" />
+                    <p className="font-bold text-[#0F172B] dark:text-slate-400">No litigation files match current filters</p>
                     {currentUserRole !== "admin" ? (
-                      <p className="text-[11px] mt-1 text-slate-500 dark:text-slate-400">
-                        Click <Link href="/cases/new" className="text-[#cca776] underline">Add New Case File</Link> to enroll the first case.
+                      <p className="text-[11px] mt-1 text-[#4a3e33] dark:text-slate-400">
+                        Click <Link href="/cases/new" className="text-[#724916] dark:text-[#cca776] underline font-bold">Add New Case File</Link> to enroll the first case.
                       </p>
                     ) : (
-                      <p className="text-[11px] mt-1 text-slate-500 dark:text-slate-400">
+                      <p className="text-[11px] mt-1 text-[#4a3e33] dark:text-slate-400">
                         Awaiting brief submissions from Chamber Advocates &amp; Associates.
                       </p>
                     )}
@@ -353,9 +353,9 @@ export default function CasesRegistryPage() {
                 cases.map((c) => {
                   const caseId = c._id || c.id || "";
                   return (
-                    <tr key={caseId} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors group">
+                    <tr key={caseId} className="hover:bg-[#724916] transition-colors group">
                       {/* Chamber File No */}
-                      <td className="py-3 px-3 font-mono font-bold text-[#cca776] whitespace-nowrap">
+                      <td className="py-3 px-3 font-mono font-bold text-[#0F172B] group-hover:text-[#cca776] dark:text-[#cca776] whitespace-nowrap">
                         <Link href={`/cases/${caseId}`} className="hover:underline" title="View Case Dossier">
                           {c.chamberFileNo}
                         </Link>
@@ -363,69 +363,69 @@ export default function CasesRegistryPage() {
 
                       {/* Institution */}
                       <td className="py-3 px-3">
-                        <div className="font-semibold text-slate-900 dark:text-white truncate max-w-[160px]" title={c.institutionName}>
+                        <div className="font-bold text-[#0F172B] group-hover:text-white dark:text-white truncate max-w-[160px]" title={c.institutionName}>
                           {c.institutionName}
                         </div>
                         {c.branch && (
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate max-w-[160px]">
+                          <div className="text-[10px] text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 truncate max-w-[160px]">
                             Branch: {c.branch}
                           </div>
                         )}
                       </td>
 
-                      {/* Case Numbers & Courts (Concise tags & stacked text) */}
+                      {/* Case Numbers & Courts */}
                       <td className="py-3 px-3">
                         {c.caseNumbers && c.caseNumbers.length > 0 ? (
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1 flex-wrap">
                               <span
-                                className="font-mono text-[11px] font-semibold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700/80 truncate max-w-[140px]"
+                                className="font-mono text-[11px] font-bold text-[#0F172B] group-hover:text-[#cca776] bg-[#cbb292] group-hover:bg-[#8b6028] dark:bg-slate-800/90 dark:text-slate-200 px-1.5 py-0.5 rounded border border-[#ab8c67] dark:border-slate-700/80 truncate max-w-[140px]"
                                 title={c.caseNumbers[0].caseNumber}
                               >
                                 {c.caseNumbers[0].caseNumber}
                               </span>
                               {c.caseNumbers.length > 1 && (
-                                <span className="text-[10px] font-bold text-[#cca776] bg-[#cca776]/10 px-1 py-0.2 rounded border border-[#cca776]/20">
+                                <span className="text-[10px] font-bold text-[#cca776] bg-[#724916] px-1 py-0.2 rounded border border-[#ab8c67]">
                                   +{c.caseNumbers.length - 1}
                                 </span>
                               )}
                             </div>
-                            <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate max-w-[160px]">
+                            <span className="text-[10px] text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 block truncate max-w-[160px]">
                               {c.caseNumbers[0].courtDivision} • {c.caseNumbers[0].caseType}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-slate-400 dark:text-slate-500 italic text-[11px]">Unspecified</span>
+                          <span className="text-[#4a3e33] group-hover:text-[#cca776]/80 italic text-[11px]">Unspecified</span>
                         )}
                       </td>
 
-                      {/* Primary Parties (Concise & truncated) */}
+                      {/* Primary Parties */}
                       <td className="py-3 px-3">
                         {c.parties && c.parties.length > 0 ? (
                           <div className="max-w-[160px]" title={c.parties[0].partyNameDetails}>
-                            <span className="text-slate-900 dark:text-slate-200 font-medium truncate block text-xs">
+                            <span className="text-[#0F172B] group-hover:text-white dark:text-slate-200 font-bold truncate block text-xs">
                               {c.parties[0].partyNameDetails}
                             </span>
                             {c.parties.length > 1 && (
-                              <span className="text-[10px] text-slate-500 dark:text-slate-400 truncate block">
+                              <span className="text-[10px] text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 truncate block">
                                 &amp; {c.parties.length - 1} others
                               </span>
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-400 dark:text-slate-500 italic text-[11px]">None</span>
+                          <span className="text-[#4a3e33] group-hover:text-[#cca776]/80 italic text-[11px]">None</span>
                         )}
                       </td>
 
                       {/* Matter */}
-                      <td className="py-3 px-3 text-slate-700 dark:text-slate-300">
-                        <div className="truncate max-w-[130px] text-xs" title={c.matter}>
+                      <td className="py-3 px-3 text-[#0F172B] group-hover:text-[#cca776] dark:text-slate-300">
+                        <div className="truncate max-w-[130px] text-xs font-medium" title={c.matter}>
                           {c.matter || "—"}
                         </div>
                       </td>
 
                       {/* Advocate */}
-                      <td className="py-3 px-3 text-slate-700 dark:text-slate-300 font-medium whitespace-nowrap">
+                      <td className="py-3 px-3 text-[#0F172B] group-hover:text-white dark:text-slate-300 font-bold whitespace-nowrap">
                         <div className="truncate max-w-[120px]" title={c.assignedAdvocate?.advocateName}>
                           {c.assignedAdvocate?.advocateName || "Unassigned"}
                         </div>
@@ -442,14 +442,14 @@ export default function CasesRegistryPage() {
                           <Link
                             href={`/cases/${caseId}`}
                             title="View Case Dossier"
-                            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-[#724916] group-hover:text-[#cca776] hover:bg-[#8b6028] dark:text-slate-400 dark:hover:text-white transition-colors"
                           >
                             <Eye className="h-4 w-4" />
                           </Link>
                           <Link
                             href={`/cases/new?id=${caseId}`}
                             title="Edit Case File"
-                            className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-[#cca776] hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                            className="p-1.5 rounded-lg text-[#724916] group-hover:text-[#cca776] hover:bg-[#8b6028] dark:text-slate-400 dark:hover:text-white transition-colors"
                           >
                             <Edit className="h-4 w-4" />
                           </Link>
@@ -462,10 +462,10 @@ export default function CasesRegistryPage() {
                                   caseId,
                                   fileNo: c.chamberFileNo,
                                   isDeleting: false,
-                                })
+                                  })
                               }
                               title="Delete Case File"
-                              className="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                              className="p-1.5 rounded-lg text-rose-700 group-hover:text-rose-300 hover:bg-rose-950/40 dark:text-rose-400 transition-colors cursor-pointer"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>

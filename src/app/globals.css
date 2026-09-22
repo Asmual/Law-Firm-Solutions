@@ -205,26 +205,45 @@ html:not(.dark) .chamber-app textarea::placeholder {
 
 /* Typography contrast in Light Mode */
 html:not(.dark) .chamber-app .text-white,
-html:not(.dark) .chamber-app .text-slate-100 {
-  color: #000000;
+html:not(.dark) .chamber-app .text-slate-100,
+html:not(.dark) .chamber-app .text-slate-900,
+html:not(.dark) .chamber-app .text-slate-950 {
+  color: #0F172B;
 }
 
 html:not(.dark) .chamber-app .text-slate-200,
 html:not(.dark) .chamber-app .text-slate-300 {
-  color: #1c1712;
+  color: #0F172B;
 }
 
 html:not(.dark) .chamber-app .text-slate-400,
-html:not(.dark) .chamber-app .text-slate-500 {
+html:not(.dark) .chamber-app .text-slate-500,
+html:not(.dark) .chamber-app .text-slate-600 {
   color: #4a3e33;
 }
 
-/* Row & list hover transitions */
+/* Row & list hover transitions - NO WHITE HOVER BACKGROUND */
+html:not(.dark) .chamber-app .hover\:bg-slate-50\/80:hover,
+html:not(.dark) .chamber-app .hover\:bg-slate-50:hover,
+html:not(.dark) .chamber-app .hover\:bg-slate-100:hover,
+html:not(.dark) .chamber-app .hover\:bg-slate-200:hover,
 html:not(.dark) .chamber-app .hover\:bg-slate-800\/40:hover,
 html:not(.dark) .chamber-app .hover\:bg-slate-800:hover,
 html:not(.dark) .chamber-app .hover\:bg-slate-800\/60:hover,
 html:not(.dark) .chamber-app .hover\:bg-slate-800\/50:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-700:hover,
-html:not(.dark) .chamber-app .hover\:bg-slate-100:hover {
-  background-color: #cca776/30 !important;
+html:not(.dark) .chamber-app .hover\:bg-slate-700:hover {
+  background-color: #724916 !important;
+  color: #CCA776 !important;
+}
+
+html:not(.dark) .chamber-app .hover\:bg-slate-50\/80:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-50:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-100:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-200:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-800\/40:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-800:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-800\/60:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-800\/50:hover *,
+html:not(.dark) .chamber-app .hover\:bg-slate-700:hover * {
+  color: #CCA776 !important;
 }

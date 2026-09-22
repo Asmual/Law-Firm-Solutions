@@ -252,32 +252,32 @@ export default function CauseListPage() {
                 </tr>
               ) : (
                 filteredHearings.map((h, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3.5 px-3 text-center font-mono font-bold text-slate-500 dark:text-slate-400">
+                  <tr key={idx} className="hover:bg-[#724916] group transition-colors">
+                    <td className="py-3.5 px-3 text-center font-mono font-bold text-[#4a3e33] group-hover:text-[#cca776] dark:text-slate-400">
                       {idx + 1}
                     </td>
-                    <td className="py-3.5 px-3 font-mono font-bold text-[#cca776]">
+                    <td className="py-3.5 px-3 font-mono font-bold text-[#0F172B] group-hover:text-[#cca776] dark:text-[#cca776]">
                       {h.caseFileNo}
                     </td>
-                    <td className="py-3.5 px-4 font-semibold text-sky-600 dark:text-sky-400">
+                    <td className="py-3.5 px-4 font-bold text-[#0F172B] group-hover:text-white dark:text-white">
                       {h.courtDivision}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-slate-900 dark:text-white">
+                    <td className="py-3.5 px-4 font-mono text-[#0F172B] group-hover:text-white dark:text-white">
                       <div className="font-bold">{h.caseNumber}</div>
-                      <div className="text-[10px] text-slate-500 dark:text-slate-400 font-sans">{h.caseType}</div>
+                      <div className="text-[10px] text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400 font-sans">{h.caseType}</div>
                     </td>
-                    <td className="py-3.5 px-4 font-medium text-slate-900 dark:text-slate-200">
+                    <td className="py-3.5 px-4 font-bold text-[#0F172B] group-hover:text-white dark:text-slate-200">
                       {h.institutionName}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
+                    <td className="py-3.5 px-4 text-[#4a3e33] group-hover:text-[#cca776]/90 dark:text-slate-300">
                       <div className="truncate max-w-[200px]" title={h.parties}>
                         {h.parties}
                       </div>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-900 dark:text-slate-200 font-medium">
+                    <td className="py-3.5 px-4 text-[#0F172B] group-hover:text-white dark:text-slate-200 font-bold">
                       {h.advocateName}
                     </td>
-                    <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400">
+                    <td className="py-3.5 px-4 text-[#4a3e33] group-hover:text-[#cca776]/80 dark:text-slate-400">
                       <div className="truncate max-w-[220px]" title={h.remarks}>
                         {h.remarks || "Regular Hearing / Appearance"}
                       </div>

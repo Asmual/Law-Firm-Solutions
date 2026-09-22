@@ -120,7 +120,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
             onClick={onCloseMobile}
             className="flex items-center gap-3 overflow-hidden"
           >
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#382613] text-[#cca776] ring-1 ring-[#ab8c67] shadow-inner dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#724916] text-[#cca776] ring-1 ring-[#ab8c67] shadow-inner dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30">
               <Scale className="h-5 w-5" />
             </div>
             {!collapsed && (
@@ -128,7 +128,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                 <span className="text-sm font-bold tracking-wide text-black dark:text-slate-100 uppercase">
                   {BRANDING.brandName}
                 </span>
-                <span className="text-[11px] text-[#382613] dark:text-[#cca776] font-bold">
+                <span className="text-[11px] text-[#724916] dark:text-[#cca776] font-bold">
                   {BRANDING.tagline}
                 </span>
               </div>
@@ -180,7 +180,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                   className={cn(
                     "group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-semibold transition-colors",
                     isActive
-                      ? "bg-[#382613] text-[#cca776] font-bold shadow-md ring-1 ring-[#382613] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30"
+                      ? "bg-[#724916] text-[#cca776] font-bold shadow-md ring-1 ring-[#724916] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30"
                       : "text-black hover:bg-[#b89b74] hover:text-black font-semibold dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
                   )}
                 >
@@ -196,7 +196,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                     <div className="flex flex-1 items-center justify-between truncate">
                       <span className="truncate">{item.label}</span>
                       {item.badge && (
-                        <span className="ml-auto rounded-full bg-[#382613] text-[#cca776] px-2 py-0.5 text-[10px] font-bold border border-[#ab8c67] dark:bg-slate-800 dark:text-[#cca776] dark:border-[#cca776]/30">
+                        <span className="ml-auto rounded-full bg-[#724916] text-[#cca776] px-2 py-0.5 text-[10px] font-bold border border-[#ab8c67] dark:bg-slate-800 dark:text-[#cca776] dark:border-[#cca776]/30">
                           {item.badge}
                         </span>
                       )}
@@ -215,7 +215,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
               <span>Chamber System Active</span>
             </div>
             <p className="mt-1 text-[11px] text-[#4a3e33] dark:text-slate-400">
-              Role: <strong className="text-[#382613] dark:text-[#cca776] uppercase font-bold">{userRole || "User"}</strong>
+              Role: <strong className="text-[#724916] dark:text-[#cca776] uppercase font-bold">{userRole || "User"}</strong>
             </p>
             {BRANDING.poweredByEnabled && (
               <p className="mt-1.5 text-[10px] text-[#4a3e33] dark:text-slate-500 border-t border-[#ab8c67] dark:border-slate-800 pt-1.5">

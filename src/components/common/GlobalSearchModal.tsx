@@ -72,7 +72,7 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
             className="w-full flex items-center justify-between rounded-lg p-2 hover:bg-[#cca776]/25 dark:hover:bg-slate-800 transition-colors text-left"
           >
             <div className="flex items-center gap-3">
-              <Briefcase className="h-4 w-4 text-[#382613] dark:text-[#cca776]" />
+              <Briefcase className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <div>
                 <span className="font-bold text-black dark:text-slate-200">Case Registry</span>
                 <p className="text-[11px] text-[#4a3e33] dark:text-slate-400">Browse all active and disposed litigation files</p>

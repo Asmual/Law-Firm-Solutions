@@ -122,14 +122,14 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
           className="hidden xl:flex items-center gap-2 text-xs border-l border-[#ab8c67] dark:border-slate-800/80 pl-3.5 py-1 select-none shrink-0"
           suppressHydrationWarning
         >
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#382613] text-[#cca776] ring-1 ring-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#724916] text-[#cca776] ring-1 ring-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30">
             <Calendar className="h-3.5 w-3.5" />
           </div>
           <div className="flex items-baseline gap-1.5 font-sans" suppressHydrationWarning>
             <span className="text-sm font-extrabold text-black dark:text-white tracking-tight" suppressHydrationWarning>
               {dateParts.day}
             </span>
-            <span className="text-xs font-bold text-[#382613] dark:text-[#cca776] uppercase tracking-wider" suppressHydrationWarning>
+            <span className="text-xs font-bold text-[#724916] dark:text-[#cca776] uppercase tracking-wider" suppressHydrationWarning>
               {dateParts.month}
             </span>
             <span className="text-xs font-semibold text-[#4a3e33] dark:text-slate-400" suppressHydrationWarning>
@@ -206,7 +206,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
                   <p className="text-[11px] text-[#4a3e33] dark:text-slate-400 truncate mt-0.5">
                     {currentUser.email}
                   </p>
-                  <div className="mt-1.5 flex items-center gap-1 text-[10px] text-[#382613] dark:text-[#cca776] font-bold">
+                  <div className="mt-1.5 flex items-center gap-1 text-[10px] text-[#724916] dark:text-[#cca776] font-bold">
                     <ShieldCheck className="h-3 w-3 text-[#cca776]" />
                     <span className="capitalize">{currentUser.role} Counsel</span>
                   </div>
@@ -219,7 +219,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
                     onClick={() => setDropdownOpen(false)}
                     className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-bold text-black hover:bg-[#cca776]/30 hover:text-black dark:text-slate-200 dark:hover:bg-[#cca776]/15 transition-colors cursor-pointer"
                   >
-                    <User className="h-3.5 w-3.5 text-[#382613] dark:text-[#cca776]" />
+                    <User className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                     <span>View Profile</span>
                   </Link>
 
@@ -238,7 +238,7 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         ) : (
           <Link
             href="/"
-            className="flex items-center gap-2 pl-2 border-l border-[#ab8c67] dark:border-slate-800 text-xs font-bold text-black hover:text-[#382613] dark:text-[#cca776] dark:hover:text-[#b8935f]"
+            className="flex items-center gap-2 pl-2 border-l border-[#ab8c67] dark:border-slate-800 text-xs font-bold text-black hover:text-[#724916] dark:text-[#cca776] dark:hover:text-[#b8935f]"
           >
             <UserCircle2 className="h-5 w-5" />
             <span className="hidden sm:inline">Sign In</span>

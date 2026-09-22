@@ -57,11 +57,6 @@ const navItems: NavItem[] = [
     icon: FileSpreadsheet,
   },
   {
-    label: "My Profile",
-    href: "/profile",
-    icon: UserCircle,
-  },
-  {
     label: "Advocates & Associates",
     href: "/team",
     icon: Users2,
@@ -72,6 +67,11 @@ const navItems: NavItem[] = [
     href: "/activity-logs",
     icon: History,
     adminOnly: true,
+  },
+  {
+    label: "My Profile",
+    href: "/profile",
+    icon: UserCircle,
   },
 ];
 

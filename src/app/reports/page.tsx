@@ -28,6 +28,19 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Institution, Case } from "@/types";
 
+const DEFAULT_INSTITUTIONS: Institution[] = [
+  { _id: "inst-nrb", name: "NRB Bank Limited", shortCode: "NRB", category: "Private Commercial Bank", branch: "Principal Branch, Gulshan", address: "Dhaka, Bangladesh", isActive: true, focalPerson: { name: "Legal Division", designation: "Head of Legal", phone: "+8801700000000" } },
+  { _id: "inst-brac", name: "BRAC Bank Limited", shortCode: "BRAC", category: "Private Commercial Bank", branch: "Special Asset Management, Anik Tower", address: "Tejgaon, Dhaka", isActive: true, focalPerson: { name: "Legal Affairs", designation: "Head of SAMD", phone: "+8801700000001" } },
+  { _id: "inst-city", name: "The City Bank Limited", shortCode: "CBL", category: "Private Commercial Bank", branch: "Law & Recovery Division", address: "City Bank Center, Gulshan-2, Dhaka", isActive: true, focalPerson: { name: "Law Division", designation: "Vice President", phone: "+8801700000002" } },
+  { _id: "inst-ebl", name: "Eastern Bank PLC", shortCode: "EBL", category: "Private Commercial Bank", branch: "Special Asset Management Division", address: "100 Gulshan Avenue, Dhaka", isActive: true, focalPerson: { name: "Legal Team", designation: "Senior Manager", phone: "+8801700000003" } },
+  { _id: "inst-pubali", name: "Pubali Bank Limited", shortCode: "PBL", category: "Private Commercial Bank", branch: "Law Division, Head Office", address: "Motijheel C/A, Dhaka", isActive: true, focalPerson: { name: "Law Division", designation: "DGM Legal", phone: "+8801700000004" } },
+  { _id: "inst-dbbl", name: "Dutch-Bangla Bank Limited", shortCode: "DBBL", category: "Private Commercial Bank", branch: "Legal Affairs Division", address: "Sena Kalyan Bhaban, Motijheel, Dhaka", isActive: true, focalPerson: { name: "Legal Division", designation: "Head of Legal", phone: "+8801700000005" } },
+  { _id: "inst-ibbl", name: "Islami Bank Bangladesh PLC", shortCode: "IBBL", category: "Shariah Islamic Bank", branch: "Law & Recovery Wing", address: "Dilkusha C/A, Dhaka", isActive: true, focalPerson: { name: "Law Wing", designation: "EVP Legal", phone: "+8801700000006" } },
+  { _id: "inst-ucb", name: "United Commercial Bank PLC", shortCode: "UCB", category: "Private Commercial Bank", branch: "Special Asset Management", address: "Gulshan-1, Dhaka", isActive: true, focalPerson: { name: "Legal Desk", designation: "Manager Legal", phone: "+8801700000007" } },
+  { _id: "inst-scb", name: "Standard Chartered Bank", shortCode: "SCB", category: "Private Commercial Bank", branch: "Legal & Compliance", address: "Gulshan North Avenue, Dhaka", isActive: true, focalPerson: { name: "Legal Counsel", designation: "Country Head Legal", phone: "+8801700000008" } },
+  { _id: "inst-idlc", name: "IDLC Finance Limited", shortCode: "IDLC", category: "Non-Banking Financial Institution (NBFI)", branch: "Special Asset Management", address: "Bays Galleria, Gulshan-1, Dhaka", isActive: true, focalPerson: { name: "Legal Department", designation: "Head of Legal", phone: "+8801700000009" } },
+];
+
 export default function ReportsPage() {
   const [reportType, setReportType] = useState<"client_monthly" | "associate_workload" | "running_cases">("client_monthly");
   const [institutions, setInstitutions] = useState<Institution[]>([]);
@@ -113,12 +126,19 @@ export default function ReportsPage() {
     fetch("/api/institutions?limit=200")
       .then((res) => res.json())
       .then((data) => {
-        if (data.institutions && data.institutions.length > 0) {
-          setInstitutions(data.institutions);
-          setSelectedInstId(data.institutions[0]._id || data.institutions[0].id || "");
+        const fetched = data.data || data.institutions;
+        if (Array.isArray(fetched) && fetched.length > 0) {
+          setInstitutions(fetched);
+          setSelectedInstId(fetched[0]._id || fetched[0].id || "");
+        } else {
+          setInstitutions(DEFAULT_INSTITUTIONS);
+          setSelectedInstId(DEFAULT_INSTITUTIONS[0]._id || "");
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        setInstitutions(DEFAULT_INSTITUTIONS);
+        setSelectedInstId(DEFAULT_INSTITUTIONS[0]._id || "");
+      });
   }, []);
 
   useEffect(() => {
@@ -782,7 +802,7 @@ export default function ReportsPage() {
             onClick={handleExportCSV}
             className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-sm"
           >
-            <Download className="h-4 w-4 text-emerald-500" />
+            <Download className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
             <span>Export CSV</span>
           </button>
           <button
@@ -867,8 +887,9 @@ export default function ReportsPage() {
               <select
                 value={selectedInstId}
                 onChange={(e) => setSelectedInstId(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white font-medium focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-white/95 dark:bg-slate-950 border border-[#ab8c67]/70 dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-white font-semibold focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776] shadow-sm cursor-pointer"
               >
+                <option value="">All Financial Institutions &amp; Clients (Chamber Pool)</option>
                 {institutions.map((i) => (
                   <option key={i._id || i.id} value={i._id || i.id}>
                     {i.name} ({i.shortCode})
@@ -1067,7 +1088,7 @@ export default function ReportsPage() {
           <div className="p-5 space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded bg-emerald-950 border border-emerald-700/60 text-emerald-400 font-bold text-xs uppercase tracking-wider">
+                <span className="px-2.5 py-1 rounded bg-[#724916] border border-[#ab8c67] text-[#dfceb7] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/40 font-bold text-xs uppercase tracking-wider">
                   A. RUNNING CASES
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -1176,7 +1197,7 @@ export default function ReportsPage() {
           <div className="p-5 space-y-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/20">
             <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 rounded bg-rose-950 border border-rose-700/60 text-rose-300 font-bold text-xs uppercase tracking-wider">
+                <span className="px-2.5 py-1 rounded bg-[#0F172B] border border-[#ab8c67]/60 text-[#cca776] dark:bg-slate-800 dark:text-[#dfceb7] dark:border-slate-700 font-bold text-xs uppercase tracking-wider">
                   B. DISPOSED / COMPLETED CASES
                 </span>
                 <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
@@ -1229,7 +1250,7 @@ export default function ReportsPage() {
                             )}
                           </td>
                           <td className="py-3 px-3">
-                            <span className="font-semibold text-rose-400 bg-rose-950/30 px-2 py-0.5 rounded text-[11px] border border-rose-800/30">
+                            <span className="font-semibold text-[#724916] bg-[#724916]/10 px-2 py-0.5 rounded text-[11px] border border-[#ab8c67]/40 dark:text-[#cca776] dark:bg-[#cca776]/10 dark:border-[#cca776]/30">
                               {partyNoStr}
                             </span>
                           </td>
@@ -1255,7 +1276,7 @@ export default function ReportsPage() {
                               <div className="space-y-1">
                                 {c.statusUpdates.map((su, sIdx) => (
                                   <div key={sIdx} className="flex items-start gap-1 leading-snug">
-                                    <span className="text-rose-400 font-bold">•</span>
+                                    <span className="text-[#724916] dark:text-[#cca776] font-bold">•</span>
                                     <span>
                                       {su.updateDate && <span className="font-mono text-slate-400 mr-1">[{su.updateDate}]</span>}
                                       {su.statusRemarks}
@@ -1329,7 +1350,7 @@ export default function ReportsPage() {
                 </div>
                 <div className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
                   <div className="text-[10px] font-bold uppercase text-slate-400">Total Assigned</div>
-                  <div className="text-base font-bold text-emerald-500">{cases.length} Cases</div>
+                  <div className="text-base font-bold text-[#724916] dark:text-[#cca776]">{cases.length} Cases</div>
                 </div>
               </div>
             </div>

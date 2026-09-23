@@ -119,7 +119,7 @@ export default function InstitutionsPage() {
             Active Litigation Files
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+            <span className="text-2xl font-bold text-[#724916] dark:text-[#cca776]">
               {totalActiveCases}
             </span>
             <span className="text-xs text-slate-500">Running in Courts</span>
@@ -131,7 +131,7 @@ export default function InstitutionsPage() {
             Disposed / Concluded
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+            <span className="text-2xl font-bold text-[#0F172B] dark:text-slate-200">
               {totalDisposedCases}
             </span>
             <span className="text-xs text-slate-500">Decreed in Favor</span>
@@ -303,12 +303,12 @@ export default function InstitutionsPage() {
               {/* Footer Case Stats & Actions */}
               <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 font-medium">
+                  <span className="inline-flex items-center gap-1 text-[#724916] dark:text-[#cca776] font-semibold">
                     <Briefcase className="h-3 w-3" />
                     <span>{inst.activeCases || 0} Active</span>
                   </span>
                   <span className="text-slate-300 dark:text-slate-700">•</span>
-                  <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+                  <span className="inline-flex items-center gap-1 text-[#0F172B] dark:text-slate-300 font-semibold">
                     <CheckCircle2 className="h-3 w-3" />
                     <span>{inst.disposedCases || 0} Disposed</span>
                   </span>
@@ -381,10 +381,10 @@ export default function InstitutionsPage() {
                         "—"
                       )}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-blue-600 dark:text-blue-400">
+                    <td className="px-4 py-3 font-semibold text-[#724916] dark:text-[#cca776]">
                       {inst.activeCases || 0}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-emerald-600 dark:text-emerald-400">
+                    <td className="px-4 py-3 font-semibold text-[#0F172B] dark:text-slate-300">
                       {inst.disposedCases || 0}
                     </td>
                     <td className="px-4 py-3 text-right">

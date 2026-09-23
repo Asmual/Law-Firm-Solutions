@@ -474,8 +474,8 @@ export default function MemberProfileMonitoringPage({
                     member.role === "admin"
                       ? "bg-[#cca776]/20 text-[#cca776] border border-[#cca776]/40"
                       : member.role === "advocate"
-                      ? "bg-blue-500/15 text-blue-400 border border-blue-500/30"
-                      : "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                      ? "bg-[#dfceb7] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700"
+                      : "bg-[#cca776]/15 text-[#724916] border border-[#cca776]/40 dark:bg-[#cca776]/10 dark:text-[#cca776] dark:border-[#cca776]/30"
                   }`}
                 >
                   <ShieldCheck className="h-3 w-3" />
@@ -564,20 +564,20 @@ export default function MemberProfileMonitoringPage({
           <p className="text-xl font-bold text-[#cca776] mt-1">{cases.length}</p>
         </div>
         <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider">Running</span>
-          <p className="text-xl font-bold text-emerald-400 mt-1">{runningCount}</p>
+          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Running</span>
+          <p className="text-xl font-bold text-[#cca776] mt-1">{runningCount}</p>
         </div>
         <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
           <span className="text-[10px] font-semibold text-[#cca776] uppercase tracking-wider">Stay Granted</span>
           <p className="text-xl font-bold text-[#cca776] mt-1">{stayCount}</p>
         </div>
         <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-amber-400 uppercase tracking-wider">Adjourned</span>
-          <p className="text-xl font-bold text-amber-400 mt-1">{adjournedCount}</p>
+          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Adjourned</span>
+          <p className="text-xl font-bold text-[#dfceb7] mt-1">{adjournedCount}</p>
         </div>
         <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-sky-400 uppercase tracking-wider">Disposed / Decreed</span>
-          <p className="text-xl font-bold text-sky-400 mt-1">{disposedCount}</p>
+          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Disposed / Decreed</span>
+          <p className="text-xl font-bold text-white mt-1">{disposedCount}</p>
         </div>
       </div>
 
@@ -673,12 +673,12 @@ export default function MemberProfileMonitoringPage({
                         <span
                           className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${
                             c.status === "running"
-                              ? "bg-emerald-950/60 text-emerald-400 border border-emerald-800/60"
+                              ? "bg-[#724916]/20 text-[#cca776] border border-[#cca776]/40"
                               : c.status === "stay_granted"
                               ? "bg-[#cca776]/20 text-[#cca776] border border-[#cca776]/40"
                               : c.status === "adjourned"
-                              ? "bg-amber-950/60 text-amber-400 border border-amber-800/60"
-                              : "bg-slate-800 text-slate-300 border border-slate-700"
+                              ? "bg-slate-800 text-slate-300 border border-slate-700"
+                              : "bg-[#0F172B] text-slate-300 border border-slate-700"
                           }`}
                         >
                           {c.status.replace("_", " ")}
@@ -852,7 +852,7 @@ export default function MemberProfileMonitoringPage({
                     onClick={() => setAssignRoleType("advocate")}
                     className={`rounded-lg py-2 text-xs font-semibold border transition-all cursor-pointer ${
                       assignRoleType === "advocate"
-                        ? "bg-blue-500/20 border-blue-500 text-blue-300"
+                        ? "bg-[#724916] border-[#ab8c67] text-[#cca776]"
                         : "border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
                     }`}
                   >
@@ -864,7 +864,7 @@ export default function MemberProfileMonitoringPage({
                     onClick={() => setAssignRoleType("associate")}
                     className={`rounded-lg py-2 text-xs font-semibold border transition-all cursor-pointer ${
                       assignRoleType === "associate"
-                        ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
+                        ? "bg-[#cca776] border-[#cca776] text-slate-950"
                         : "border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
                     }`}
                   >

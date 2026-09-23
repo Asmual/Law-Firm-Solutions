@@ -23,18 +23,18 @@ import { CardSkeleton, TableSkeleton } from "@/components/common/Skeleton";
 
 const ROLE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
   admin: {
-    bg: "bg-[#cca776]/20 border border-[#cca776]/40",
-    text: "text-[#cca776]",
+    bg: "bg-[#724916]/15 border border-[#ab8c67] dark:bg-[#cca776]/20 dark:border-[#cca776]/40",
+    text: "text-[#724916] dark:text-[#cca776]",
     label: "Admin",
   },
   advocate: {
-    bg: "bg-blue-500/15 border border-blue-500/30",
-    text: "text-blue-400",
+    bg: "bg-[#dfceb7] border border-[#ab8c67] dark:bg-slate-800 dark:border-slate-700",
+    text: "text-[#0F172B] dark:text-slate-200",
     label: "Advocate",
   },
   associate: {
-    bg: "bg-emerald-500/15 border border-emerald-500/30",
-    text: "text-emerald-400",
+    bg: "bg-[#cca776]/15 border border-[#cca776]/40 dark:bg-[#cca776]/10 dark:border-[#cca776]/30",
+    text: "text-[#724916] dark:text-[#cca776]",
     label: "Associate",
   },
 };
@@ -246,7 +246,7 @@ export default function TeamPage() {
           <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
             Advocates
           </span>
-          <span className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-1 block">
+          <span className="text-2xl font-bold text-[#724916] dark:text-[#cca776] mt-1 block">
             {totalAdvocates}
           </span>
         </div>
@@ -254,7 +254,7 @@ export default function TeamPage() {
           <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
             Associates
           </span>
-          <span className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1 block">
+          <span className="text-2xl font-bold text-[#0F172B] dark:text-slate-200 mt-1 block">
             {totalAssociates}
           </span>
         </div>
@@ -365,7 +365,7 @@ export default function TeamPage() {
                       <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5">
                         <span>{user.name}</span>
                         {user.authProvider === "google" && (
-                          <span className="rounded bg-blue-500/15 px-1.5 py-0.2 text-[9px] font-semibold text-blue-400 border border-blue-500/30">
+                          <span className="rounded bg-[#724916]/10 px-1.5 py-0.2 text-[9px] font-semibold text-[#724916] dark:text-[#cca776] border border-[#ab8c67]/40">
                             Google
                           </span>
                         )}
@@ -464,7 +464,7 @@ export default function TeamPage() {
                               <div className="font-semibold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5 whitespace-nowrap">
                                 <span>{user.name}</span>
                                 {user.authProvider === "google" && (
-                                  <span className="rounded bg-blue-500/10 px-1.5 py-0.2 text-[9px] font-medium text-blue-500 dark:text-blue-400 border border-blue-500/20">
+                                  <span className="rounded bg-[#724916]/10 px-1.5 py-0.2 text-[9px] font-medium text-[#724916] dark:text-[#cca776] border border-[#ab8c67]/30">
                                     Google
                                   </span>
                                 )}
@@ -505,7 +505,7 @@ export default function TeamPage() {
                         {/* Account Status Badge */}
                         <td className="px-4 py-3.5 whitespace-nowrap">
                           {user.isActive !== false ? (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1 rounded-full bg-[#724916]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[#724916] dark:text-[#cca776] border border-[#ab8c67]/40 whitespace-nowrap">
                               <CheckCircle className="h-3 w-3" />
                               <span>Active</span>
                             </span>

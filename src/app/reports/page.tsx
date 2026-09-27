@@ -823,13 +823,13 @@ export default function ReportsPage() {
             onClick={() => setReportType("client_monthly")}
             className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
               reportType === "client_monthly"
-                ? "bg-[#cca776]/15 border-[#cca776] shadow-sm"
-                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
+                ? "bg-[#724916]/10 border-[#ab8c67] dark:bg-[#cca776]/15 dark:border-[#cca776] shadow-sm ring-1 ring-[#ab8c67]/40"
+                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-[#ab8c67]/60 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
-              <Building2 className={`h-4 w-4 ${reportType === "client_monthly" ? "text-[#cca776]" : "text-slate-400"}`} />
-              <span className={`text-xs font-bold ${reportType === "client_monthly" ? "text-[#cca776] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
+              <Building2 className={`h-4 w-4 ${reportType === "client_monthly" ? "text-[#724916] dark:text-[#cca776]" : "text-slate-400"}`} />
+              <span className={`text-xs font-bold ${reportType === "client_monthly" ? "text-[#724916] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
                 Client Monthly Report
               </span>
             </div>
@@ -842,13 +842,13 @@ export default function ReportsPage() {
             onClick={() => setReportType("associate_workload")}
             className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
               reportType === "associate_workload"
-                ? "bg-[#cca776]/15 border-[#cca776] shadow-sm"
-                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
+                ? "bg-[#724916]/10 border-[#ab8c67] dark:bg-[#cca776]/15 dark:border-[#cca776] shadow-sm ring-1 ring-[#ab8c67]/40"
+                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-[#ab8c67]/60 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
-              <Users2 className={`h-4 w-4 ${reportType === "associate_workload" ? "text-[#cca776]" : "text-slate-400"}`} />
-              <span className={`text-xs font-bold ${reportType === "associate_workload" ? "text-[#cca776] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
+              <Users2 className={`h-4 w-4 ${reportType === "associate_workload" ? "text-[#724916] dark:text-[#cca776]" : "text-slate-400"}`} />
+              <span className={`text-xs font-bold ${reportType === "associate_workload" ? "text-[#724916] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
                 Associate Workload Report
               </span>
             </div>
@@ -861,13 +861,13 @@ export default function ReportsPage() {
             onClick={() => setReportType("running_cases")}
             className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
               reportType === "running_cases"
-                ? "bg-[#cca776]/15 border-[#cca776] shadow-sm"
-                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
+                ? "bg-[#724916]/10 border-[#ab8c67] dark:bg-[#cca776]/15 dark:border-[#cca776] shadow-sm ring-1 ring-[#ab8c67]/40"
+                : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 hover:border-[#ab8c67]/60 dark:hover:border-slate-700"
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
-              <Scale className={`h-4 w-4 ${reportType === "running_cases" ? "text-[#cca776]" : "text-slate-400"}`} />
-              <span className={`text-xs font-bold ${reportType === "running_cases" ? "text-[#cca776] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
+              <Scale className={`h-4 w-4 ${reportType === "running_cases" ? "text-[#724916] dark:text-[#cca776]" : "text-slate-400"}`} />
+              <span className={`text-xs font-bold ${reportType === "running_cases" ? "text-[#724916] dark:text-white" : "text-slate-700 dark:text-slate-300"}`}>
                 Running &amp; Stay Granted Cases
               </span>
             </div>
@@ -1060,7 +1060,7 @@ export default function ReportsPage() {
               <p className="font-bold text-slate-900 dark:text-white">
                 The In-charge / Head of Legal Affairs &amp; Recovery
               </p>
-              <p className="font-semibold text-[#cca776]">
+              <p className="font-semibold text-[#724916] dark:text-[#cca776]">
                 Special Assets Management Division (SAMD)
               </p>
               <p className="font-bold text-base text-slate-900 dark:text-white mt-1">
@@ -1141,7 +1141,7 @@ export default function ReportsPage() {
                             )}
                           </td>
                           <td className="py-3 px-3">
-                            <span className="font-semibold text-[#cca776] bg-[#cca776]/10 px-2 py-0.5 rounded text-[11px] border border-[#cca776]/20">
+                            <span className="font-semibold text-[#724916] bg-[#724916]/10 px-2 py-0.5 rounded text-[11px] border border-[#ab8c67]/40 dark:text-[#cca776] dark:bg-[#cca776]/10 dark:border-[#cca776]/20">
                               {partyNoStr}
                             </span>
                           </td>
@@ -1159,7 +1159,7 @@ export default function ReportsPage() {
                           <td className="py-3 px-3 text-slate-800 dark:text-slate-200 font-medium">
                             {c.matter || "-"}
                           </td>
-                          <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                          <td className="py-3 px-3 text-center font-mono font-bold text-[#724916] dark:text-[#cca776]">
                             {c.chamberFileNo}
                           </td>
                           <td className="py-3 px-3 text-slate-700 dark:text-slate-300 text-[11px]">
@@ -1167,7 +1167,7 @@ export default function ReportsPage() {
                               <div className="space-y-1">
                                 {c.statusUpdates.map((su, sIdx) => (
                                   <div key={sIdx} className="flex items-start gap-1 leading-snug">
-                                    <span className="text-[#cca776] font-bold">•</span>
+                                    <span className="text-[#724916] dark:text-[#cca776] font-bold">•</span>
                                     <span>
                                       {su.updateDate && <span className="font-mono text-slate-400 mr-1">[{su.updateDate}]</span>}
                                       {su.statusRemarks}
@@ -1268,7 +1268,7 @@ export default function ReportsPage() {
                           <td className="py-3 px-3 text-slate-800 dark:text-slate-200 font-medium">
                             {c.matter || "-"}
                           </td>
-                          <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                          <td className="py-3 px-3 text-center font-mono font-bold text-[#724916] dark:text-[#cca776]">
                             {c.chamberFileNo}
                           </td>
                           <td className="py-3 px-3 text-slate-700 dark:text-slate-300 text-[11px]">
@@ -1314,7 +1314,7 @@ export default function ReportsPage() {
               <div className="text-xs font-bold text-slate-900 dark:text-white pt-1">
                 Advocate Asmual
               </div>
-              <div className="text-[11px] text-[#cca776] font-medium">
+              <div className="text-[11px] text-[#724916] dark:text-[#cca776] font-semibold">
                 Senior Advocate &amp; Litigation Counsel
               </div>
               <div className="text-[10px] text-slate-500">
@@ -1333,7 +1333,7 @@ export default function ReportsPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-[#cca776]" />
+                  <Briefcase className="h-5 w-5 text-[#724916] dark:text-[#cca776]" />
                   <h2 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                     ASSOCIATE WISE ASSIGNED CASES REPORT (As on {todayStr})
                   </h2>
@@ -1346,7 +1346,7 @@ export default function ReportsPage() {
               <div className="flex items-center gap-3">
                 <div className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
                   <div className="text-[10px] font-bold uppercase text-slate-400">Total Associates</div>
-                  <div className="text-base font-bold text-[#cca776]">{associateGroups.length}</div>
+                  <div className="text-base font-bold text-[#724916] dark:text-[#cca776]">{associateGroups.length}</div>
                 </div>
                 <div className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-center">
                   <div className="text-[10px] font-bold uppercase text-slate-400">Total Assigned</div>
@@ -1409,7 +1409,7 @@ export default function ReportsPage() {
                               <td className="py-3 px-2 text-center font-mono font-bold text-slate-500">
                                 {cIdx + 1}
                               </td>
-                              <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                              <td className="py-3 px-3 text-center font-mono font-bold text-[#724916] dark:text-[#cca776]">
                                 {group.associateCode}
                               </td>
                               <td className="py-3 px-3 font-semibold text-slate-900 dark:text-white">
@@ -1418,7 +1418,7 @@ export default function ReportsPage() {
                               <td className="py-3 px-3 text-slate-800 dark:text-slate-200 font-medium">
                                 {c.institutionName || "Client"}
                               </td>
-                              <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                              <td className="py-3 px-3 text-center font-mono font-bold text-[#724916] dark:text-[#cca776]">
                                 {c.chamberFileNo}
                               </td>
                               <td className="py-3 px-3 font-mono font-medium text-slate-900 dark:text-white">
@@ -1436,7 +1436,7 @@ export default function ReportsPage() {
                                 {dateAssigned}
                               </td>
                               <td className="py-3 px-3">
-                                <span className="inline-block px-2.5 py-1 rounded bg-[#cca776]/10 border border-[#cca776]/20 text-[#cca776] font-medium text-[11px]">
+                                <span className="inline-block px-2.5 py-1 rounded bg-[#724916]/10 border border-[#ab8c67]/40 text-[#724916] dark:bg-[#cca776]/10 dark:border-[#cca776]/20 dark:text-[#cca776] font-medium text-[11px]">
                                   {remarks}
                                 </span>
                               </td>
@@ -1450,7 +1450,7 @@ export default function ReportsPage() {
                   {/* Subtotal Row per Associate (Photo 2) */}
                   <div className="bg-slate-100 dark:bg-slate-950/90 px-4 py-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
                     <span>Total Cases Assigned to {group.associateCode}:</span>
-                    <span className="font-mono text-[#cca776] text-sm">{group.cases.length}</span>
+                    <span className="font-mono text-[#724916] dark:text-[#cca776] text-sm">{group.cases.length}</span>
                   </div>
                 </div>
               ))
@@ -1486,7 +1486,7 @@ export default function ReportsPage() {
               <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 Checked by: (Managing Partner)
               </div>
-              <div className="text-[11px] text-[#cca776] font-semibold">
+              <div className="text-[11px] text-[#724916] dark:text-[#cca776] font-semibold">
                 Senior Advocate / Managing Partner
               </div>
             </div>
@@ -1499,12 +1499,12 @@ export default function ReportsPage() {
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg overflow-hidden p-6 space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <Scale className="h-5 w-5 text-[#cca776]" />
+              <Scale className="h-5 w-5 text-[#724916] dark:text-[#cca776]" />
               <h2 className="text-base font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                 Active Running &amp; Stay Granted Litigation Cases ({runningCases.length})
               </h2>
             </div>
-            <span className="text-xs text-[#cca776] font-mono">Period: {selectedMonth}</span>
+            <span className="text-xs text-[#724916] dark:text-[#cca776] font-mono font-semibold">Period: {selectedMonth}</span>
           </div>
 
           <div className="overflow-x-auto">
@@ -1550,7 +1550,7 @@ export default function ReportsPage() {
                           )}
                         </td>
                         <td className="py-3 px-3">
-                          <span className="font-semibold text-[#cca776] bg-[#cca776]/10 px-2 py-0.5 rounded text-[11px] border border-[#cca776]/20">
+                          <span className="font-semibold text-[#724916] bg-[#724916]/10 px-2 py-0.5 rounded text-[11px] border border-[#ab8c67]/40 dark:text-[#cca776] dark:bg-[#cca776]/10 dark:border-[#cca776]/20">
                             {partyNoStr}
                           </span>
                         </td>
@@ -1568,7 +1568,7 @@ export default function ReportsPage() {
                         <td className="py-3 px-3 text-slate-800 dark:text-slate-200 font-medium">
                           {c.matter || "-"}
                         </td>
-                        <td className="py-3 px-3 text-center font-mono font-bold text-[#cca776]">
+                        <td className="py-3 px-3 text-center font-mono font-bold text-[#724916] dark:text-[#cca776]">
                           {c.chamberFileNo}
                         </td>
                         <td className="py-3 px-3 text-slate-700 dark:text-slate-300 text-[11px]">
@@ -1576,7 +1576,7 @@ export default function ReportsPage() {
                             <div className="space-y-1">
                               {c.statusUpdates.map((su, sIdx) => (
                                 <div key={sIdx} className="flex items-start gap-1 leading-snug">
-                                  <span className="text-[#cca776] font-bold">•</span>
+                                  <span className="text-[#724916] dark:text-[#cca776] font-bold">•</span>
                                   <span>
                                     {su.updateDate && <span className="font-mono text-slate-400 mr-1">[{su.updateDate}]</span>}
                                     {su.statusRemarks}

@@ -79,7 +79,7 @@ export default function InstitutionsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#724916]/10 text-[#724916] ring-1 ring-[#ab8c67]/40 dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30">
               <Building2 className="h-4 w-4" />
             </div>
             <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
@@ -93,7 +93,7 @@ export default function InstitutionsPage() {
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center gap-1.5 rounded-xl bg-[#cca776] px-4 py-2.5 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] transition-all"
+          className="inline-flex items-center gap-1.5 rounded-xl bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f] px-4 py-2.5 text-xs font-bold shadow-sm transition-all cursor-pointer"
         >
           <Plus className="h-4 w-4" />
           <span>+ Register New Institution</span>
@@ -158,10 +158,10 @@ export default function InstitutionsPage() {
           <button
             onClick={() => setViewMode("grid")}
             aria-label="Grid View"
-            className={`p-1.5 rounded-md ${
+            className={`p-1.5 rounded-md transition-colors ${
               viewMode === "grid"
-                ? "bg-[#cca776]/15 text-[#cca776]"
-                : "text-slate-400 hover:text-slate-600"
+                ? "bg-[#724916] text-[#cca776] dark:bg-[#cca776] dark:text-slate-950 font-bold"
+                : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
             }`}
           >
             <Grid className="h-4 w-4" />
@@ -169,10 +169,10 @@ export default function InstitutionsPage() {
           <button
             onClick={() => setViewMode("table")}
             aria-label="Table View"
-            className={`p-1.5 rounded-md ${
+            className={`p-1.5 rounded-md transition-colors ${
               viewMode === "table"
-                ? "bg-[#cca776]/15 text-[#cca776]"
-                : "text-slate-400 hover:text-slate-600"
+                ? "bg-[#724916] text-[#cca776] dark:bg-[#cca776] dark:text-slate-950 font-bold"
+                : "text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
             }`}
           >
             <List className="h-4 w-4" />
@@ -186,10 +186,10 @@ export default function InstitutionsPage() {
           <button
             key={cat}
             onClick={() => setSelectedCategory(cat)}
-            className={`whitespace-nowrap rounded-lg px-3 py-1.5 font-medium transition-colors ${
+            className={`whitespace-nowrap rounded-lg px-3 py-1.5 font-semibold transition-colors cursor-pointer ${
               selectedCategory === cat
-                ? "bg-[#cca776] text-slate-950 font-bold"
-                : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800"
+                ? "bg-[#724916] text-[#cca776] dark:bg-[#cca776] dark:text-slate-950 shadow-sm"
+                : "bg-white text-slate-700 border border-[#ab8c67]/40 hover:bg-[#dfceb7]/30 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800"
             }`}
           >
             {cat}
@@ -230,7 +230,7 @@ export default function InstitutionsPage() {
           {institutions.map((inst) => (
             <div
               key={inst.id || inst._id}
-              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-[#cca776]/60 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
+              className="flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-5 shadow-sm hover:border-[#724916]/60 dark:hover:border-[#cca776]/60 hover:shadow-md transition-all dark:border-slate-800 dark:bg-slate-900"
             >
               <div>
                 {/* Header: Short Code & Category */}
@@ -238,7 +238,7 @@ export default function InstitutionsPage() {
                   <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-bold tracking-wider text-slate-800 dark:bg-slate-800 dark:text-slate-200">
                     {inst.shortCode}
                   </span>
-                  <span className="inline-flex items-center rounded-full bg-[#cca776]/15 px-2.5 py-0.5 text-[10px] font-semibold text-[#cca776] ring-1 ring-[#cca776]/30">
+                  <span className="inline-flex items-center rounded-full bg-[#724916]/10 px-2.5 py-0.5 text-[10px] font-bold text-[#724916] ring-1 ring-[#ab8c67]/40 dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30">
                     {inst.category}
                   </span>
                 </div>
@@ -268,17 +268,17 @@ export default function InstitutionsPage() {
                 {inst.focalPerson?.name && (
                   <div className="mt-4 rounded-lg bg-slate-50 p-3 text-[11px] dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-1.5 font-semibold text-slate-800 dark:text-slate-200">
-                      <Users className="h-3 w-3 text-[#cca776]" />
+                      <Users className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776] shrink-0" />
                       <span>{inst.focalPerson.name}</span>
                     </div>
-                    <p className="text-[10px] text-slate-500 dark:text-slate-400 ml-4.5">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 ml-5">
                       {inst.focalPerson.designation}
                     </p>
                     <div className="mt-2 flex flex-wrap items-center gap-3 text-[10px] text-slate-600 dark:text-slate-400">
                       {inst.focalPerson.phone && (
                         <a
                           href={`tel:${inst.focalPerson.phone}`}
-                          className="flex items-center gap-1 hover:text-[#cca776]"
+                          className="flex items-center gap-1 text-[#724916] dark:text-slate-400 hover:text-[#8b6028] dark:hover:text-[#cca776] font-medium"
                         >
                           <Phone className="h-2.5 w-2.5" />
                           <span>{inst.focalPerson.phone}</span>
@@ -318,7 +318,7 @@ export default function InstitutionsPage() {
                   href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
                     inst.name
                   )}`}
-                  className="inline-flex items-center gap-1 rounded-md bg-slate-100 px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-[#cca776] hover:text-slate-950 transition-colors dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-[#cca776] dark:hover:text-slate-950"
+                  className="inline-flex items-center gap-1 rounded-md bg-[#dfceb7]/60 border border-[#ab8c67]/40 px-2 py-1 text-[11px] font-semibold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] transition-colors dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-[#cca776] dark:hover:text-slate-950"
                   title="Add new case file for this institution"
                 >
                   <FilePlus2 className="h-3 w-3" />
@@ -351,7 +351,7 @@ export default function InstitutionsPage() {
                 {institutions.map((inst) => (
                   <tr
                     key={inst.id || inst._id}
-                    className="transition-colors"
+                    className="transition-colors hover:bg-slate-50/80 dark:hover:bg-slate-800/40"
                   >
                     <td className="px-4 py-3 font-bold text-slate-900 dark:text-white">
                       {inst.shortCode}
@@ -360,7 +360,7 @@ export default function InstitutionsPage() {
                       {inst.name}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                      <span className="inline-flex rounded-full bg-[#724916]/10 px-2 py-0.5 text-[10px] font-bold text-[#724916] ring-1 ring-[#ab8c67]/40 dark:bg-slate-800 dark:text-slate-300 dark:ring-0">
                         {inst.category}
                       </span>
                     </td>
@@ -392,7 +392,7 @@ export default function InstitutionsPage() {
                         href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
                           inst.name
                         )}`}
-                        className="font-medium text-[#cca776] hover:underline"
+                        className="font-bold text-[#724916] dark:text-[#cca776] hover:underline"
                       >
                         + New Case
                       </Link>

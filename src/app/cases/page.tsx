@@ -187,18 +187,18 @@ export default function CasesRegistryPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-[#cca776]">
-              Case Database & Archive
+            <span className="text-xs font-bold uppercase tracking-wider text-[#724916] dark:text-[#cca776]">
+              Case Database &amp; Archive
             </span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-[#cca776]/10 text-[#cca776] border border-[#cca776]/30">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#724916]/10 text-[#724916] border border-[#ab8c67]/40 dark:bg-[#cca776]/10 dark:text-[#cca776] dark:border-[#cca776]/30 font-bold">
               {cases.length} Records Found
             </span>
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2.5">
-            <Briefcase className="h-6 w-6 text-[#cca776]" />
+          <h1 className="text-2xl font-bold tracking-tight text-[#0F172B] dark:text-white flex items-center gap-2.5">
+            <Briefcase className="h-6 w-6 text-[#724916] dark:text-[#cca776]" />
             Litigation Case Registry
           </h1>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
@@ -209,14 +209,14 @@ export default function CasesRegistryPage() {
         <div className="flex items-center gap-2.5">
           <Link
             href="/reports"
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-700 text-[#0F172B] dark:text-slate-300 hover:bg-[#dfceb7]/30 dark:hover:bg-slate-800 transition-colors shadow-sm"
           >
-            <FileSpreadsheet className="h-3.5 w-3.5 text-[#cca776]" />
+            <FileSpreadsheet className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
             <span>Generate Reports</span>
           </Link>
           <Link
             href="/cases/new"
-            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b8935f] shadow-md shadow-[#cca776]/20 transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f] shadow-md shadow-[#724916]/20 transition-all cursor-pointer"
           >
             <Plus className="h-4 w-4" />
             <span>Add New Case File</span>
@@ -229,10 +229,10 @@ export default function CasesRegistryPage() {
         <button
           type="button"
           onClick={() => setFilterScope("all")}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
             filterScope === "all"
-              ? "bg-[#cca776] text-slate-950 font-bold shadow-sm"
-              : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              ? "bg-[#724916] text-[#cca776] dark:bg-[#cca776] dark:text-slate-950 shadow-sm"
+              : "bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-800 text-[#0F172B] dark:text-slate-400 hover:text-[#724916] dark:hover:text-white"
           }`}
         >
           All Chamber Cases
@@ -240,10 +240,10 @@ export default function CasesRegistryPage() {
         <button
           type="button"
           onClick={() => setFilterScope("my")}
-          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+          className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
             filterScope === "my"
-              ? "bg-[#cca776] text-slate-950 font-bold shadow-sm"
-              : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+              ? "bg-[#724916] text-[#cca776] dark:bg-[#cca776] dark:text-slate-950 shadow-sm"
+              : "bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-800 text-[#0F172B] dark:text-slate-400 hover:text-[#724916] dark:hover:text-white"
           }`}
         >
           My Assigned Cases Only

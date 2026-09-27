@@ -1130,7 +1130,7 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={addCaseNumberRow}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#cca776] hover:text-black bg-[#cca776]/15 hover:bg-[#cca776] border border-[#cca776]/40 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
             >
               <Plus className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Add Another Court / Case No.</span>
@@ -1334,7 +1334,7 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={addPartyRow}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 hover:text-emerald-300 bg-emerald-950/40 border border-emerald-800/60 px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#cca776] hover:text-black bg-[#cca776]/15 hover:bg-[#cca776] border border-[#cca776]/40 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
             >
               <Plus className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Add Another Party</span>
@@ -1670,7 +1670,7 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={addStatusRow}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#cca776] hover:text-[#b89360] bg-[#cca776]/10 border border-[#cca776]/30 px-2.5 sm:px-3 py-1.5 rounded-lg transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#cca776] hover:text-black bg-[#cca776]/15 hover:bg-[#cca776] border border-[#cca776]/40 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
             >
               <Plus className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">Add Progress Entry</span>

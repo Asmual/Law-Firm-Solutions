@@ -112,8 +112,8 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
 
         {/* Footer shortcuts */}
         <div className="flex items-center justify-between border-t border-[#ab8c67] dark:border-slate-800 px-4 py-2 text-[11px] text-[#4a3e33] dark:text-slate-400 bg-[#d4c1a5] dark:bg-slate-950">
-          <span>Press <kbd className="rounded bg-[#cbb292] border border-[#ab8c67] dark:bg-slate-800 px-1 py-0.5 text-black dark:text-slate-300 font-bold">Esc</kbd> to close</span>
-          <span>Tip: Press <kbd className="rounded bg-[#cbb292] border border-[#ab8c67] dark:bg-slate-800 px-1 py-0.5 text-black dark:text-slate-300 font-bold">Ctrl + K</kbd> anytime</span>
+          <span>Press <kbd className="rounded bg-[#cbb292] border border-[#ab8c67] dark:bg-slate-800 px-1 py-0.5 text-[#724916] dark:text-slate-300 font-bold">Esc</kbd> to close</span>
+          <span>Tip: Press <kbd className="rounded bg-[#cbb292] border border-[#ab8c67] dark:bg-slate-800 px-1 py-0.5 text-[#724916] dark:text-slate-300 font-bold">Ctrl + K</kbd> anytime</span>
         </div>
       </div>
     </div>

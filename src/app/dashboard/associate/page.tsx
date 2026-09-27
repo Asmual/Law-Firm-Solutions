@@ -190,7 +190,7 @@ export default function AssociateDashboardPage() {
                 >
                   <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap min-w-0">
-                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-[#cbb292] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-white dark:border-slate-700 shrink-0 whitespace-nowrap">
+                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-[#cbb292] text-[#724916] border border-[#ab8c67] dark:bg-slate-800 dark:text-white dark:border-slate-700 shrink-0 whitespace-nowrap">
                         {c.chamberFileNo}
                       </span>
                       <span className="text-xs font-bold text-[#0F172B] dark:text-white shrink-0 whitespace-nowrap">
@@ -203,10 +203,10 @@ export default function AssociateDashboardPage() {
 
                     <Link
                       href={`/cases/new?id=${c._id || c.id}`}
-                      className="inline-flex items-center gap-1 rounded-lg bg-[#cbb292] px-3 py-1 text-xs font-bold text-[#0F172B] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-[#724916] dark:hover:text-[#cca776] transition-all border border-[#ab8c67] dark:border-slate-700 shrink-0 whitespace-nowrap cursor-pointer"
+                      className="inline-flex items-center gap-1 rounded-lg bg-[#cbb292] px-3 py-1 text-xs font-bold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-[#724916] dark:hover:text-[#cca776] transition-all border border-[#ab8c67] dark:border-slate-700 shrink-0 whitespace-nowrap cursor-pointer"
                     >
                       <span>+ Update Order / Remarks</span>
-                      <ArrowUpRight className="h-3 w-3" />
+                      <ArrowUpRight className="h-3 w-3 text-[#724916] dark:text-[#cca776]" />
                     </Link>
                   </div>
 

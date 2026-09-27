@@ -83,36 +83,36 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#ab8c67] bg-[#cbb292]/95 px-4 sm:px-6 backdrop-blur text-black dark:border-slate-800 dark:bg-slate-950/90 dark:text-slate-100 transition-colors duration-200">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-[#ab8c67] bg-[#cbb292]/95 px-4 sm:px-6 backdrop-blur text-[#724916] dark:border-slate-800 dark:bg-slate-950/90 dark:text-slate-100 transition-colors duration-200">
       {/* Left: Mobile Menu Toggle, Global Search Bar & Bold Date */}
       <div className="flex items-center gap-2 sm:gap-3 shrink min-w-0">
         <button
           onClick={onOpenMobileMenu}
-          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-[#ab8c67] bg-[#dfceb7] text-black hover:bg-[#cca776] hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer shrink-0"
+          className="lg:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-[#ab8c67] bg-[#dfceb7] text-[#724916] hover:bg-[#cca776] hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer shrink-0"
           title="Open Navigation"
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-5 w-5 text-[#724916] dark:text-slate-400" />
         </button>
 
         {/* Mobile Search Icon Trigger */}
         <button
           onClick={onOpenSearch}
-          className="sm:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-[#ab8c67] bg-[#dfceb7] text-black hover:text-[#cca776] hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer shrink-0"
+          className="sm:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-[#ab8c67] bg-[#dfceb7] text-[#724916] hover:text-[#cca776] hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors cursor-pointer shrink-0"
           title="Search"
         >
-          <Search className="h-4 w-4" />
+          <Search className="h-4 w-4 text-[#724916] dark:text-slate-400" />
         </button>
 
         {/* Desktop / Tablet Expanded Search Bar */}
         <button
           onClick={onOpenSearch}
-          className="hidden sm:flex group h-9 w-60 md:w-72 lg:w-96 items-center justify-between rounded-lg border border-[#ab8c67] bg-[#dfceb7] px-3 text-xs text-black hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition-all cursor-pointer shrink-0"
+          className="hidden sm:flex group h-9 w-60 md:w-72 lg:w-96 items-center justify-between rounded-lg border border-[#ab8c67] bg-[#dfceb7] px-3 text-xs text-[#724916] hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:text-slate-200 transition-all cursor-pointer shrink-0"
         >
           <div className="flex items-center gap-2 truncate">
-            <Search className="h-3.5 w-3.5 text-black/70 group-hover:text-black dark:text-slate-400 transition-colors shrink-0" />
-            <span className="truncate font-medium">Search File No, Case, Bank, Party...</span>
+            <Search className="h-3.5 w-3.5 text-[#724916] group-hover:text-[#8b6028] dark:text-slate-400 transition-colors shrink-0" />
+            <span className="truncate font-semibold text-[#724916] dark:text-slate-300">Search File No, Case, Bank, Party...</span>
           </div>
-          <kbd className="hidden rounded bg-[#cbb292] border border-[#ab8c67] px-1.5 py-0.5 text-[10px] font-bold text-black dark:bg-slate-800 dark:text-slate-400 md:inline-block">
+          <kbd className="hidden rounded bg-[#cbb292] border border-[#ab8c67] px-1.5 py-0.5 text-[10px] font-bold text-[#724916] dark:bg-slate-800 dark:text-slate-400 md:inline-block">
             Ctrl K
           </kbd>
         </button>
@@ -126,13 +126,13 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
             <Calendar className="h-3.5 w-3.5" />
           </div>
           <div className="flex items-baseline gap-1.5 font-sans" suppressHydrationWarning>
-            <span className="text-sm font-extrabold text-black dark:text-white tracking-tight" suppressHydrationWarning>
+            <span className="text-sm font-extrabold text-[#724916] dark:text-white tracking-tight" suppressHydrationWarning>
               {dateParts.day}
             </span>
             <span className="text-xs font-bold text-[#724916] dark:text-[#cca776] uppercase tracking-wider" suppressHydrationWarning>
               {dateParts.month}
             </span>
-            <span className="text-xs font-semibold text-[#4a3e33] dark:text-slate-400" suppressHydrationWarning>
+            <span className="text-xs font-semibold text-[#724916]/80 dark:text-slate-400" suppressHydrationWarning>
               {dateParts.year}
             </span>
           </div>
@@ -144,10 +144,10 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         {/* Quick Add Case Button */}
         <Link
           href="/cases/new"
-          className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] p-2 sm:px-3 sm:py-1.5 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] transition-colors shrink-0"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f] p-2 sm:px-3 sm:py-1.5 text-xs font-bold shadow-sm transition-colors shrink-0 cursor-pointer"
           title="Add New Case File"
         >
-          <Plus className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+          <Plus className="h-4 w-4 sm:h-3.5 sm:w-3.5 text-[#cca776] dark:text-slate-950" />
           <span className="hidden sm:inline whitespace-nowrap">Add Case</span>
         </Link>
 
@@ -157,9 +157,9 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
         {/* Notifications */}
         <button
           title="Upcoming Court Hearings"
-          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-[#ab8c67] bg-[#dfceb7] text-black hover:bg-[#cca776] hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+          className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-[#ab8c67] bg-[#dfceb7] text-[#724916] hover:bg-[#cca776] hover:border-[#8b6e40] dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
         >
-          <Bell className="h-4 w-4" />
+          <Bell className="h-4 w-4 text-[#724916] dark:text-slate-300" />
           <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#cca776] opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#cca776]"></span>
@@ -181,16 +181,16 @@ export function Header({ onOpenSearch, onOpenMobileMenu }: HeaderProps) {
                 <img
                   src={currentUser.avatarUrl}
                   alt={currentUser.name}
-                  className="h-8 w-8 rounded-full object-cover ring-2 ring-[#cca776]/60 group-hover:ring-[#cca776] shadow-sm shrink-0"
+                  className="h-8 w-8 rounded-full object-cover ring-2 ring-[#724916]/60 dark:ring-[#cca776]/60 group-hover:ring-[#724916] dark:group-hover:ring-[#cca776] shadow-sm shrink-0"
                 />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-2 ring-[#cca776]/40 font-bold text-xs shrink-0 group-hover:bg-[#cca776]/25 transition-colors">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#724916]/10 text-[#724916] ring-2 ring-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/40 font-bold text-xs shrink-0 group-hover:bg-[#724916]/20 transition-colors">
                   {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "U"}
                 </div>
               )}
 
               {/* Current User Role Badge: Hidden on mobile, visible on sm and up, without any arrow */}
-              <span className="hidden sm:inline-block rounded-md bg-[#cca776]/15 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-bold text-[#cca776] border border-[#cca776]/30 uppercase tracking-wider whitespace-nowrap">
+              <span className="hidden sm:inline-block rounded-md bg-[#724916]/10 text-[#724916] border border-[#ab8c67]/40 dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">
                 {currentUser.role}
               </span>
             </button>

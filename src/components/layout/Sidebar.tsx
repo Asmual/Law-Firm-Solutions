@@ -125,7 +125,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
             </div>
             {!collapsed && (
               <div className="flex flex-col truncate">
-                <span className="text-sm font-bold tracking-wide text-black dark:text-slate-100 uppercase">
+                <span className="text-sm font-bold tracking-wide text-[#724916] dark:text-slate-100 uppercase">
                   {BRANDING.brandName}
                 </span>
                 <span className="text-[11px] text-[#724916] dark:text-[#cca776] font-bold">
@@ -181,7 +181,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                     "group flex items-center gap-3 rounded-lg px-2.5 py-2 text-xs font-semibold transition-colors",
                     isActive
                       ? "bg-[#724916] text-[#cca776] font-bold shadow-md ring-1 ring-[#724916] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/30"
-                      : "text-black hover:bg-[#b89b74] hover:text-black font-semibold dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
+                      : "text-[#724916] hover:bg-[#b89b74]/60 hover:text-[#0F172B] font-bold dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100"
                   )}
                 >
                   <Icon
@@ -189,7 +189,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
                       "h-4 w-4 shrink-0 transition-transform group-hover:scale-105",
                       isActive
                         ? "text-[#cca776]"
-                        : "text-black group-hover:text-black dark:text-slate-400 dark:group-hover:text-slate-200"
+                        : "text-[#724916] group-hover:text-[#0F172B] dark:text-slate-400 dark:group-hover:text-slate-200"
                     )}
                   />
                   {!collapsed && (
@@ -210,7 +210,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
         {/* Chamber Status Info */}
         {!collapsed && (
           <div className="p-3 mx-2.5 mb-3 rounded-xl bg-[#dfceb7] border border-[#ab8c67] dark:bg-slate-900/80 dark:border-slate-800/80">
-            <div className="flex items-center gap-2 text-xs font-bold text-black dark:text-slate-300">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#724916] dark:text-slate-300">
               <ShieldCheck className="h-4 w-4 text-emerald-700 dark:text-emerald-400" />
               <span>Chamber System Active</span>
             </div>

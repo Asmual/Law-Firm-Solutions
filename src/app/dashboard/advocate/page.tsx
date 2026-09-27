@@ -101,7 +101,7 @@ export default function AdvocateDashboardPage() {
             </Link>
             <Link
               href="/cause-list"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#cbb292] px-4 py-2.5 text-xs font-bold text-[#0F172B] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800/90 dark:text-slate-200 dark:border-slate-700 transition-all whitespace-nowrap cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#cbb292] px-4 py-2.5 text-xs font-bold text-[#724916] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800/90 dark:text-slate-200 dark:border-slate-700 transition-all whitespace-nowrap cursor-pointer"
             >
               <Clock className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <span>Cause List Schedule</span>
@@ -225,7 +225,7 @@ export default function AdvocateDashboardPage() {
                   <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
                     <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap min-w-0">
                       {/* File No Badge */}
-                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-[#cbb292] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-white dark:border-slate-700 shrink-0 whitespace-nowrap">
+                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-md bg-[#cbb292] text-[#724916] border border-[#ab8c67] dark:bg-slate-800 dark:text-white dark:border-slate-700 shrink-0 whitespace-nowrap">
                         {c.chamberFileNo}
                       </span>
 
@@ -244,7 +244,7 @@ export default function AdvocateDashboardPage() {
                     {/* Right side: Status Badge + Next Hearing Date + Link */}
                     <div className="flex items-center gap-2.5 shrink-0 ml-auto sm:ml-0">
                       {nextHearing && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-[#cbb292] dark:bg-slate-800 px-2.5 py-0.5 text-[11px] font-bold text-[#0F172B] dark:text-slate-300 border border-[#ab8c67] dark:border-slate-700 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-[#cbb292] dark:bg-slate-800 px-2.5 py-0.5 text-[11px] font-bold text-[#724916] dark:text-slate-300 border border-[#ab8c67] dark:border-slate-700 whitespace-nowrap">
                           <Calendar className="h-3 w-3 text-[#724916] dark:text-[#cca776]" />
                           <span>{nextHearing}</span>
                         </span>
@@ -258,10 +258,10 @@ export default function AdvocateDashboardPage() {
 
                       <Link
                         href={`/cases/new?id=${c._id || c.id}`}
-                        className="inline-flex items-center gap-1 rounded-lg bg-[#cbb292] px-3 py-1 text-xs font-bold text-[#0F172B] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-[#724916] dark:hover:text-[#cca776] transition-all border border-[#ab8c67] dark:border-slate-700 whitespace-nowrap cursor-pointer"
+                        className="inline-flex items-center gap-1 rounded-lg bg-[#cbb292] px-3 py-1 text-xs font-bold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-[#724916] dark:hover:text-[#cca776] transition-all border border-[#ab8c67] dark:border-slate-700 whitespace-nowrap cursor-pointer"
                       >
                         <span>Open File</span>
-                        <ArrowUpRight className="h-3 w-3" />
+                        <ArrowUpRight className="h-3 w-3 text-[#724916] dark:text-[#cca776]" />
                       </Link>
                     </div>
                   </div>

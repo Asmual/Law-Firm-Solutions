@@ -159,7 +159,7 @@ export default function CasesRegistryPage() {
         );
       case "adjourned":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#cbb292] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
+          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#cbb292] text-[#724916] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
             Adjourned
           </span>
         );
@@ -315,7 +315,7 @@ export default function CasesRegistryPage() {
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               {/* Case Table Header */}
-              <tr className="border-b border-[#ab8c67] dark:border-slate-800 bg-[#cbb292] dark:bg-slate-950/70 text-[10px] uppercase font-bold text-[#0F172B] dark:text-slate-400 tracking-wider">
+              <tr className="border-b border-[#ab8c67] dark:border-slate-800 bg-[#cbb292] dark:bg-slate-950/70 text-[10px] uppercase font-bold text-[#724916] dark:text-slate-400 tracking-wider">
                 <th className="py-3 px-3 w-28 whitespace-nowrap">File No.</th>
                 <th className="py-3 px-3 min-w-[140px]">Client / Institution</th>
                 <th className="py-3 px-3 min-w-[150px]">Case No. &amp; Court</th>
@@ -379,7 +379,7 @@ export default function CasesRegistryPage() {
                           <div className="space-y-0.5">
                             <div className="flex items-center gap-1 flex-wrap">
                               <span
-                                className="font-mono text-[11px] font-bold text-[#0F172B] bg-[#cbb292] dark:bg-slate-800/90 dark:text-slate-200 px-1.5 py-0.5 rounded border border-[#ab8c67] dark:border-slate-700/80 truncate max-w-[140px]"
+                                className="font-mono text-[11px] font-bold text-[#724916] bg-[#cbb292] dark:bg-slate-800/90 dark:text-slate-200 px-1.5 py-0.5 rounded border border-[#ab8c67] dark:border-slate-700/80 truncate max-w-[140px]"
                                 title={c.caseNumbers[0].caseNumber}
                               >
                                 {c.caseNumbers[0].caseNumber}

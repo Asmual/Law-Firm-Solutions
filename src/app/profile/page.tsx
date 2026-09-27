@@ -613,18 +613,18 @@ export default function ProfilePage() {
 
             {/* Contact & Bar roll badges */}
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1 text-xs">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#0F172B] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-medium">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#724916] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-bold">
                 <Mail className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                 {profileData.email}
               </span>
               {profileData.phone && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#0F172B] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-medium">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#724916] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-bold">
                   <Phone className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                   {profileData.phone}
                 </span>
               )}
               {profileData.barEnrollmentNo && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#0F172B] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-medium">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#724916] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-bold">
                   <Gavel className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                   Roll: <span className="font-mono font-bold text-[#724916] dark:text-white">{profileData.barEnrollmentNo}</span>
                 </span>
@@ -749,7 +749,7 @@ export default function ProfilePage() {
                   type="email"
                   disabled
                   value={profileData.email}
-                  className="w-full rounded-lg border border-[#ab8c67]/60 bg-[#cbb292]/40 pl-8 pr-3 py-2 text-xs text-[#0F172B] font-medium cursor-not-allowed opacity-80 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-400"
+                  className="w-full rounded-lg border border-[#ab8c67]/60 bg-[#cbb292]/40 pl-8 pr-3 py-2 text-xs text-[#724916] font-bold cursor-not-allowed opacity-80 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-400"
                 />
               </div>
             </div>
@@ -776,7 +776,7 @@ export default function ProfilePage() {
               <label className="block text-xs font-bold text-[#0F172B] dark:text-slate-200 mb-1">
                 Authorized System Role
               </label>
-              <div className="flex items-center gap-2 rounded-lg border border-[#ab8c67] bg-[#cbb292]/50 px-3 py-2 text-xs text-[#0F172B] dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-300">
+              <div className="flex items-center gap-2 rounded-lg border border-[#ab8c67] bg-[#cbb292]/50 px-3 py-2 text-xs text-[#724916] dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-300">
                 <ShieldCheck className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
                 <span className="font-bold capitalize text-[#724916] dark:text-white">{profileData.role}</span>
                 <span className="ml-auto text-[10px] text-[#4a3e33] dark:text-slate-400">Chamber policy</span>
@@ -922,7 +922,7 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={handleExportMyCasesCSV}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#cbb292] text-xs font-bold text-[#0F172B] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#cbb292] text-xs font-bold text-[#724916] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 transition-colors cursor-pointer"
               >
                 <FileSpreadsheet className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                 <span>CSV</span>
@@ -978,7 +978,7 @@ export default function ProfilePage() {
                               : c.status === "stay_granted"
                               ? "bg-[#cca776]/20 text-[#724916] border border-[#ab8c67] dark:bg-[#cca776]/20 dark:text-[#dfceb7] dark:border-[#cca776]/40"
                               : c.status === "adjourned"
-                              ? "bg-[#cbb292] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+                              ? "bg-[#cbb292] text-[#724916] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
                               : "bg-[#0F172B] text-[#dfceb7] border border-[#ab8c67]/60 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
                           }`}
                         >

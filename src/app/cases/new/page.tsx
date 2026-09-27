@@ -840,9 +840,9 @@ function CaseFormContent() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2 text-xs font-bold rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b89360] shadow-md shadow-[#724916]/20 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
             >
-              <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <Save className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#cca776] dark:text-slate-950" />
               <span>{isSaving ? "Saving..." : "Save Record"}</span>
             </button>
           </div>
@@ -1130,9 +1130,9 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={addCaseNumberRow}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#cca776] hover:text-black bg-[#cca776]/15 hover:bg-[#cca776] border border-[#cca776]/40 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
+              className="group inline-flex items-center gap-1.5 text-xs font-bold bg-[#cbb292] text-[#724916] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] hover:border-[#724916] dark:bg-slate-800 dark:text-[#cca776] dark:border-[#cca776]/30 dark:hover:bg-[#cca776] dark:hover:text-slate-950 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3.5 w-3.5 text-[#724916] group-hover:text-[#cca776] dark:text-[#cca776] dark:group-hover:text-slate-950 transition-colors" />
               <span className="hidden sm:inline">Add Another Court / Case No.</span>
               <span className="sm:hidden">Add Case No.</span>
             </button>
@@ -1334,9 +1334,9 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={addPartyRow}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#cca776] hover:text-black bg-[#cca776]/15 hover:bg-[#cca776] border border-[#cca776]/40 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
+              className="group inline-flex items-center gap-1.5 text-xs font-bold bg-[#cbb292] text-[#724916] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] hover:border-[#724916] dark:bg-slate-800 dark:text-[#cca776] dark:border-[#cca776]/30 dark:hover:bg-[#cca776] dark:hover:text-slate-950 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3.5 w-3.5 text-[#724916] group-hover:text-[#cca776] dark:text-[#cca776] dark:group-hover:text-slate-950 transition-colors" />
               <span className="hidden sm:inline">Add Another Party</span>
               <span className="sm:hidden">Add Party</span>
             </button>
@@ -1670,9 +1670,9 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={addStatusRow}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#cca776] hover:text-black bg-[#cca776]/15 hover:bg-[#cca776] border border-[#cca776]/40 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
+              className="group inline-flex items-center gap-1.5 text-xs font-bold bg-[#cbb292] text-[#724916] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] hover:border-[#724916] dark:bg-slate-800 dark:text-[#cca776] dark:border-[#cca776]/30 dark:hover:bg-[#cca776] dark:hover:text-slate-950 px-2.5 sm:px-3 py-1.5 rounded-lg transition-all cursor-pointer whitespace-nowrap shrink-0 shadow-sm"
             >
-              <Plus className="h-3.5 w-3.5" />
+              <Plus className="h-3.5 w-3.5 text-[#724916] group-hover:text-[#cca776] dark:text-[#cca776] dark:group-hover:text-slate-950 transition-colors" />
               <span className="hidden sm:inline">Add Progress Entry</span>
               <span className="sm:hidden">Add Entry</span>
             </button>
@@ -1899,9 +1899,9 @@ function CaseFormContent() {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 text-xs font-bold rounded-lg bg-[#cca776] text-slate-950 hover:bg-[#b89360] shadow-md shadow-[#cca776]/20 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 text-xs font-bold rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b89360] shadow-md shadow-[#724916]/20 transition-all cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
             >
-              <Save className="h-4 w-4" />
+              <Save className="h-4 w-4 text-[#cca776] dark:text-slate-950" />
               <span>{isSaving ? "Saving..." : "Save Record"}</span>
             </button>
           </div>

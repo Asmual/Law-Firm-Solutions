@@ -92,7 +92,7 @@ export function AppShell({ children }: AppShellProps) {
     );
   }
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-[#cbb292] dark:bg-slate-950 font-sans text-black dark:text-slate-100 chamber-app">
+    <div className="flex h-screen w-full overflow-hidden bg-[#cbb292] dark:bg-slate-950 font-sans text-[#724916] dark:text-slate-100 chamber-app">
       {/* Sidebar */}
       <Sidebar
         mobileOpen={isMobileMenuOpen}

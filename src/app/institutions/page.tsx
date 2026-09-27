@@ -216,9 +216,9 @@ export default function InstitutionsPage() {
           </p>
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-3.5 py-1.5 text-xs font-bold text-slate-950 hover:bg-[#b8935f]"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f] px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer"
           >
-            <Plus className="h-3.5 w-3.5" />
+            <Plus className="h-3.5 w-3.5 text-[#cca776] dark:text-slate-950" />
             <span>Add Institution</span>
           </button>
         </div>

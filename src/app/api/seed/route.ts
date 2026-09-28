@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       ]);
     }
 
-    const defaultPasswordHash = hashPassword("password123");
+    const defaultPasswordHash = hashPassword("advocate12345");
 
     // 1. Seed Chamber Users (1 Admin, 5 Advocates, 3 Associates)
     const users = await UserModel.create([
@@ -1288,15 +1288,15 @@ export async function GET(req: NextRequest) {
         institutionsCount: institutions.length,
         usersCount: users.length,
         demoLoginAccounts: [
-          { role: "admin", name: "Barrister Rafiqul Islam", email: "admin@chamber.com", password: "password123" },
-          { role: "advocate", name: "Advocate Asmual", email: "asmual@chamber.com", password: "password123" },
-          { role: "advocate", name: "Advocate Farhana Kabir", email: "farhana@chamber.com", password: "password123" },
-          { role: "advocate", name: "Advocate Kazi Tanvir Ahmed", email: "tanvir@chamber.com", password: "password123" },
-          { role: "advocate", name: "Advocate Mahmudul Hasan Chowdhury", email: "mahmudul@chamber.com", password: "password123" },
-          { role: "advocate", name: "Advocate Nusrat Jahan Rimi", email: "nusrat@chamber.com", password: "password123" },
-          { role: "associate", name: "Advocate Shakil Ahmed", email: "shakil@chamber.com", password: "password123" },
-          { role: "associate", name: "Advocate Sabrina Yasmin", email: "sabrina@chamber.com", password: "password123" },
-          { role: "associate", name: "Advocate Tariqul Islam", email: "tariqul@chamber.com", password: "password123" },
+          { role: "admin", name: "Barrister Rafiqul Islam", email: "admin@chamber.com", password: "advocate12345" },
+          { role: "advocate", name: "Advocate Asmual", email: "asmual@chamber.com", password: "advocate12345" },
+          { role: "advocate", name: "Advocate Farhana Kabir", email: "farhana@chamber.com", password: "advocate12345" },
+          { role: "advocate", name: "Advocate Kazi Tanvir Ahmed", email: "tanvir@chamber.com", password: "advocate12345" },
+          { role: "advocate", name: "Advocate Mahmudul Hasan Chowdhury", email: "mahmudul@chamber.com", password: "advocate12345" },
+          { role: "advocate", name: "Advocate Nusrat Jahan Rimi", email: "nusrat@chamber.com", password: "advocate12345" },
+          { role: "associate", name: "Advocate Shakil Ahmed", email: "shakil@chamber.com", password: "advocate12345" },
+          { role: "associate", name: "Advocate Sabrina Yasmin", email: "sabrina@chamber.com", password: "advocate12345" },
+          { role: "associate", name: "Advocate Tariqul Islam", email: "tariqul@chamber.com", password: "advocate12345" },
         ],
       },
     });

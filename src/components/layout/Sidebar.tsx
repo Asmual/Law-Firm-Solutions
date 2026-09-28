@@ -146,7 +146,7 @@ export function Sidebar({ mobileOpen, onCloseMobile }: SidebarProps) {
 
           {navItems
             .filter((item) => {
-              if (item.adminOnly && userRole !== "admin") return false;
+              if (item.adminOnly && userRole !== "admin" && userRole !== "partner") return false;
               return true;
             })
             .map((item) => {

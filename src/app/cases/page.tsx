@@ -10,6 +10,8 @@ import {
   Edit,
   Trash2,
   Eye,
+  Download,
+  Layers,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Case, Institution } from "@/types";
@@ -28,6 +30,7 @@ export default function CasesRegistryPage() {
   const [selectedInstId, setSelectedInstId] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [groupBy, setGroupBy] = useState<"none" | "institution" | "advocate">("none");
   const [deleteModalState, setDeleteModalState] = useState<{
     isOpen: boolean;
     caseId: string;
@@ -39,6 +42,61 @@ export default function CasesRegistryPage() {
     fileNo: "",
     isDeleting: false,
   });
+
+  const handleExportCSV = () => {
+    if (cases.length === 0) {
+      toast.info("No cases available to export.");
+      return;
+    }
+
+    const headers = [
+      "Chamber File No",
+      "Institution",
+      "Case Number",
+      "Case Type",
+      "Court / Division",
+      "Litigating Parties",
+      "Matter",
+      "Lead Advocate",
+      "Status",
+      "Next Hearing Date",
+      "Last Status Remarks",
+    ];
+
+    const rows = cases.map((c) => {
+      const primaryCase = c.caseNumbers?.[0];
+      const lastUpdate = c.statusUpdates?.[c.statusUpdates.length - 1];
+      const parties = c.parties?.map((p) => p.partyNameDetails).join(" vs ") || "";
+      return [
+        `"${c.chamberFileNo || ""}"`,
+        `"${c.institutionName || ""}"`,
+        `"${primaryCase?.caseNumber || ""}"`,
+        `"${primaryCase?.caseType || c.matter || ""}"`,
+        `"${primaryCase?.courtDivision || ""}"`,
+        `"${parties.replace(/"/g, '""')}"`,
+        `"${(c.matter || "").replace(/"/g, '""')}"`,
+        `"${c.assignedAdvocate?.advocateName || ""}"`,
+        `"${c.status || ""}"`,
+        `"${lastUpdate?.nextHearingDate ? new Date(lastUpdate.nextHearingDate).toLocaleDateString("en-GB") : ""}"`,
+        `"${(lastUpdate?.statusRemarks || "").replace(/"/g, '""')}"`,
+      ];
+    });
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute(
+      "download",
+      `chamber_litigation_registry_${new Date().toISOString().split("T")[0]}.csv`
+    );
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    toast.success("Case registry exported to CSV/Excel.");
+  };
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -143,6 +201,27 @@ export default function CasesRegistryPage() {
     }
   };
 
+  const groupedCases = React.useMemo(() => {
+    if (groupBy === "none") {
+      return [{ groupName: "", cases }];
+    }
+    const map = new Map<string, Case[]>();
+    for (const c of cases) {
+      const key =
+        groupBy === "institution"
+          ? c.institutionName || "Unknown Institution"
+          : c.assignedAdvocate?.advocateName || "Unassigned (Chamber Pool)";
+      if (!map.has(key)) {
+        map.set(key, []);
+      }
+      map.get(key)!.push(c);
+    }
+    return Array.from(map.entries()).map(([groupName, groupCases]) => ({
+      groupName,
+      cases: groupCases,
+    }));
+  }, [cases, groupBy]);
+
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "running":
@@ -206,13 +285,22 @@ export default function CasesRegistryPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <button
+            type="button"
+            onClick={handleExportCSV}
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-700 text-[#0F172B] dark:text-slate-300 hover:bg-[#dfceb7]/30 dark:hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
+            title="Download full litigation registry in CSV / Excel"
+          >
+            <Download className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
+            <span>Export CSV</span>
+          </button>
           <Link
             href="/reports"
             className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-700 text-[#0F172B] dark:text-slate-300 hover:bg-[#dfceb7]/30 dark:hover:bg-slate-800 transition-colors shadow-sm"
           >
             <FileSpreadsheet className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
-            <span>Generate Reports</span>
+            <span>Client Statements</span>
           </Link>
           <Link
             href="/cases/new"
@@ -254,7 +342,7 @@ export default function CasesRegistryPage() {
       <div className="bg-[#dfceb7] dark:bg-slate-900/90 border border-[#ab8c67] dark:border-slate-800 rounded-xl p-4 shadow-sm">
         <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
           {/* Search Box */}
-          <div className="sm:col-span-5 relative">
+          <div className="sm:col-span-4 relative">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#724916] dark:text-slate-400" />
             <input
               type="text"
@@ -266,7 +354,7 @@ export default function CasesRegistryPage() {
           </div>
 
           {/* Filter by Institution */}
-          <div className="sm:col-span-4">
+          <div className="sm:col-span-3">
             <select
               value={selectedInstId}
               onChange={(e) => setSelectedInstId(e.target.value)}
@@ -297,11 +385,25 @@ export default function CasesRegistryPage() {
             </select>
           </div>
 
+          {/* Group By Selector */}
+          <div className="sm:col-span-2">
+            <select
+              value={groupBy}
+              onChange={(e) => setGroupBy(e.target.value as "none" | "institution" | "advocate")}
+              className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-800 rounded-lg text-[#0F172B] dark:text-slate-200 font-semibold focus:outline-none focus:border-[#724916]"
+              title="Organize case list by Institution or Advocate"
+            >
+              <option value="none">Flat View (All)</option>
+              <option value="institution">Group by Institution</option>
+              <option value="advocate">Group by Advocate</option>
+            </select>
+          </div>
+
           {/* Search Button */}
           <div className="sm:col-span-1">
             <button
               type="submit"
-              className="w-full py-2 text-xs font-bold rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] transition-colors cursor-pointer"
+              className="w-full py-2 text-xs font-bold rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] transition-colors cursor-pointer shadow-sm"
             >
               Filter
             </button>
@@ -350,131 +452,144 @@ export default function CasesRegistryPage() {
                   </td>
                 </tr>
               ) : (
-                cases.map((c) => {
-                  const caseId = c._id || c.id || "";
-                  return (
-                    <tr key={caseId} className="transition-colors border-b border-[#ab8c67]/40 dark:border-slate-800/80">
-                      {/* Chamber File No */}
-                      <td className="py-3 px-3 font-mono font-bold text-[#0F172B] dark:text-[#cca776] whitespace-nowrap">
-                        <Link href={`/cases/${caseId}`} className="hover:underline" title="View Case Dossier">
-                          {c.chamberFileNo}
-                        </Link>
-                      </td>
+                groupedCases.map((group) => (
+                  <React.Fragment key={group.groupName || "all-cases"}>
+                    {groupBy !== "none" && (
+                      <tr className="bg-[#cca776]/25 dark:bg-slate-800 font-bold border-y-2 border-[#ab8c67]/60 dark:border-slate-700">
+                        <td colSpan={8} className="py-2 px-3 text-xs text-[#724916] dark:text-[#cca776]">
+                          {groupBy === "institution" ? "🏛️ Institution: " : "⚖️ Lead Counsel: "}
+                          <span className="font-extrabold text-[#0F172B] dark:text-white">{group.groupName}</span>
+                          <span className="ml-2 text-[10px] text-[#4a3e33] dark:text-slate-400 font-normal">({group.cases.length} cases)</span>
+                        </td>
+                      </tr>
+                    )}
+                    {group.cases.map((c) => {
+                      const caseId = c._id || c.id || "";
+                      return (
+                        <tr key={caseId} className="transition-colors border-b border-[#ab8c67]/40 dark:border-slate-800/80">
+                          {/* Chamber File No */}
+                          <td className="py-3 px-3 font-mono font-bold text-[#0F172B] dark:text-[#cca776] whitespace-nowrap">
+                            <Link href={`/cases/${caseId}`} className="hover:underline" title="View Case Dossier">
+                              {c.chamberFileNo}
+                            </Link>
+                          </td>
 
-                      {/* Institution */}
-                      <td className="py-3 px-3">
-                        <div className="font-bold text-[#0F172B] dark:text-white truncate max-w-[160px]" title={c.institutionName}>
-                          {c.institutionName}
-                        </div>
-                        {c.branch && (
-                          <div className="text-[10px] text-[#4a3e33] dark:text-slate-400 truncate max-w-[160px]">
-                            Branch: {c.branch}
-                          </div>
-                        )}
-                      </td>
+                          {/* Institution */}
+                          <td className="py-3 px-3">
+                            <div className="font-bold text-[#0F172B] dark:text-white truncate max-w-[160px]" title={c.institutionName}>
+                              {c.institutionName}
+                            </div>
+                            {c.branch && (
+                              <div className="text-[10px] text-[#4a3e33] dark:text-slate-400 truncate max-w-[160px]">
+                                Branch: {c.branch}
+                              </div>
+                            )}
+                          </td>
 
-                      {/* Case Numbers & Courts */}
-                      <td className="py-3 px-3">
-                        {c.caseNumbers && c.caseNumbers.length > 0 ? (
-                          <div className="space-y-0.5">
-                            <div className="flex items-center gap-1 flex-wrap">
-                              <span
-                                className="font-mono text-[11px] font-bold text-[#724916] bg-[#cbb292] dark:bg-slate-800/90 dark:text-slate-200 px-1.5 py-0.5 rounded border border-[#ab8c67] dark:border-slate-700/80 truncate max-w-[140px]"
-                                title={c.caseNumbers[0].caseNumber}
-                              >
-                                {c.caseNumbers[0].caseNumber}
-                              </span>
-                              {c.caseNumbers.length > 1 && (
-                                <span className="text-[10px] font-bold text-[#cca776] bg-[#724916] px-1 py-0.2 rounded border border-[#ab8c67]">
-                                  +{c.caseNumbers.length - 1}
+                          {/* Case Numbers & Courts */}
+                          <td className="py-3 px-3">
+                            {c.caseNumbers && c.caseNumbers.length > 0 ? (
+                              <div className="space-y-0.5">
+                                <div className="flex items-center gap-1 flex-wrap">
+                                  <span
+                                    className="font-mono text-[11px] font-bold text-[#724916] bg-[#cbb292] dark:bg-slate-800/90 dark:text-slate-200 px-1.5 py-0.5 rounded border border-[#ab8c67] dark:border-slate-700/80 truncate max-w-[140px]"
+                                    title={c.caseNumbers[0].caseNumber}
+                                  >
+                                    {c.caseNumbers[0].caseNumber}
+                                  </span>
+                                  {c.caseNumbers.length > 1 && (
+                                    <span className="text-[10px] font-bold text-[#cca776] bg-[#724916] px-1 py-0.2 rounded border border-[#ab8c67]">
+                                      +{c.caseNumbers.length - 1}
+                                    </span>
+                                  )}
+                                </div>
+                                <span className="text-[10px] text-[#4a3e33] dark:text-slate-400 block truncate max-w-[160px]">
+                                  {c.caseNumbers[0].courtDivision} • {c.caseNumbers[0].caseType}
                                 </span>
+                              </div>
+                            ) : (
+                              <span className="text-[#4a3e33] italic text-[11px]">Unspecified</span>
+                            )}
+                          </td>
+
+                          {/* Primary Parties */}
+                          <td className="py-3 px-3">
+                            {c.parties && c.parties.length > 0 ? (
+                              <div className="max-w-[160px]" title={c.parties[0].partyNameDetails}>
+                                <span className="text-[#0F172B] dark:text-slate-200 font-bold truncate block text-xs">
+                                  {c.parties[0].partyNameDetails}
+                                </span>
+                                {c.parties.length > 1 && (
+                                  <span className="text-[10px] text-[#4a3e33] dark:text-slate-400 truncate block">
+                                    &amp; {c.parties.length - 1} others
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-[#4a3e33] italic text-[11px]">None</span>
+                            )}
+                          </td>
+
+                          {/* Matter */}
+                          <td className="py-3 px-3 text-[#0F172B] dark:text-slate-300">
+                            <div className="truncate max-w-[130px] text-xs font-medium" title={c.matter}>
+                              {c.matter || "—"}
+                            </div>
+                          </td>
+
+                          {/* Advocate */}
+                          <td className="py-3 px-3 text-[#0F172B] dark:text-slate-300 font-bold whitespace-nowrap">
+                            <div className="truncate max-w-[120px]" title={c.assignedAdvocate?.advocateName}>
+                              {c.assignedAdvocate?.advocateName || "Unassigned"}
+                            </div>
+                          </td>
+
+                          {/* Status Badge */}
+                          <td className="py-3 px-3 text-center whitespace-nowrap">
+                            {getStatusBadge(c.status)}
+                          </td>
+
+                          {/* Action buttons */}
+                          <td className="py-3 px-3 text-right whitespace-nowrap">
+                            <div className="flex items-center justify-end gap-1">
+                              <Link
+                                href={`/cases/${caseId}`}
+                                title="View Case Dossier"
+                                className="p-1.5 rounded-lg text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:text-slate-400 dark:hover:text-white transition-colors"
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Link>
+                              <Link
+                                href={`/cases/new?id=${caseId}`}
+                                title="Edit Case File"
+                                className="p-1.5 rounded-lg text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:text-slate-400 dark:hover:text-white transition-colors"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Link>
+                              {(currentUserRole === "admin" || currentUserRole === "partner") && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setDeleteModalState({
+                                      isOpen: true,
+                                      caseId,
+                                      fileNo: c.chamberFileNo,
+                                      isDeleting: false,
+                                    })
+                                  }
+                                  title="Delete Case File"
+                                  className="p-1.5 rounded-lg text-rose-700 hover:bg-rose-950/40 hover:text-rose-300 dark:text-rose-400 transition-colors cursor-pointer"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
                               )}
                             </div>
-                            <span className="text-[10px] text-[#4a3e33] dark:text-slate-400 block truncate max-w-[160px]">
-                              {c.caseNumbers[0].courtDivision} • {c.caseNumbers[0].caseType}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-[#4a3e33] italic text-[11px]">Unspecified</span>
-                        )}
-                      </td>
-
-                      {/* Primary Parties */}
-                      <td className="py-3 px-3">
-                        {c.parties && c.parties.length > 0 ? (
-                          <div className="max-w-[160px]" title={c.parties[0].partyNameDetails}>
-                            <span className="text-[#0F172B] dark:text-slate-200 font-bold truncate block text-xs">
-                              {c.parties[0].partyNameDetails}
-                            </span>
-                            {c.parties.length > 1 && (
-                              <span className="text-[10px] text-[#4a3e33] dark:text-slate-400 truncate block">
-                                &amp; {c.parties.length - 1} others
-                              </span>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-[#4a3e33] italic text-[11px]">None</span>
-                        )}
-                      </td>
-
-                      {/* Matter */}
-                      <td className="py-3 px-3 text-[#0F172B] dark:text-slate-300">
-                        <div className="truncate max-w-[130px] text-xs font-medium" title={c.matter}>
-                          {c.matter || "—"}
-                        </div>
-                      </td>
-
-                      {/* Advocate */}
-                      <td className="py-3 px-3 text-[#0F172B] dark:text-slate-300 font-bold whitespace-nowrap">
-                        <div className="truncate max-w-[120px]" title={c.assignedAdvocate?.advocateName}>
-                          {c.assignedAdvocate?.advocateName || "Unassigned"}
-                        </div>
-                      </td>
-
-                      {/* Status Badge */}
-                      <td className="py-3 px-3 text-center whitespace-nowrap">
-                        {getStatusBadge(c.status)}
-                      </td>
-
-                      {/* Action buttons */}
-                      <td className="py-3 px-3 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-1">
-                          <Link
-                            href={`/cases/${caseId}`}
-                            title="View Case Dossier"
-                            className="p-1.5 rounded-lg text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:text-slate-400 dark:hover:text-white transition-colors"
-                          >
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                          <Link
-                            href={`/cases/new?id=${caseId}`}
-                            title="Edit Case File"
-                            className="p-1.5 rounded-lg text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:text-slate-400 dark:hover:text-white transition-colors"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Link>
-                          {currentUserRole === "admin" && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setDeleteModalState({
-                                  isOpen: true,
-                                  caseId,
-                                  fileNo: c.chamberFileNo,
-                                  isDeleting: false,
-                                  })
-                              }
-                              title="Delete Case File"
-                              className="p-1.5 rounded-lg text-rose-700 hover:bg-rose-950/40 hover:text-rose-300 dark:text-rose-400 transition-colors cursor-pointer"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </React.Fragment>
+                ))
               )}
             </tbody>
           </table>

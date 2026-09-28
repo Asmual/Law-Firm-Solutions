@@ -353,6 +353,7 @@ function CaseFormContent() {
   const [wokalatnamaNote, setWokalatnamaNote] = useState("");
   const [mainPetitionNote, setMainPetitionNote] = useState("");
   const [extensionNote, setExtensionNote] = useState("");
+  const [generalRemarks, setGeneralRemarks] = useState("");
 
   // Assigned Advocate & Associate
   const [assignedAdvocateName, setAssignedAdvocateName] = useState("Unassigned");
@@ -507,6 +508,7 @@ function CaseFormContent() {
             setWokalatnamaNote(c.specialNotes.wokalatnamaNote || "");
             setMainPetitionNote(c.specialNotes.mainPetitionNote || "");
             setExtensionNote(c.specialNotes.extensionNote || "");
+            setGeneralRemarks(c.specialNotes.generalRemarks || "");
           }
           if (c.assignedAdvocate) {
             setAssignedAdvocateName(c.assignedAdvocate.advocateName || "Unassigned");
@@ -729,6 +731,7 @@ function CaseFormContent() {
         wokalatnamaNote,
         mainPetitionNote,
         extensionNote,
+        generalRemarks,
       },
       assignedAdvocate: {
         advocateId: assignedAdvocateId || undefined,
@@ -1829,7 +1832,7 @@ function CaseFormContent() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                 Wokalatnama / Power Note
@@ -1858,13 +1861,26 @@ function CaseFormContent() {
 
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Extension Note
+                Extension / Stay Note
               </label>
               <input
                 type="text"
                 placeholder="e.g. Extension granted till 30.12.2024"
                 value={extensionNote}
                 onChange={(e) => setExtensionNote(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                General Chamber Remarks
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Confidential client instructions / file notes"
+                value={generalRemarks}
+                onChange={(e) => setGeneralRemarks(e.target.value)}
                 className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
               />
             </div>

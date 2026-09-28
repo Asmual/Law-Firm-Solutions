@@ -430,6 +430,14 @@ export default function CaseDossierViewPage({
                     </p>
                   </div>
                 )}
+                {caseData.specialNotes.extensionNote && (
+                  <div>
+                    <span className="text-slate-500 block text-[10px] uppercase">Extension / Stay Extension Note</span>
+                    <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
+                      {caseData.specialNotes.extensionNote}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}

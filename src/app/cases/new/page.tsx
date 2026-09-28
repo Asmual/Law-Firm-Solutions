@@ -17,9 +17,12 @@ import {
   User,
   Scale,
   AlertCircle,
+  UploadCloud,
+  Paperclip,
+  ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Institution, CaseNumberItem, PartyItem, StatusHearingUpdate, User as UserType } from "@/types";
+import { Institution, CaseNumberItem, PartyItem, StatusHearingUpdate, CaseDocument, User as UserType } from "@/types";
 import { LegalDatePicker } from "@/components/common/LegalDatePicker";
 import { ConfirmationModal } from "@/components/common/ConfirmationModal";
 
@@ -376,6 +379,59 @@ function CaseFormContent() {
 
   const [caseStatus, setCaseStatus] = useState<"running" | "stay_granted" | "adjourned" | "disposed" | "decreed">("running");
 
+  // Section 8: Legal Documents & Evidence Files
+  const [documents, setDocuments] = useState<CaseDocument[]>([]);
+  const [isUploadingDoc, setIsUploadingDoc] = useState(false);
+  const [newDocTitle, setNewDocTitle] = useState("");
+  const [newDocCategory, setNewDocCategory] = useState("Main Petition / Plaint");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const titleToUse = newDocTitle.trim() || file.name.replace(/\.[^/.]+$/, "");
+    setIsUploadingDoc(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "File upload failed");
+      }
+
+      const fileExtension = file.name.split(".").pop() || "pdf";
+      const newDoc: CaseDocument = {
+        title: `${titleToUse} (${newDocCategory})`,
+        fileUrl: data.url,
+        fileType: fileExtension.toLowerCase(),
+        uploadedAt: new Date().toISOString(),
+      };
+
+      setDocuments((prev) => [...prev, newDoc]);
+      setNewDocTitle("");
+      toast.success(`"${file.name}" uploaded and attached to case.`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Upload error";
+      toast.error(msg);
+    } finally {
+      setIsUploadingDoc(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const removeDocument = (index: number) => {
+    setDocuments((prev) => prev.filter((_, i) => i !== index));
+    toast.info("Document detached from case file.");
+  };
+
   const selectInstitution = (inst: Institution) => {
     setSelectedInst(inst);
     setIsDropdownOpen(false);
@@ -526,6 +582,9 @@ function CaseFormContent() {
           }
           if (c.statusUpdates && c.statusUpdates.length > 0) {
             setStatusUpdates(c.statusUpdates);
+          }
+          if (c.documents && Array.isArray(c.documents)) {
+            setDocuments(c.documents);
           }
         }
       })
@@ -747,6 +806,7 @@ function CaseFormContent() {
         internalRemarks: internalRemarks || "Drafting and hearing",
       } : undefined,
       statusUpdates: statusUpdates.filter((s) => s.statusRemarks.trim() !== ""),
+      documents: documents.filter((d) => Boolean(d.fileUrl)),
       status: caseStatus,
     };
 
@@ -1885,6 +1945,140 @@ function CaseFormContent() {
               />
             </div>
           </div>
+        </div>
+
+        {/* ================= SECTION 8: LEGAL DOCUMENTS & EVIDENCE MANAGEMENT ================= */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <UploadCloud className="h-4 w-4 text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
+                8. Case Documents &amp; Evidence Files ({documents.length})
+              </h2>
+            </div>
+            <span className="text-[10px] px-2.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 font-medium">
+              PDF, DOCX, Evidence (Max 15MB)
+            </span>
+          </div>
+
+          {/* Upload Input & Category Selector */}
+          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+              <div className="sm:col-span-5">
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                  Document Title / Description
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Certified Copy of High Court Order"
+                  value={newDocTitle}
+                  onChange={(e) => setNewDocTitle(e.target.value)}
+                  className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                />
+              </div>
+
+              <div className="sm:col-span-4">
+                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                  Category
+                </label>
+                <select
+                  value={newDocCategory}
+                  onChange={(e) => setNewDocCategory(e.target.value)}
+                  className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                >
+                  <option value="Main Petition / Plaint">Main Petition / Plaint</option>
+                  <option value="Wokalatnama / Power of Attorney">Wokalatnama / Power of Attorney</option>
+                  <option value="Court Order / Injunction">Court Order / Injunction</option>
+                  <option value="Evidence / Exhibit">Evidence / Exhibit</option>
+                  <option value="Legal Notice / Demand">Legal Notice / Demand</option>
+                  <option value="Written Statement / Reply">Written Statement / Reply</option>
+                </select>
+              </div>
+
+              <div className="sm:col-span-3">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg,.xlsx,.xls,.txt"
+                />
+                <button
+                  type="button"
+                  disabled={isUploadingDoc}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 transition-colors cursor-pointer disabled:opacity-50 shadow-sm"
+                >
+                  <UploadCloud className="h-4 w-4" />
+                  <span>{isUploadingDoc ? "Uploading..." : "Browse & Attach"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Uploaded Documents List */}
+          {documents.length === 0 ? (
+            <div className="p-6 text-center rounded-lg border border-dashed border-slate-800 text-xs text-slate-500">
+              No documents attached yet. Click Browse &amp; Attach above to archive petitions, certified orders, or evidence.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                    <th className="py-2 px-2 w-10 text-center">SL</th>
+                    <th className="py-2 px-2">Document Title &amp; Category</th>
+                    <th className="py-2 px-2 w-28 text-center">Type</th>
+                    <th className="py-2 px-2 w-32">Uploaded Date</th>
+                    <th className="py-2 px-2 text-right w-28">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60">
+                  {documents.map((doc, idx) => (
+                    <tr key={idx} className="hover:bg-slate-950/60">
+                      <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
+                      <td className="py-2 px-2">
+                        <div className="flex items-center gap-2">
+                          <Paperclip className="h-3.5 w-3.5 text-[#cca776] shrink-0" />
+                          <span className="font-semibold text-slate-200">{doc.title}</span>
+                        </div>
+                      </td>
+                      <td className="py-2 px-2 text-center">
+                        <span className="uppercase font-mono text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                          {doc.fileType || "doc"}
+                        </span>
+                      </td>
+                      <td className="py-2 px-2 text-slate-400 text-[11px]">
+                        {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString("en-GB") : "Just now"}
+                      </td>
+                      <td className="py-2 px-2 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <a
+                            href={doc.fileUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 font-semibold text-[#cca776] hover:underline"
+                            title="Open document in new tab"
+                          >
+                            <span>Open</span>
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => removeDocument(idx)}
+                            className="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-950/40 cursor-pointer"
+                            title="Remove document"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* ================= FORM FOOTER ACTIONS ================= */}

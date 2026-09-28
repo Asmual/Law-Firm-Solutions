@@ -31,18 +31,29 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check file type
-    if (!file.type.startsWith("image/")) {
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "text/plain",
+    ];
+
+    const isImage = file.type.startsWith("image/");
+    const isDocument = allowedTypes.includes(file.type) || file.name.endsWith(".pdf") || file.name.endsWith(".docx") || file.name.endsWith(".doc");
+
+    if (!isImage && !isDocument) {
       return NextResponse.json(
-        { success: false, error: "File must be an image (JPEG, PNG, WebP, etc.)." },
+        { success: false, error: "File must be a PDF, DOC, DOCX, spreadsheet, or image." },
         { status: 400 }
       );
     }
 
-    // 5MB limit
-    if (file.size > 5 * 1024 * 1024) {
+    // 15MB limit for legal documents and evidence
+    if (file.size > 15 * 1024 * 1024) {
       return NextResponse.json(
-        { success: false, error: "Image size must be less than 5MB." },
+        { success: false, error: "File size must be less than 15MB." },
         { status: 400 }
       );
     }
@@ -54,17 +65,22 @@ export async function POST(req: NextRequest) {
     let publicId = "";
 
     try {
+      const uploadOptions: Record<string, unknown> = {
+        folder: isImage ? "law-firm-solutions/avatars" : "law-firm-solutions/documents",
+        resource_type: isImage ? "image" : "auto",
+      };
+
+      if (isImage) {
+        uploadOptions.transformation = [
+          { width: 800, height: 800, crop: "limit" },
+          { quality: "auto", fetch_format: "auto" },
+        ];
+      }
+
       const uploadResult = await new Promise<{ secure_url: string; public_id: string }>(
         (resolve, reject) => {
           const uploadStream = cloudinary.uploader.upload_stream(
-            {
-              folder: "law-firm-solutions/avatars",
-              resource_type: "image",
-              transformation: [
-                { width: 400, height: 400, crop: "fill", gravity: "face" },
-                { quality: "auto", fetch_format: "auto" },
-              ],
-            },
+            uploadOptions,
             (error, result) => {
               if (error || !result) {
                 reject(error || new Error("Upload failed"));
@@ -81,7 +97,7 @@ export async function POST(req: NextRequest) {
     } catch (cloudinaryErr) {
       console.warn("Cloudinary direct upload failed, fallback to base64 data url:", cloudinaryErr);
       const base64Data = buffer.toString("base64");
-      secureUrl = `data:${file.type};base64,${base64Data}`;
+      secureUrl = `data:${file.type || "application/pdf"};base64,${base64Data}`;
       publicId = `local_${Date.now()}`;
     }
 

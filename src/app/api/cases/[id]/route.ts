@@ -47,7 +47,7 @@ export async function PUT(
     }
 
     // Role-based Access Enforcement:
-    // Admin has universal authority.
+    // Admin & Partner have universal chamber authority.
     // Advocate can edit cases where they are assigned counsel.
     // Associate can update hearing status, notes, and records for assigned/chamber matters.
     const isAssignedAdvocate =
@@ -62,7 +62,7 @@ export async function PUT(
       return NextResponse.json(
         {
           error:
-            "Permission denied. You can only edit litigation cases assigned to you. Contact the Admin for reassignment.",
+            "Permission denied. You can only edit litigation cases assigned to you. Contact the Partner or Admin for reassignment.",
         },
         { status: 403 }
       );
@@ -80,9 +80,9 @@ export async function PUT(
 
     // Check if File No changed and conflicts with another record
     if (body.chamberFileNo && body.chamberFileNo.trim() !== existing.chamberFileNo) {
-      if (user.role !== "admin") {
+      if (user.role !== "admin" && user.role !== "partner") {
         return NextResponse.json(
-          { error: "Only Admin can modify Chamber File Number." },
+          { error: "Only Admin or Senior Partner can modify Chamber File Number." },
           { status: 403 }
         );
       }
@@ -106,16 +106,16 @@ export async function PUT(
     if (body.parties) existing.parties = body.parties;
     if (body.specialNotes) existing.specialNotes = body.specialNotes;
 
-    // Only Admin can reassign lead advocate
+    // Admin & Partner can reassign lead advocate
     if (body.assignedAdvocate) {
-      if (user.role === "admin" || isAssignedAdvocate) {
+      if (user.role === "admin" || user.role === "partner" || isAssignedAdvocate) {
         existing.assignedAdvocate = body.assignedAdvocate;
       }
     }
 
     // Assign / update Associate
     if (body.assignedAssociate !== undefined) {
-      if (user.role === "admin" || user.role === "advocate") {
+      if (user.role === "admin" || user.role === "partner" || user.role === "advocate") {
         existing.assignedAssociate = body.assignedAssociate;
       }
     }
@@ -123,6 +123,11 @@ export async function PUT(
     // Append / replace status updates
     if (Array.isArray(body.statusUpdates)) {
       existing.statusUpdates = body.statusUpdates;
+    }
+
+    // Update documents array
+    if (Array.isArray(body.documents)) {
+      existing.documents = body.documents;
     }
 
     // Update status and institution stats if changed
@@ -176,7 +181,7 @@ export async function DELETE(
 ) {
   try {
     const user = await getCurrentUserFromSession();
-    if (!user || user.role !== "admin") {
+    if (!user || (user.role !== "admin" && user.role !== "partner")) {
       return NextResponse.json(
         { error: "Forbidden. Only Senior Lawyer / Admin can delete case files." },
         { status: 403 }

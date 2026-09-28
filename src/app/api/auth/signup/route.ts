@@ -34,10 +34,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Only Advocate and Associate can self-register
-    // Admin accounts must be created manually or promoted by an administrator
-    const assignedRole: "advocate" | "associate" =
-      role === "advocate" ? "advocate" : "associate";
+    // Senior Lawyer / Partner and Associate / Advocate can self-register
+    // Super Admin accounts are managed by existing administrators
+    const assignedRole: UserRole =
+      role === "partner" ? "partner" : role === "associate" ? "associate" : "advocate";
 
     const passwordHash = hashPassword(password);
 

@@ -23,16 +23,16 @@ import {
 import { toast } from "sonner";
 import { BRANDING } from "@/config/branding";
 
-const SIGNUP_ROLES: { value: "advocate" | "associate"; label: string; desc: string }[] = [
+const SIGNUP_ROLES: { value: "partner" | "advocate" | "associate"; label: string; desc: string }[] = [
   {
-    value: "advocate",
-    label: "Advocate",
-    desc: "Practicing advocate managing briefs & assigned hearings",
+    value: "partner",
+    label: "Senior Lawyer / Partner",
+    desc: "Partner managing briefs, overseeing associates & hearings",
   },
   {
-    value: "associate",
-    label: "Associate",
-    desc: "Chamber associate assisting with research, files & proceedings",
+    value: "advocate",
+    label: "Associate Lawyer / Advocate",
+    desc: "Advocate / associate handling court files & proceedings",
   },
 ];
 
@@ -57,7 +57,7 @@ export default function HomePage() {
     name: "",
     email: "",
     password: "",
-    role: "advocate" as "advocate" | "associate",
+    role: "advocate" as "partner" | "advocate" | "associate",
     chamberDesignation: "Advocate",
     barEnrollmentNo: "",
     phone: "",
@@ -623,7 +623,9 @@ export default function HomePage() {
                                 ...signupData,
                                 role: r.value,
                                 chamberDesignation:
-                                  r.value === "advocate" ? "Advocate" : "Associate Advocate",
+                                  r.value === "partner"
+                                    ? "Senior Counsel & Partner"
+                                    : "Advocate",
                               })
                             }
                             className={`p-2 sm:p-2.5 rounded-xl border text-left transition-all cursor-pointer backdrop-blur-md ${

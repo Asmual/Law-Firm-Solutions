@@ -23,23 +23,33 @@ import { CardSkeleton, TableSkeleton } from "@/components/common/Skeleton";
 
 const ROLE_COLORS: Record<string, { bg: string; text: string; label: string }> = {
   admin: {
-    bg: "bg-[#724916]/15 border border-[#ab8c67] dark:bg-[#cca776]/20 dark:border-[#cca776]/40",
-    text: "text-[#724916] dark:text-[#cca776]",
-    label: "Admin",
+    bg: "bg-[#724916] text-[#cca776] border border-[#ab8c67]",
+    text: "text-[#cca776]",
+    label: "Super Admin",
   },
-  advocate: {
+  partner: {
     bg: "bg-[#dfceb7] border border-[#ab8c67] dark:bg-slate-800 dark:border-slate-700",
     text: "text-[#0F172B] dark:text-slate-200",
-    label: "Advocate",
+    label: "Senior Lawyer / Partner",
+  },
+  advocate: {
+    bg: "bg-[#cbb292]/60 border border-[#ab8c67] dark:bg-[#cca776]/15 dark:border-[#cca776]/30",
+    text: "text-[#724916] dark:text-[#cca776]",
+    label: "Associate Lawyer / Advocate",
   },
   associate: {
-    bg: "bg-[#cca776]/15 border border-[#cca776]/40 dark:bg-[#cca776]/10 dark:border-[#cca776]/30",
+    bg: "bg-[#cbb292]/60 border border-[#ab8c67] dark:bg-[#cca776]/15 dark:border-[#cca776]/30",
     text: "text-[#724916] dark:text-[#cca776]",
-    label: "Associate",
+    label: "Associate Lawyer / Advocate",
   },
 };
 
-const ALL_ROLES: ("admin" | "advocate" | "associate")[] = ["admin", "advocate", "associate"];
+const ALL_ROLES: ("admin" | "partner" | "advocate" | "associate")[] = [
+  "admin",
+  "partner",
+  "advocate",
+  "associate",
+];
 
 export default function TeamPage() {
   const [users, setUsers] = useState<User[]>([]);

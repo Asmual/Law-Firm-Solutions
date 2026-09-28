@@ -244,65 +244,65 @@ export default function TeamPage() {
 
       {/* Metrics Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
-          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-[#ab8c67] bg-[#dfceb7] shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[11px] font-bold text-[#4a3e33] dark:text-slate-400 uppercase tracking-wider block">
             Total Practitioners
           </span>
-          <span className="text-2xl font-bold text-slate-900 dark:text-white mt-1 block">
+          <span className="text-2xl font-bold text-[#0F172B] dark:text-white mt-1 block">
             {users.length}
           </span>
         </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
-          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-[#ab8c67] bg-[#dfceb7] shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[11px] font-bold text-[#4a3e33] dark:text-slate-400 uppercase tracking-wider block">
             Advocates
           </span>
           <span className="text-2xl font-bold text-[#724916] dark:text-[#cca776] mt-1 block">
             {totalAdvocates}
           </span>
         </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
-          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-[#ab8c67] bg-[#dfceb7] shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[11px] font-bold text-[#4a3e33] dark:text-slate-400 uppercase tracking-wider block">
             Associates
           </span>
           <span className="text-2xl font-bold text-[#0F172B] dark:text-slate-200 mt-1 block">
             {totalAssociates}
           </span>
         </div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/80 shadow-sm">
-          <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
+        <div className="p-4 rounded-xl border border-[#ab8c67] bg-[#dfceb7] shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[11px] font-bold text-[#4a3e33] dark:text-slate-400 uppercase tracking-wider block">
             Admins
           </span>
-          <span className="text-2xl font-bold text-[#cca776] mt-1 block">
+          <span className="text-2xl font-bold text-[#724916] dark:text-[#cca776] mt-1 block">
             {totalAdmins}
           </span>
         </div>
       </div>
 
       {/* Search & Filters */}
-      <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-sm flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="p-4 rounded-xl border border-[#ab8c67] bg-[#dfceb7] shadow-sm flex flex-col md:flex-row items-center justify-between gap-3 dark:border-slate-800 dark:bg-slate-900/90">
         {/* Search */}
         <div className="relative w-full md:w-80">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-[#724916] dark:text-slate-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search practitioner by name, email, roll no..."
-            className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 pl-9 pr-3 py-1.5 text-xs text-slate-900 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[#cca776] focus:outline-none transition-colors"
+            className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] pl-9 pr-3 py-1.5 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none transition-colors dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500"
           />
         </div>
 
         {/* Role Filter Pills */}
-        <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-950 p-1 rounded-lg border border-slate-200 dark:border-slate-800 text-xs w-full md:w-auto overflow-x-auto">
-          <span className="text-slate-500 px-2 font-medium shrink-0">Role:</span>
+        <div className="flex items-center gap-1 bg-[#cbb292] p-1 rounded-lg border border-[#ab8c67] text-xs w-full md:w-auto overflow-x-auto dark:bg-slate-950 dark:border-slate-800">
+          <span className="text-[#4a3e33] dark:text-slate-500 px-2 font-bold shrink-0">Role:</span>
           {["all", "advocate", "associate", "admin"].map((r) => (
             <button
               key={r}
               onClick={() => setRoleFilter(r)}
-              className={`px-3 py-1 rounded-md text-xs font-medium transition-colors capitalize shrink-0 cursor-pointer ${
+              className={`px-3 py-1 rounded-md text-xs font-bold transition-colors capitalize shrink-0 cursor-pointer ${
                 roleFilter === r
-                  ? "bg-[#cca776] text-slate-950 font-bold"
-                  : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white"
+                  ? "bg-[#724916] text-[#cca776] shadow-sm dark:bg-[#cca776] dark:text-slate-950"
+                  : "text-[#724916] hover:bg-[#724916]/10 dark:text-slate-400 dark:hover:text-white"
               }`}
             >
               {r === "all" ? "All Profiles" : r}
@@ -330,13 +330,13 @@ export default function TeamPage() {
               return (
                 <div
                   key={userId}
-                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 p-5 shadow-sm dark:shadow-lg hover:border-[#cca776]/50 transition-all group flex flex-col justify-between"
+                  className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 shadow-sm hover:border-[#724916] transition-all group flex flex-col justify-between dark:border-slate-800 dark:bg-slate-900/90"
                 >
                   <div className="space-y-4">
                     {/* Top Row: Avatar & Role */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="relative">
-                        <div className="h-14 w-14 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-[#cca776]/40 flex items-center justify-center font-bold text-lg text-[#cca776] shadow-md">
+                        <div className="h-14 w-14 rounded-full overflow-hidden bg-[#ece1d0] border-2 border-[#ab8c67] flex items-center justify-center font-bold text-lg text-[#724916] shadow-sm dark:bg-slate-800 dark:border-[#cca776]/40 dark:text-[#cca776]">
                           {user.avatarUrl ? (
                             <img
                               src={user.avatarUrl}
@@ -349,8 +349,8 @@ export default function TeamPage() {
                         </div>
                         {/* Online/Active status dot */}
                         <span
-                          className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white dark:border-slate-900 ${
-                            user.isActive !== false ? "bg-emerald-400" : "bg-rose-500"
+                          className={`absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-[#dfceb7] dark:border-slate-900 ${
+                            user.isActive !== false ? "bg-[#724916] dark:bg-[#cca776]" : "bg-rose-500"
                           }`}
                           title={user.isActive !== false ? "Active Member" : "Suspended"}
                         />
@@ -372,7 +372,7 @@ export default function TeamPage() {
 
                     {/* Member Details */}
                     <div>
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white group-hover:text-[#cca776] transition-colors flex items-center gap-1.5">
+                      <h3 className="text-base font-bold text-[#0F172B] dark:text-white group-hover:text-[#724916] dark:group-hover:text-[#cca776] transition-colors flex items-center gap-1.5">
                         <span>{user.name}</span>
                         {user.authProvider === "google" && (
                           <span className="rounded bg-[#724916]/10 px-1.5 py-0.2 text-[9px] font-semibold text-[#724916] dark:text-[#cca776] border border-[#ab8c67]/40">
@@ -380,26 +380,26 @@ export default function TeamPage() {
                           </span>
                         )}
                       </h3>
-                      <p className="text-xs text-slate-600 dark:text-slate-300 font-medium mt-0.5">
+                      <p className="text-xs text-[#4a3e33] dark:text-slate-300 font-bold mt-0.5">
                         {user.chamberDesignation || "Chamber Practitioner"}
                       </p>
                       {user.barEnrollmentNo && (
-                        <div className="flex items-center gap-1 text-[11px] text-slate-400 mt-1 font-mono">
-                          <Award className="h-3 w-3 text-[#cca776]" />
+                        <div className="flex items-center gap-1 text-[11px] text-[#4a3e33] dark:text-slate-400 mt-1 font-mono font-medium">
+                          <Award className="h-3 w-3 text-[#724916] dark:text-[#cca776]" />
                           <span>Bar Roll: {user.barEnrollmentNo}</span>
                         </div>
                       )}
                     </div>
 
                     {/* Contact Info */}
-                    <div className="space-y-1.5 pt-3 border-t border-slate-800/80 text-xs">
-                      <div className="flex items-center gap-2 text-slate-400 truncate">
-                        <Mail className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                    <div className="space-y-1.5 pt-3 border-t border-[#ab8c67]/40 dark:border-slate-800/80 text-xs">
+                      <div className="flex items-center gap-2 text-[#4a3e33] dark:text-slate-400 truncate font-medium">
+                        <Mail className="h-3.5 w-3.5 text-[#724916] dark:text-slate-500 shrink-0" />
                         <span className="truncate">{user.email}</span>
                       </div>
                       {user.phone && (
-                        <div className="flex items-center gap-2 text-slate-400 truncate">
-                          <Phone className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+                        <div className="flex items-center gap-2 text-[#4a3e33] dark:text-slate-400 truncate font-medium">
+                          <Phone className="h-3.5 w-3.5 text-[#724916] dark:text-slate-500 shrink-0" />
                           <span>{user.phone}</span>
                         </div>
                       )}
@@ -407,12 +407,12 @@ export default function TeamPage() {
                   </div>
 
                   {/* Card Footer: View Progress Button */}
-                  <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
+                  <div className="pt-4 mt-4 border-t border-[#ab8c67]/60 dark:border-slate-800">
                     <Link
                       href={`/team/${userId}`}
-                      className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-slate-100 hover:bg-[#cca776] text-slate-800 hover:text-slate-950 border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 hover:border-[#cca776] text-xs font-semibold transition-all cursor-pointer group-hover:shadow-md"
+                      className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-[#cbb292] hover:bg-[#724916] text-[#724916] hover:text-[#cca776] border border-[#ab8c67] text-xs font-bold transition-all cursor-pointer group-hover:shadow-md dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700 dark:hover:bg-[#cca776] dark:hover:text-slate-950"
                     >
-                      <Briefcase className="h-3.5 w-3.5 text-[#cca776] group-hover:text-slate-950 transition-colors" />
+                      <Briefcase className="h-3.5 w-3.5 text-[#724916] group-hover:text-[#cca776] dark:text-[#cca776] dark:group-hover:text-slate-950 transition-colors" />
                       <span>View Profile &amp; Work Progress</span>
                       <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
@@ -424,10 +424,10 @@ export default function TeamPage() {
         )
       ) : (
         /* View Mode: Management Table */
-        <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-sm dark:shadow-xl">
+        <div className="overflow-hidden rounded-xl border border-[#ab8c67] bg-[#dfceb7] shadow-sm dark:border-slate-800 dark:bg-slate-900/90 dark:shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 dark:bg-slate-950 text-slate-600 dark:text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-200 dark:border-slate-800">
+              <thead className="bg-[#cbb292] text-[#724916] uppercase tracking-wider font-bold border-b border-[#ab8c67] dark:bg-slate-950 dark:text-slate-400 dark:border-slate-800">
                 <tr>
                   <th className="px-4 py-3">Advocate / Member</th>
                   <th className="px-4 py-3">Designation</th>
@@ -578,7 +578,7 @@ export default function TeamPage() {
                                     className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer disabled:opacity-50 whitespace-nowrap ${
                                       user.isActive !== false
                                         ? "bg-rose-950/40 text-rose-400 border border-rose-800/60 hover:bg-rose-900/60"
-                                        : "bg-emerald-950/40 text-emerald-400 border border-emerald-800/60 hover:bg-emerald-900/60"
+                                        : "bg-[#724916] text-[#cca776] border border-[#ab8c67] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f]"
                                     }`}
                                   >
                                     {user.isActive !== false ? (

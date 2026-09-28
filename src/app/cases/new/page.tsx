@@ -1034,8 +1034,8 @@ function CaseFormContent() {
               </div>
 
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-lg font-medium">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="inline-flex items-center gap-1.5 text-xs text-[#724916] bg-[#724916]/10 border border-[#ab8c67] px-3 py-1.5 rounded-lg font-bold dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#724916] dark:bg-[#cca776] animate-pulse"></span>
                   Active Institution Record Selected
                 </span>
               </div>

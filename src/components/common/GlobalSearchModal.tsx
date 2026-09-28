@@ -100,7 +100,7 @@ export function GlobalSearchModal({ isOpen, onClose }: GlobalSearchModalProps) {
             className="w-full flex items-center justify-between rounded-lg p-2 hover:bg-[#cca776]/25 dark:hover:bg-slate-800 transition-colors text-left"
           >
             <div className="flex items-center gap-3">
-              <UserCircle2 className="h-4 w-4 text-emerald-700 dark:text-emerald-500" />
+              <UserCircle2 className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <div>
                 <span className="font-bold text-black dark:text-slate-200">Client Reports &amp; Letterhead</span>
                 <p className="text-[11px] text-[#4a3e33] dark:text-slate-400">Generate monthly latest position reports &amp; associate workloads</p>

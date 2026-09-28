@@ -445,7 +445,7 @@ export default function MemberProfileMonitoringPage({
       </div>
 
       {/* 1. Member Profile Banner - Compact & Circular Avatar */}
-      <div className="relative overflow-hidden rounded-xl bg-slate-900/90 p-4 sm:p-5 text-white shadow-lg border border-slate-800">
+      <div className="relative overflow-hidden rounded-xl bg-[#dfceb7] p-4 sm:p-5 text-[#0F172B] shadow-sm border border-[#ab8c67] dark:bg-slate-900/90 dark:text-white dark:border-slate-800">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
             {/* Avatar (Circular with Gold Ring) */}
@@ -454,10 +454,10 @@ export default function MemberProfileMonitoringPage({
                 <img
                   src={member.avatarUrl}
                   alt={member.name}
-                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover ring-2 ring-[#cca776] shadow-md"
+                  className="h-20 w-20 sm:h-24 sm:w-24 rounded-full object-cover ring-2 ring-[#724916] dark:ring-[#cca776] shadow-md"
                 />
               ) : (
-                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776] ring-2 ring-[#cca776]/40 font-bold text-2xl sm:text-3xl shadow-md">
+                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-[#ece1d0] text-[#724916] ring-2 ring-[#ab8c67] font-bold text-2xl sm:text-3xl shadow-md dark:bg-[#cca776]/15 dark:text-[#cca776] dark:ring-[#cca776]/40">
                   {member.name.charAt(0).toUpperCase()}
                 </div>
               )}
@@ -466,16 +466,16 @@ export default function MemberProfileMonitoringPage({
             {/* Information */}
             <div className="space-y-1.5 min-w-0">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white">
+                <h1 className="text-lg sm:text-xl font-bold tracking-tight text-[#0F172B] dark:text-white">
                   {member.name}
                 </h1>
                 <span
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold uppercase ${
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold uppercase ${
                     member.role === "admin"
-                      ? "bg-[#cca776]/20 text-[#cca776] border border-[#cca776]/40"
+                      ? "bg-[#724916] text-[#cca776] border border-[#ab8c67] dark:bg-[#cca776]/20 dark:text-[#cca776] dark:border-[#cca776]/40"
                       : member.role === "advocate"
-                      ? "bg-[#dfceb7] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700"
-                      : "bg-[#cca776]/15 text-[#724916] border border-[#cca776]/40 dark:bg-[#cca776]/10 dark:text-[#cca776] dark:border-[#cca776]/30"
+                      ? "bg-[#cbb292] text-[#724916] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700"
+                      : "bg-[#ece1d0] text-[#724916] border border-[#ab8c67] dark:bg-[#cca776]/10 dark:text-[#cca776] dark:border-[#cca776]/30"
                   }`}
                 >
                   <ShieldCheck className="h-3 w-3" />
@@ -483,37 +483,37 @@ export default function MemberProfileMonitoringPage({
                 </span>
 
                 {member.isActive === false && (
-                  <span className="rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-semibold text-rose-400 border border-rose-500/30">
+                  <span className="rounded-full bg-rose-500/15 px-2 py-0.5 text-[10px] font-semibold text-rose-500 border border-rose-500/30">
                     Suspended
                   </span>
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-slate-400">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1 text-xs text-[#4a3e33] dark:text-slate-400 font-medium">
                 <span className="flex items-center gap-1.5">
-                  <Mail className="h-3.5 w-3.5 text-[#cca776]" />
+                  <Mail className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                   {member.email}
                 </span>
                 {member.phone && (
                   <span className="flex items-center gap-1.5">
-                    <Phone className="h-3.5 w-3.5 text-[#cca776]" />
+                    <Phone className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                     {member.phone}
                   </span>
                 )}
                 {member.barEnrollmentNo && (
-                  <span className="flex items-center gap-1.5 text-slate-300">
-                    <Gavel className="h-3.5 w-3.5 text-[#cca776]" />
-                    Bar Roll: <span className="font-mono text-white">{member.barEnrollmentNo}</span>
+                  <span className="flex items-center gap-1.5 text-[#0F172B] dark:text-slate-300">
+                    <Gavel className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
+                    Bar Roll: <span className="font-mono font-bold text-[#724916] dark:text-white">{member.barEnrollmentNo}</span>
                   </span>
                 )}
               </div>
 
-              <p className="text-xs font-medium text-slate-300">
+              <p className="text-xs font-bold text-[#0F172B] dark:text-slate-300">
                 {member.chamberDesignation || "Legal Practitioner"}
               </p>
 
               {member.bio && (
-                <p className="text-xs text-slate-400 max-w-xl italic mt-1">
+                <p className="text-xs text-[#4a3e33] dark:text-slate-400 max-w-xl italic mt-1 font-medium">
                   &ldquo;{member.bio}&rdquo;
                 </p>
               )}
@@ -526,7 +526,7 @@ export default function MemberProfileMonitoringPage({
               <button
                 type="button"
                 onClick={() => setShowAssignModal(true)}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-[#cca776] px-4 py-2 text-xs font-bold text-slate-950 hover:bg-[#cca776]/90 shadow-md shadow-[#cca776]/20 transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-[#724916] px-4 py-2 text-xs font-bold text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 shadow-sm transition-all cursor-pointer"
               >
                 <Plus className="h-4 w-4" />
                 <span>Assign Case Brief</span>
@@ -536,60 +536,57 @@ export default function MemberProfileMonitoringPage({
             <button
               type="button"
               onClick={handleExportMemberCSV}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-300 hover:bg-slate-700 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#ab8c67] bg-[#cbb292] px-3 py-2 text-xs font-bold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] transition-colors cursor-pointer dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
             >
-              <FileSpreadsheet className="h-3.5 w-3.5 text-[#cca776]" />
+              <FileSpreadsheet className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
               <span>CSV</span>
             </button>
 
             <button
               type="button"
               onClick={handleExportMemberPDF}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#cca776]/40 bg-[#cca776]/10 px-3.5 py-2 text-xs font-semibold text-[#cca776] hover:bg-[#cca776]/20 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#ab8c67] bg-[#cbb292] px-3.5 py-2 text-xs font-bold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] transition-colors cursor-pointer dark:border-[#cca776]/40 dark:bg-[#cca776]/10 dark:text-[#cca776]"
             >
               <Download className="h-3.5 w-3.5" />
               <span>Export Docket (PDF)</span>
             </button>
           </div>
         </div>
-
-        {/* Ambient glow decoration */}
-        <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-[#cca776]/10 blur-3xl pointer-events-none" />
       </div>
 
       {/* 2. Key Metrics Overview */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Assigned Briefs</span>
-          <p className="text-xl font-bold text-[#cca776] mt-1">{cases.length}</p>
+        <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[10px] font-bold text-[#4a3e33] uppercase tracking-wider dark:text-slate-400">Assigned Briefs</span>
+          <p className="text-xl font-bold text-[#724916] dark:text-[#cca776] mt-1">{cases.length}</p>
         </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Running</span>
-          <p className="text-xl font-bold text-[#cca776] mt-1">{runningCount}</p>
+        <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[10px] font-bold text-[#4a3e33] uppercase tracking-wider dark:text-slate-400">Running</span>
+          <p className="text-xl font-bold text-[#724916] dark:text-[#cca776] mt-1">{runningCount}</p>
         </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-[#cca776] uppercase tracking-wider">Stay Granted</span>
-          <p className="text-xl font-bold text-[#cca776] mt-1">{stayCount}</p>
+        <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[10px] font-bold text-[#4a3e33] uppercase tracking-wider dark:text-[#cca776]">Stay Granted</span>
+          <p className="text-xl font-bold text-[#724916] dark:text-[#cca776] mt-1">{stayCount}</p>
         </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Adjourned</span>
-          <p className="text-xl font-bold text-[#dfceb7] mt-1">{adjournedCount}</p>
+        <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[10px] font-bold text-[#4a3e33] uppercase tracking-wider dark:text-slate-400">Adjourned</span>
+          <p className="text-xl font-bold text-[#0F172B] dark:text-[#dfceb7] mt-1">{adjournedCount}</p>
         </div>
-        <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-          <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Disposed / Decreed</span>
-          <p className="text-xl font-bold text-white mt-1">{disposedCount}</p>
+        <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+          <span className="text-[10px] font-bold text-[#4a3e33] uppercase tracking-wider dark:text-slate-400">Disposed / Decreed</span>
+          <p className="text-xl font-bold text-[#0F172B] dark:text-white mt-1">{disposedCount}</p>
         </div>
       </div>
 
       {/* 3. Section Tabs */}
-      <div className="flex rounded-xl bg-slate-900/90 p-1 border border-slate-800 w-full sm:w-80 self-start">
+      <div className="flex rounded-xl bg-[#dfceb7] p-1 border border-[#ab8c67] w-full sm:w-80 self-start dark:bg-slate-900/90 dark:border-slate-800">
         <button
           type="button"
           onClick={() => setActiveSection("cases")}
-          className={`flex-1 rounded-lg py-2 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+          className={`flex-1 rounded-lg py-2 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
             activeSection === "cases"
-              ? "bg-[#cca776] text-slate-950 shadow-md font-bold"
-              : "text-slate-400 hover:text-slate-200"
+              ? "bg-[#724916] text-[#cca776] shadow-md dark:bg-[#cca776] dark:text-slate-950"
+              : "text-[#724916] hover:bg-[#cbb292]/50 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
           <Briefcase className="h-3.5 w-3.5" />
@@ -599,10 +596,10 @@ export default function MemberProfileMonitoringPage({
         <button
           type="button"
           onClick={() => setActiveSection("worklog")}
-          className={`flex-1 rounded-lg py-2 text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+          className={`flex-1 rounded-lg py-2 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
             activeSection === "worklog"
-              ? "bg-[#cca776] text-slate-950 shadow-md font-bold"
-              : "text-slate-400 hover:text-slate-200"
+              ? "bg-[#724916] text-[#cca776] shadow-md dark:bg-[#cca776] dark:text-slate-950"
+              : "text-[#724916] hover:bg-[#cbb292]/50 dark:text-slate-400 dark:hover:text-slate-200"
           }`}
         >
           <Clock className="h-3.5 w-3.5" />
@@ -614,22 +611,22 @@ export default function MemberProfileMonitoringPage({
       {activeSection === "cases" && (
         <div className="space-y-4 animate-in fade-in">
           {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/80 p-4 rounded-xl border border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#dfceb7] p-4 rounded-xl border border-[#ab8c67] dark:bg-slate-900/80 dark:border-slate-800">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+              <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#724916] dark:text-slate-400" />
               <input
                 type="text"
                 placeholder="Filter cases by file no, client, case no, party..."
                 value={caseSearchQuery}
                 onChange={(e) => setCaseSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-slate-700 bg-slate-950 pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
+                className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] pl-8 pr-3 py-1.5 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
               />
             </div>
 
             <select
               value={caseStatusFilter}
               onChange={(e) => setCaseStatusFilter(e.target.value)}
-              className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-white focus:border-[#cca776] focus:outline-none"
+              className="rounded-lg border border-[#ab8c67] bg-[#f3ebd9] px-3 py-1.5 text-xs text-[#0F172B] font-bold focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
             >
               <option value="all">All Statuses</option>
               <option value="running">Running</option>
@@ -646,10 +643,10 @@ export default function MemberProfileMonitoringPage({
               <p>Loading assigned cases...</p>
             </div>
           ) : filteredCases.length === 0 ? (
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-12 text-center text-slate-400">
-              <Briefcase className="h-10 w-10 text-slate-600 mx-auto mb-2 opacity-50" />
-              <p className="font-semibold text-white">No cases assigned to this member</p>
-              <p className="text-xs text-slate-500 mt-1">
+            <div className="rounded-2xl border border-dashed border-[#ab8c67] bg-[#dfceb7] p-12 text-center text-[#4a3e33] dark:border-slate-800 dark:bg-slate-900/60">
+              <Briefcase className="h-10 w-10 text-[#724916] dark:text-slate-600 mx-auto mb-2 opacity-50" />
+              <p className="font-bold text-[#0F172B] dark:text-white">No cases assigned to this member</p>
+              <p className="text-xs text-[#4a3e33] dark:text-slate-500 mt-1 font-medium">
                 Use the &ldquo;Assign Case Brief&rdquo; button above to allocate litigation to this practitioner.
               </p>
             </div>
@@ -663,22 +660,22 @@ export default function MemberProfileMonitoringPage({
                 return (
                   <div
                     key={caseId}
-                    className="rounded-xl border border-slate-800 bg-slate-900/80 p-4 hover:border-slate-700 transition-all space-y-2.5"
+                    className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-4 hover:border-[#724916] transition-all space-y-2.5 dark:border-slate-800 dark:bg-slate-900/80"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono font-bold text-[#cca776] text-sm">
+                        <span className="font-mono font-bold text-[#724916] text-sm dark:text-[#cca776]">
                           {c.chamberFileNo}
                         </span>
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
                             c.status === "running"
-                              ? "bg-[#724916]/20 text-[#cca776] border border-[#cca776]/40"
+                              ? "bg-[#724916] text-[#cca776] border border-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30"
                               : c.status === "stay_granted"
-                              ? "bg-[#cca776]/20 text-[#cca776] border border-[#cca776]/40"
+                              ? "bg-[#724916]/80 text-[#cca776] border border-[#ab8c67] dark:bg-[#cca776]/20 dark:text-[#cca776]"
                               : c.status === "adjourned"
-                              ? "bg-slate-800 text-slate-300 border border-slate-700"
-                              : "bg-[#0F172B] text-slate-300 border border-slate-700"
+                              ? "bg-[#cbb292] text-[#724916] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300"
+                              : "bg-[#ece1d0] text-[#0F172B] border border-[#ab8c67] dark:bg-slate-900 dark:text-slate-300"
                           }`}
                         >
                           {c.status.replace("_", " ")}
@@ -688,7 +685,7 @@ export default function MemberProfileMonitoringPage({
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/cases/new?id=${caseId}`}
-                          className="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-[#cca776] border border-[#cca776]/30 transition-colors"
+                          className="px-3 py-1 text-xs font-bold rounded-lg bg-[#cbb292] hover:bg-[#724916] text-[#724916] hover:text-[#cca776] border border-[#ab8c67] transition-colors dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-[#cca776] dark:border-[#cca776]/30"
                         >
                           View &amp; Edit Brief
                         </Link>
@@ -697,34 +694,34 @@ export default function MemberProfileMonitoringPage({
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
                       <div>
-                        <span className="text-slate-400 block text-[10px]">Client / Institution:</span>
-                        <span className="font-semibold text-white">{c.institutionName}</span>
+                        <span className="text-[#4a3e33] block text-[10px] font-bold dark:text-slate-400">Client / Institution:</span>
+                        <span className="font-bold text-[#0F172B] dark:text-white">{c.institutionName}</span>
                       </div>
 
                       <div>
-                        <span className="text-slate-400 block text-[10px]">Case Number &amp; Court:</span>
-                        <span className="font-mono text-slate-200">
+                        <span className="text-[#4a3e33] block text-[10px] font-bold dark:text-slate-400">Case Number &amp; Court:</span>
+                        <span className="font-mono font-bold text-[#0F172B] dark:text-slate-200">
                           {c.caseNumbers?.[0]?.caseNumber || "—"} ({c.caseNumbers?.[0]?.courtDivision || "Court"})
                         </span>
                       </div>
 
                       <div>
-                        <span className="text-slate-400 block text-[10px]">Parties:</span>
-                        <span className="text-slate-300 truncate block" title={c.parties?.[0]?.partyNameDetails}>
+                        <span className="text-[#4a3e33] block text-[10px] font-bold dark:text-slate-400">Parties:</span>
+                        <span className="text-[#4a3e33] dark:text-slate-300 truncate block font-medium" title={c.parties?.[0]?.partyNameDetails}>
                           {c.parties?.[0]?.partyNameDetails || "—"}
                         </span>
                       </div>
                     </div>
 
                     {(nextDate || latestOrder) && (
-                      <div className="bg-slate-950/60 rounded-lg p-2.5 border border-slate-800/80 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                      <div className="bg-[#ece1d0] rounded-lg p-2.5 border border-[#ab8c67]/60 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1 dark:bg-slate-950/60 dark:border-slate-800/80">
                         {latestOrder && (
-                          <span className="text-slate-400 truncate max-w-xl">
-                            <strong className="text-slate-300">Latest Diary:</strong> {latestOrder}
+                          <span className="text-[#4a3e33] dark:text-slate-400 truncate max-w-xl font-medium">
+                            <strong className="text-[#0F172B] dark:text-slate-300 font-bold">Latest Diary:</strong> {latestOrder}
                           </span>
                         )}
                         {nextDate && (
-                          <span className="text-[#cca776] font-mono shrink-0 flex items-center gap-1">
+                          <span className="text-[#724916] dark:text-[#cca776] font-mono shrink-0 flex items-center gap-1 font-bold">
                             <Calendar className="h-3 w-3" />
                             Next: {nextDate}
                           </span>
@@ -742,12 +739,12 @@ export default function MemberProfileMonitoringPage({
       {/* 5. Section 2: Work Log & Activity Timeline */}
       {activeSection === "worklog" && (
         <div className="space-y-4 animate-in fade-in">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-4">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Clock className="h-4 w-4 text-[#cca776]" />
+          <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
+            <h3 className="text-sm font-bold text-[#0F172B] dark:text-white flex items-center gap-2">
+              <Clock className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <span>Chamber Audit &amp; Performance Trail</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-[#4a3e33] dark:text-slate-400 mt-1 font-medium">
               Supervisory trail of cases updated, diary remarks entered, and actions logged by {member.name}
             </p>
           </div>
@@ -775,16 +772,16 @@ export default function MemberProfileMonitoringPage({
                   <div key={logId} className="relative pl-6">
                     <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-slate-900 border-2 border-[#cca776]" />
 
-                    <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 space-y-1.5">
+                    <div className="rounded-xl border border-[#ab8c67]/60 bg-[#ece1d0] p-4 space-y-1.5 dark:border-slate-800 dark:bg-slate-900/70">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="text-xs font-bold text-[#cca776] uppercase tracking-wide">
+                        <span className="text-xs font-bold text-[#724916] uppercase tracking-wide dark:text-[#cca776]">
                           {log.action.replace(":", " • ")}
                         </span>
-                        <span className="text-[11px] text-slate-400 font-mono">{formattedTime}</span>
+                        <span className="text-[11px] text-[#4a3e33] dark:text-slate-400 font-mono font-medium">{formattedTime}</span>
                       </div>
-                      <p className="text-xs text-white font-medium">{log.description}</p>
+                      <p className="text-xs text-[#0F172B] font-bold dark:text-white">{log.description}</p>
                       {log.entityTitle && (
-                        <span className="inline-block text-[10px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                        <span className="inline-block text-[10px] font-mono text-[#724916] bg-[#cbb292] px-2 py-0.5 rounded border border-[#ab8c67] dark:bg-slate-950 dark:text-slate-400 dark:border-slate-800 font-bold">
                           Ref: {log.entityTitle}
                         </span>
                       )}
@@ -800,21 +797,21 @@ export default function MemberProfileMonitoringPage({
       {/* 6. Case Assignment Modal */}
       {showAssignModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="w-full max-w-lg rounded-2xl border border-[#ab8c67] bg-[#dfceb7] p-6 shadow-2xl space-y-5 dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center justify-between border-b border-[#ab8c67]/60 dark:border-slate-800 pb-3">
               <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Briefcase className="h-4 w-4 text-[#cca776]" />
+                <h3 className="text-sm font-bold text-[#0F172B] dark:text-white flex items-center gap-2">
+                  <Briefcase className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
                   <span>Assign Case File to {member.name}</span>
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-[#4a3e33] dark:text-slate-400 mt-0.5 font-medium">
                   Allocate chamber brief responsibility and track ongoing courtroom hearings
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setShowAssignModal(false)}
-                className="text-slate-400 hover:text-white text-xs font-semibold p-1"
+                className="text-[#724916] hover:bg-[#cbb292]/50 hover:text-[#0F172B] text-xs font-bold p-1 rounded-lg dark:text-slate-400 dark:hover:text-white"
               >
                 ✕
               </button>
@@ -823,14 +820,14 @@ export default function MemberProfileMonitoringPage({
             <form onSubmit={handleAssignCase} className="space-y-4 text-xs">
               {/* Select Case */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                   Select Chamber Case File *
                 </label>
                 <select
                   required
                   value={selectedCaseToAssign}
                   onChange={(e) => setSelectedCaseToAssign(e.target.value)}
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-[#cca776] focus:outline-none"
+                  className="w-full rounded-xl border border-[#ab8c67] bg-[#f3ebd9] px-3 py-2 text-[#0F172B] font-medium focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 >
                   <option value="">-- Choose Case File --</option>
                   {allCases.map((c) => (
@@ -843,17 +840,17 @@ export default function MemberProfileMonitoringPage({
 
               {/* Assignment Role Capacity */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                   Assignment Capacity
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setAssignRoleType("advocate")}
-                    className={`rounded-lg py-2 text-xs font-semibold border transition-all cursor-pointer ${
+                    className={`rounded-lg py-2 text-xs font-bold border transition-all cursor-pointer ${
                       assignRoleType === "advocate"
                         ? "bg-[#724916] border-[#ab8c67] text-[#cca776]"
-                        : "border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
+                        : "border-[#ab8c67] bg-[#cbb292] text-[#724916] hover:bg-[#724916]/10 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400"
                     }`}
                   >
                     Lead Advocate
@@ -862,10 +859,10 @@ export default function MemberProfileMonitoringPage({
                   <button
                     type="button"
                     onClick={() => setAssignRoleType("associate")}
-                    className={`rounded-lg py-2 text-xs font-semibold border transition-all cursor-pointer ${
+                    className={`rounded-lg py-2 text-xs font-bold border transition-all cursor-pointer ${
                       assignRoleType === "associate"
-                        ? "bg-[#cca776] border-[#cca776] text-slate-950"
-                        : "border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
+                        ? "bg-[#724916] border-[#ab8c67] text-[#cca776]"
+                        : "border-[#ab8c67] bg-[#cbb292] text-[#724916] hover:bg-[#724916]/10 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-400"
                     }`}
                   >
                     Assisting Associate
@@ -875,7 +872,7 @@ export default function MemberProfileMonitoringPage({
 
               {/* Remarks / Instructions */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                   Internal Instructions / Assignment Remarks
                 </label>
                 <textarea
@@ -883,16 +880,16 @@ export default function MemberProfileMonitoringPage({
                   value={assignRemarks}
                   onChange={(e) => setAssignRemarks(e.target.value)}
                   placeholder="e.g. Assigned to conduct upcoming High Court stay extension hearing..."
-                  className="w-full rounded-xl border border-slate-700 bg-slate-950 p-3 text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none resize-none"
+                  className="w-full rounded-xl border border-[#ab8c67] bg-[#f3ebd9] p-3 text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none resize-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
               {/* Modal Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#ab8c67]/60 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowAssignModal(false)}
-                  className="px-4 py-2 rounded-xl text-slate-400 hover:text-white transition-colors cursor-pointer"
+                  className="px-4 py-2 rounded-xl text-[#724916] hover:bg-[#cbb292]/50 font-bold transition-colors cursor-pointer dark:text-slate-400 dark:hover:text-white"
                 >
                   Cancel
                 </button>
@@ -900,7 +897,7 @@ export default function MemberProfileMonitoringPage({
                 <button
                   type="submit"
                   disabled={isAssigning}
-                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-[#cca776] text-slate-950 font-bold hover:bg-[#cca776]/90 transition-all cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-[#724916] text-[#cca776] font-bold hover:bg-[#8b6028] transition-all cursor-pointer disabled:opacity-50 dark:bg-[#cca776] dark:text-slate-950"
                 >
                   {isAssigning ? (
                     <>

@@ -289,7 +289,7 @@ export default function CasesRegistryPage() {
           <button
             type="button"
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-700 text-[#0F172B] dark:text-slate-300 hover:bg-[#dfceb7]/30 dark:hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-lg bg-[#cbb292] border border-[#ab8c67] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors shadow-sm cursor-pointer"
             title="Download full litigation registry in CSV / Excel"
           >
             <Download className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
@@ -297,7 +297,7 @@ export default function CasesRegistryPage() {
           </button>
           <Link
             href="/reports"
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-700 text-[#0F172B] dark:text-slate-300 hover:bg-[#dfceb7]/30 dark:hover:bg-slate-800 transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-lg bg-[#cbb292] border border-[#ab8c67] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800 transition-colors shadow-sm"
           >
             <FileSpreadsheet className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
             <span>Client Statements</span>
@@ -320,7 +320,7 @@ export default function CasesRegistryPage() {
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
             filterScope === "all"
               ? "bg-[#724916] text-[#cca776] dark:bg-[#cca776] dark:text-slate-950 shadow-sm"
-              : "bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-800 text-[#0F172B] dark:text-slate-400 hover:text-[#724916] dark:hover:text-white"
+              : "bg-[#cbb292] border border-[#ab8c67] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:text-white"
           }`}
         >
           All Chamber Cases
@@ -331,7 +331,7 @@ export default function CasesRegistryPage() {
           className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
             filterScope === "my"
               ? "bg-[#724916] text-[#cca776] dark:bg-[#cca776] dark:text-slate-950 shadow-sm"
-              : "bg-white dark:bg-slate-900 border border-[#ab8c67]/40 dark:border-slate-800 text-[#0F172B] dark:text-slate-400 hover:text-[#724916] dark:hover:text-white"
+              : "bg-[#cbb292] border border-[#ab8c67] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:text-white"
           }`}
         >
           My Assigned Cases Only

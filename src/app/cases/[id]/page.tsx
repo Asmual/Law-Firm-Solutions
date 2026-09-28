@@ -240,7 +240,7 @@ export default function CaseDossierViewPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 print:hidden">
         <Link
           href="/cases"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-[#cca776] transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-bold text-[#724916] hover:underline dark:text-slate-400 dark:hover:text-[#cca776] transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Litigation Registry</span>
@@ -251,16 +251,16 @@ export default function CaseDossierViewPage({
           <button
             type="button"
             onClick={() => window.print()}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-slate-200 hover:bg-slate-700 hover:text-white transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-[#ab8c67] bg-[#cbb292] text-xs font-bold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 transition-all cursor-pointer shadow-sm"
           >
-            <Printer className="h-4 w-4 text-slate-400" />
+            <Printer className="h-4 w-4 text-[#724916] dark:text-slate-400" />
             <span>Print Dossier</span>
           </button>
 
           {/* Edit Case File Action */}
           <Link
             href={`/cases/new?id=${caseId}`}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#cca776] text-xs font-bold text-slate-950 shadow-md shadow-[#cca776]/20 hover:bg-[#b89360] transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#724916] text-xs font-bold text-[#cca776] shadow-md shadow-[#724916]/20 hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b89360] transition-all cursor-pointer"
           >
             <Edit className="h-4 w-4" />
             <span>Edit Case File</span>
@@ -269,49 +269,49 @@ export default function CaseDossierViewPage({
       </div>
 
       {/* Main Dossier Header Banner */}
-      <div className="relative rounded-2xl border border-slate-800 bg-slate-900/90 p-6 sm:p-8 shadow-xl overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#cca776]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="relative rounded-2xl border border-[#ab8c67] bg-[#dfceb7] p-6 sm:p-8 shadow-sm dark:border-slate-800 dark:bg-slate-900/90 dark:shadow-xl overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-[#724916]/5 dark:bg-[#cca776]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="space-y-3">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono text-xs font-bold px-3 py-1 rounded-lg bg-[#cca776]/15 text-[#cca776] border border-[#cca776]/30 tracking-wider">
+              <span className="font-mono text-xs font-bold px-3 py-1 rounded-lg bg-[#724916] text-[#cca776] border border-[#ab8c67] tracking-wider dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30">
                 {caseData.chamberFileNo}
               </span>
               <span
                 className={`text-xs font-bold px-3 py-1 rounded-lg border uppercase tracking-wider ${
                   caseData.status === "running"
-                    ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+                    ? "bg-[#724916] text-[#cca776] border-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30"
                     : caseData.status === "disposed" || caseData.status === "decreed"
-                    ? "bg-slate-800 text-slate-300 border-slate-700"
-                    : "bg-amber-500/15 text-amber-400 border-amber-500/30"
+                    ? "bg-[#ece1d0] text-[#0F172B] border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700"
+                    : "bg-[#cbb292] text-[#724916] border-[#ab8c67] dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/30"
                 }`}
               >
                 {caseData.status}
               </span>
             </div>
 
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0F172B] dark:text-white">
               {caseData.institutionName}
               {caseData.branch && (
-                <span className="text-slate-400 font-normal text-base block sm:inline sm:ml-2">
+                <span className="text-[#4a3e33] font-normal text-base block sm:inline sm:ml-2 dark:text-slate-400">
                   • Branch: {caseData.branch}
                 </span>
               )}
             </h1>
 
-            <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#4a3e33] dark:text-slate-300 max-w-2xl leading-relaxed">
               {caseData.matter || "No subject matter recorded for this litigation file."}
             </p>
           </div>
 
           {/* Hearing & Bench Snapshot */}
-          <div className="p-4 rounded-xl bg-slate-950/80 border border-slate-800 sm:min-w-[260px] space-y-2">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#cca776]">
+          <div className="p-4 rounded-xl bg-[#ece1d0] border border-[#ab8c67]/60 dark:bg-slate-950/80 dark:border-slate-800 sm:min-w-[260px] space-y-2">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#724916] dark:text-[#cca776]">
               <Calendar className="h-4 w-4" />
               <span>Next Fixed Hearing</span>
             </div>
-            <div className="text-sm font-bold text-white">
+            <div className="text-sm font-bold text-[#0F172B] dark:text-white">
               {latestHearing?.nextHearingDate
                 ? new Date(latestHearing.nextHearingDate).toLocaleDateString("en-GB", {
                     day: "2-digit",
@@ -321,15 +321,15 @@ export default function CaseDossierViewPage({
                 : "Not Scheduled"}
             </div>
             {latestHearing?.statusRemarks && (
-              <div className="text-xs text-slate-400 pt-1 border-t border-slate-800">
-                <span className="text-slate-500">Last Status: </span>
-                <span className="text-slate-200 font-medium">{latestHearing.statusRemarks}</span>
+              <div className="text-xs text-[#4a3e33] dark:text-slate-400 pt-1 border-t border-[#ab8c67]/40 dark:border-slate-800">
+                <span className="text-[#4a3e33] dark:text-slate-500 font-semibold">Last Status: </span>
+                <span className="text-[#0F172B] dark:text-slate-200 font-bold">{latestHearing.statusRemarks}</span>
               </div>
             )}
             {primaryCourt?.courtDivision && (
-              <div className="text-[11px] text-slate-400">
-                <span className="text-slate-500">Court: </span>
-                {primaryCourt.courtDivision}
+              <div className="text-[11px] text-[#4a3e33] dark:text-slate-400">
+                <span className="text-[#4a3e33] dark:text-slate-500 font-semibold">Court: </span>
+                <span className="text-[#0F172B] dark:text-slate-300">{primaryCourt.courtDivision}</span>
               </div>
             )}
           </div>
@@ -341,9 +341,9 @@ export default function CaseDossierViewPage({
         {/* Left Column: Courts, Parties & Timeline (Span 2) */}
         <div className="lg:col-span-2 space-y-6">
           {/* Court & Case Numbers */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 sm:p-6 space-y-4">
-            <div className="flex items-center gap-2 text-sm font-bold text-white border-b border-slate-800 pb-3">
-              <Scale className="h-4 w-4 text-[#cca776]" />
+          <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 sm:p-6 space-y-4 dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#0F172B] dark:text-white border-b border-[#ab8c67]/60 dark:border-slate-800 pb-3">
+              <Scale className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <span>Court Particulars &amp; Case Filings</span>
             </div>
 
@@ -352,26 +352,26 @@ export default function CaseDossierViewPage({
                 {caseData.caseNumbers.map((cn, i) => (
                   <div
                     key={i}
-                    className="p-3.5 rounded-lg border border-slate-800 bg-slate-950/70 space-y-1"
+                    className="p-3.5 rounded-lg border border-[#ab8c67]/60 bg-[#ece1d0] dark:border-slate-800 dark:bg-slate-950/70 space-y-1"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-bold text-[#cca776]">
+                      <span className="font-mono text-xs font-bold text-[#724916] dark:text-[#cca776]">
                         {cn.caseNumber}
                       </span>
                       {cn.year && (
-                        <span className="text-[10px] font-semibold text-slate-400 px-1.5 py-0.5 rounded bg-slate-800">
+                        <span className="text-[10px] font-bold text-[#724916] px-1.5 py-0.5 rounded bg-[#cbb292] border border-[#ab8c67]/40 dark:bg-slate-800 dark:text-slate-400">
                           {cn.year}
                         </span>
                       )}
                     </div>
-                    <div className="text-xs font-semibold text-white">
+                    <div className="text-xs font-bold text-[#0F172B] dark:text-white">
                       {cn.caseType || "General Litigation"}
                     </div>
-                    <div className="text-[11px] text-slate-400 truncate">
+                    <div className="text-[11px] text-[#4a3e33] dark:text-slate-400 truncate font-medium">
                       {cn.courtDivision}
                     </div>
                     {cn.remarks && (
-                      <div className="text-[10px] text-slate-500 pt-1 italic">
+                      <div className="text-[10px] text-[#4a3e33] dark:text-slate-500 pt-1 italic">
                         {cn.remarks}
                       </div>
                     )}
@@ -379,14 +379,14 @@ export default function CaseDossierViewPage({
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-500 italic">No specific court numbers recorded.</p>
+              <p className="text-xs text-[#4a3e33] dark:text-slate-500 italic">No specific court numbers recorded.</p>
             )}
           </div>
 
           {/* Litigating Parties */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 sm:p-6 space-y-4">
-            <div className="flex items-center gap-2 text-sm font-bold text-white border-b border-slate-800 pb-3">
-              <Users className="h-4 w-4 text-[#cca776]" />
+          <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 sm:p-6 space-y-4 dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#0F172B] dark:text-white border-b border-[#ab8c67]/60 dark:border-slate-800 pb-3">
+              <Users className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <span>Litigating Parties</span>
             </div>
 
@@ -395,20 +395,20 @@ export default function CaseDossierViewPage({
                 {caseData.parties.map((p, i) => (
                   <div
                     key={i}
-                    className="p-3.5 rounded-lg border border-slate-800 bg-slate-950/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                    className="p-3.5 rounded-lg border border-[#ab8c67]/60 bg-[#ece1d0] dark:border-slate-800 dark:bg-slate-950/70 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                   >
                     <div>
-                      <span className="text-xs font-bold text-slate-200 block">
+                      <span className="text-xs font-bold text-[#0F172B] dark:text-slate-200 block">
                         Party #{p.partyNo}: {p.partyNameDetails}
                       </span>
                       {p.searchListEntry && (
-                        <span className="text-[11px] text-slate-400 block mt-0.5">
+                        <span className="text-[11px] text-[#4a3e33] dark:text-slate-400 block mt-0.5 font-medium">
                           Search List Entry: {p.searchListEntry}
                         </span>
                       )}
                     </div>
                     {p.caseReceivedDate && (
-                      <span className="text-[10px] font-medium text-slate-400 px-2 py-0.5 rounded bg-slate-800 border border-slate-700 self-start sm:self-center">
+                      <span className="text-[10px] font-bold text-[#724916] px-2 py-0.5 rounded bg-[#cbb292] border border-[#ab8c67] self-start sm:self-center dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700">
                         Received: {p.caseReceivedDate}
                       </span>
                     )}
@@ -416,15 +416,15 @@ export default function CaseDossierViewPage({
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-500 italic">No parties listed.</p>
+              <p className="text-xs text-[#4a3e33] dark:text-slate-500 italic">No parties listed.</p>
             )}
           </div>
 
           {/* Hearing History / Proceedings Timeline */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 sm:p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
-              <div className="flex items-center gap-2 text-sm font-bold text-white">
-                <Clock className="h-4 w-4 text-[#cca776]" />
+          <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 sm:p-6 space-y-4 dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/60 dark:border-slate-800 gap-2">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#0F172B] dark:text-white">
+                <Clock className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
                 <span>Hearing History &amp; Proceedings Timeline ({caseData.statusUpdates?.length || 0})</span>
               </div>
               <button
@@ -442,28 +442,28 @@ export default function CaseDossierViewPage({
                 {caseData.statusUpdates.map((h, i) => (
                   <div
                     key={i}
-                    className="p-3.5 rounded-lg border border-slate-800 bg-slate-950/70 space-y-1.5"
+                    className="p-3.5 rounded-lg border border-[#ab8c67]/60 bg-[#ece1d0] dark:border-slate-800 dark:bg-slate-950/70 space-y-1.5"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-white">
+                      <span className="text-xs font-bold text-[#0F172B] dark:text-white">
                         {h.updateDate ? new Date(h.updateDate).toLocaleDateString("en-GB") : "Unknown Date"}
                       </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#cca776]/10 text-[#cca776] border border-[#cca776]/30 uppercase">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#724916] text-[#cca776] border border-[#ab8c67] uppercase dark:bg-[#cca776]/10 dark:text-[#cca776] dark:border-[#cca776]/30">
                         {h.statusRemarks}
                       </span>
                     </div>
                     {h.courtName && (
-                      <div className="text-[11px] text-slate-400">
-                        Court / Bench: <strong className="text-slate-300">{h.courtName}</strong>
+                      <div className="text-[11px] text-[#4a3e33] dark:text-slate-400">
+                        Court / Bench: <strong className="text-[#0F172B] dark:text-slate-300 font-bold">{h.courtName}</strong>
                       </div>
                     )}
                     {h.orderDetails && (
-                      <p className="text-xs text-slate-300 bg-slate-900 p-2.5 rounded border border-slate-800/80">
+                      <p className="text-xs text-[#0F172B] bg-[#f3ebd9] dark:bg-slate-900 dark:text-slate-300 p-2.5 rounded border border-[#ab8c67]/60 dark:border-slate-800/80 leading-relaxed font-medium">
                         {h.orderDetails}
                       </p>
                     )}
                     {h.nextHearingDate && (
-                      <div className="text-[11px] text-[#cca776]">
+                      <div className="text-[11px] font-bold text-[#724916] dark:text-[#cca776]">
                         Next Fixed: {new Date(h.nextHearingDate).toLocaleDateString("en-GB")}
                       </div>
                     )}
@@ -471,27 +471,27 @@ export default function CaseDossierViewPage({
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-slate-500 italic">No prior proceedings recorded in this file.</p>
+              <p className="text-xs text-[#4a3e33] dark:text-slate-500 italic">No prior proceedings recorded in this file.</p>
             )}
           </div>
 
           {/* Case Documents & Evidence Management */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 sm:p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center gap-2 text-sm font-bold text-white">
-                <UploadCloud className="h-4 w-4 text-[#cca776]" />
+          <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 sm:p-6 space-y-4 dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/60 dark:border-slate-800">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#0F172B] dark:text-white">
+                <UploadCloud className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
                 <span>Legal Documents &amp; Evidence Files ({caseData.documents?.length || 0})</span>
               </div>
-              <span className="text-[10px] px-2.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 font-medium">
+              <span className="text-[10px] px-2.5 py-0.5 rounded bg-[#cbb292] text-[#724916] border border-[#ab8c67] font-bold dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
                 Max 15MB • Cloud Archival
               </span>
             </div>
 
             {/* Direct Upload Form in Dossier */}
-            <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3 print:hidden">
+            <div className="p-3.5 rounded-xl bg-[#ece1d0] border border-[#ab8c67]/60 dark:bg-slate-950 dark:border-slate-800/80 space-y-3 print:hidden">
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
                 <div className="sm:col-span-5">
-                  <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                  <label className="block text-[11px] font-bold text-[#0F172B] dark:text-slate-400 mb-1">
                     Document Title
                   </label>
                   <input
@@ -499,18 +499,18 @@ export default function CaseDossierViewPage({
                     placeholder="e.g. Certified Order / Written Objection"
                     value={docUploadTitle}
                     onChange={(e) => setDocUploadTitle(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                    className="w-full px-3 py-1.5 text-xs bg-[#f3ebd9] border border-[#ab8c67] rounded-lg text-[#0F172B] placeholder-[#6e5a44] focus:outline-none focus:border-[#724916] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-100 dark:placeholder-slate-500"
                   />
                 </div>
 
                 <div className="sm:col-span-4">
-                  <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                  <label className="block text-[11px] font-bold text-[#0F172B] dark:text-slate-400 mb-1">
                     Category
                   </label>
                   <select
                     value={docUploadCategory}
                     onChange={(e) => setDocUploadCategory(e.target.value)}
-                    className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                    className="w-full px-3 py-1.5 text-xs bg-[#f3ebd9] border border-[#ab8c67] rounded-lg text-[#0F172B] focus:outline-none focus:border-[#724916] dark:bg-slate-900 dark:border-slate-700 dark:text-slate-200"
                   >
                     <option value="Court Order / Injunction">Court Order / Injunction</option>
                     <option value="Main Petition / Plaint">Main Petition / Plaint</option>
@@ -544,25 +544,25 @@ export default function CaseDossierViewPage({
 
             {/* Document list */}
             {(!caseData.documents || caseData.documents.length === 0) ? (
-              <p className="text-xs text-slate-500 italic py-2">
+              <p className="text-xs text-[#4a3e33] dark:text-slate-500 italic py-2">
                 No legal documents or exhibits currently attached to this file. Use the upload box above to attach files.
               </p>
             ) : (
-              <div className="divide-y divide-slate-800/80">
+              <div className="divide-y divide-[#ab8c67]/40 dark:divide-slate-800/80">
                 {caseData.documents.map((doc, idx) => (
                   <div
                     key={idx}
-                    className="py-3 flex items-center justify-between gap-3 text-xs hover:bg-slate-950/40 px-2 rounded-lg transition-colors"
+                    className="py-3 flex items-center justify-between gap-3 text-xs hover:bg-[#ece1d0] dark:hover:bg-slate-950/40 px-2 rounded-lg transition-colors"
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-800 text-[#cca776] shrink-0">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#cbb292] text-[#724916] dark:bg-slate-800 dark:text-[#cca776] shrink-0 border border-[#ab8c67]/40">
                         <Paperclip className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
-                        <span className="font-semibold text-slate-200 block truncate">
+                        <span className="font-bold text-[#0F172B] dark:text-slate-200 block truncate">
                           {doc.title}
                         </span>
-                        <span className="text-[10px] text-slate-500">
+                        <span className="text-[10px] text-[#4a3e33] dark:text-slate-500">
                           {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString("en-GB") : "Uploaded"} • Format: {doc.fileType?.toUpperCase() || "DOC"}
                         </span>
                       </div>
@@ -573,7 +573,7 @@ export default function CaseDossierViewPage({
                         href={doc.fileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-800 text-[11px] font-semibold text-[#cca776] hover:bg-[#cca776] hover:text-slate-950 transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#cbb292] text-[11px] font-bold text-[#724916] border border-[#ab8c67] hover:bg-[#724916] hover:text-[#cca776] transition-colors dark:bg-slate-800 dark:text-[#cca776] dark:hover:bg-[#cca776] dark:hover:text-slate-950"
                       >
                         <span>Open</span>
                         <ExternalLink className="h-3 w-3" />
@@ -581,7 +581,7 @@ export default function CaseDossierViewPage({
                       <button
                         type="button"
                         onClick={() => handleDeleteDossierDoc(idx)}
-                        className="p-1 rounded text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 cursor-pointer print:hidden"
+                        className="p-1 rounded text-rose-600 hover:text-rose-700 hover:bg-rose-50 dark:text-rose-400 dark:hover:text-rose-300 dark:hover:bg-rose-950/40 cursor-pointer print:hidden transition-colors"
                         title="Delete file"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -597,37 +597,37 @@ export default function CaseDossierViewPage({
         {/* Right Column: Representation & Notes */}
         <div className="space-y-6">
           {/* Assigned Legal Representation */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 space-y-4">
-            <div className="flex items-center gap-2 text-sm font-bold text-white border-b border-slate-800 pb-3">
-              <UserCheck className="h-4 w-4 text-[#cca776]" />
+          <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 space-y-4 dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#0F172B] dark:text-white border-b border-[#ab8c67]/60 dark:border-slate-800 pb-3">
+              <UserCheck className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <span>Chamber Counsel Assigned</span>
             </div>
 
             {/* Lead Advocate */}
-            <div className="p-3 rounded-lg border border-slate-800 bg-slate-950/70 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="p-3 rounded-lg border border-[#ab8c67]/60 bg-[#ece1d0] dark:border-slate-800 dark:bg-slate-950/70 space-y-1">
+              <span className="text-[10px] font-bold text-[#724916] uppercase tracking-wider block dark:text-slate-400">
                 Assigned Advocate (Counsel)
               </span>
-              <div className="text-xs font-bold text-white">
+              <div className="text-xs font-bold text-[#0F172B] dark:text-white">
                 {caseData.assignedAdvocate?.advocateName || "Unassigned"}
               </div>
               {caseData.assignedAdvocate?.dateAssigned && (
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-[#4a3e33] dark:text-slate-400">
                   Assigned Date: {caseData.assignedAdvocate.dateAssigned}
                 </div>
               )}
             </div>
 
             {/* Associate */}
-            <div className="p-3 rounded-lg border border-slate-800 bg-slate-950/70 space-y-1">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="p-3 rounded-lg border border-[#ab8c67]/60 bg-[#ece1d0] dark:border-slate-800 dark:bg-slate-950/70 space-y-1">
+              <span className="text-[10px] font-bold text-[#724916] uppercase tracking-wider block dark:text-slate-400">
                 Assigned Associate
               </span>
-              <div className="text-xs font-bold text-white">
+              <div className="text-xs font-bold text-[#0F172B] dark:text-white">
                 {caseData.assignedAssociate?.associateName || "None Assigned"}
               </div>
               {caseData.assignedAssociate?.dateAssigned && (
-                <div className="text-[11px] text-slate-400">
+                <div className="text-[11px] text-[#4a3e33] dark:text-slate-400">
                   Assigned Date: {caseData.assignedAssociate.dateAssigned}
                 </div>
               )}
@@ -635,32 +635,32 @@ export default function CaseDossierViewPage({
           </div>
 
           {/* Institution Contact Information */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 space-y-4">
-            <div className="flex items-center gap-2 text-sm font-bold text-white border-b border-slate-800 pb-3">
-              <Building2 className="h-4 w-4 text-[#cca776]" />
+          <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 space-y-4 dark:border-slate-800 dark:bg-slate-900/90">
+            <div className="flex items-center gap-2 text-sm font-bold text-[#0F172B] dark:text-white border-b border-[#ab8c67]/60 dark:border-slate-800 pb-3">
+              <Building2 className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
               <span>Institution Particulars</span>
             </div>
 
             <div className="space-y-2 text-xs">
               <div>
-                <span className="text-slate-500 block text-[10px] uppercase">Institution</span>
-                <span className="font-semibold text-white">{caseData.institutionName}</span>
+                <span className="text-[#4a3e33] dark:text-slate-500 block text-[10px] uppercase font-bold">Institution</span>
+                <span className="font-bold text-[#0F172B] dark:text-white">{caseData.institutionName}</span>
               </div>
               {caseData.branch && (
                 <div>
-                  <span className="text-slate-500 block text-[10px] uppercase">Branch Office</span>
-                  <span className="text-slate-300">{caseData.branch}</span>
+                  <span className="text-[#4a3e33] dark:text-slate-500 block text-[10px] uppercase font-bold">Branch Office</span>
+                  <span className="text-[#0F172B] dark:text-slate-300 font-medium">{caseData.branch}</span>
                 </div>
               )}
               {caseData.focalPerson?.name && (
-                <div className="pt-2 border-t border-slate-800">
-                  <span className="text-slate-500 block text-[10px] uppercase">Focal Contact</span>
-                  <span className="font-semibold text-slate-200">{caseData.focalPerson.name}</span>
+                <div className="pt-2 border-t border-[#ab8c67]/40 dark:border-slate-800">
+                  <span className="text-[#4a3e33] dark:text-slate-500 block text-[10px] uppercase font-bold">Focal Contact</span>
+                  <span className="font-bold text-[#0F172B] dark:text-slate-200">{caseData.focalPerson.name}</span>
                   {caseData.focalPerson.designation && (
-                    <span className="text-slate-400 block text-[11px]">{caseData.focalPerson.designation}</span>
+                    <span className="text-[#4a3e33] dark:text-slate-400 block text-[11px] font-medium">{caseData.focalPerson.designation}</span>
                   )}
                   {caseData.focalPerson.phone && (
-                    <span className="text-slate-400 block text-[11px]">Tel: {caseData.focalPerson.phone}</span>
+                    <span className="text-[#724916] dark:text-slate-400 block text-[11px] font-bold">Tel: {caseData.focalPerson.phone}</span>
                   )}
                 </div>
               )}
@@ -669,41 +669,41 @@ export default function CaseDossierViewPage({
 
           {/* Special Chamber Notes */}
           {caseData.specialNotes && (
-            <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-5 space-y-3">
-              <div className="flex items-center gap-2 text-sm font-bold text-white border-b border-slate-800 pb-2">
-                <FileText className="h-4 w-4 text-[#cca776]" />
+            <div className="rounded-xl border border-[#ab8c67] bg-[#dfceb7] p-5 space-y-3 dark:border-slate-800 dark:bg-slate-900/90">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#0F172B] dark:text-white border-b border-[#ab8c67]/60 dark:border-slate-800 pb-2">
+                <FileText className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
                 <span>Chamber Brief &amp; Notes</span>
               </div>
 
               <div className="space-y-2 text-xs">
                 {caseData.specialNotes.generalRemarks && (
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase">General Remarks</span>
-                    <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
+                    <span className="text-[#4a3e33] dark:text-slate-500 block text-[10px] uppercase font-bold">General Remarks</span>
+                    <p className="text-[#0F172B] dark:text-slate-300 text-[11px] leading-relaxed mt-0.5 font-medium">
                       {caseData.specialNotes.generalRemarks}
                     </p>
                   </div>
                 )}
                 {caseData.specialNotes.wokalatnamaNote && (
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase">Wokalatnama Note</span>
-                    <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
+                    <span className="text-[#4a3e33] dark:text-slate-500 block text-[10px] uppercase font-bold">Wokalatnama Note</span>
+                    <p className="text-[#0F172B] dark:text-slate-300 text-[11px] leading-relaxed mt-0.5 font-medium">
                       {caseData.specialNotes.wokalatnamaNote}
                     </p>
                   </div>
                 )}
                 {caseData.specialNotes.mainPetitionNote && (
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase">Main Petition Note</span>
-                    <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
+                    <span className="text-[#4a3e33] dark:text-slate-500 block text-[10px] uppercase font-bold">Main Petition Note</span>
+                    <p className="text-[#0F172B] dark:text-slate-300 text-[11px] leading-relaxed mt-0.5 font-medium">
                       {caseData.specialNotes.mainPetitionNote}
                     </p>
                   </div>
                 )}
                 {caseData.specialNotes.extensionNote && (
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase">Extension / Stay Extension Note</span>
-                    <p className="text-slate-300 text-[11px] leading-relaxed mt-0.5">
+                    <span className="text-[#4a3e33] dark:text-slate-500 block text-[10px] uppercase font-bold">Extension / Stay Extension Note</span>
+                    <p className="text-[#0F172B] dark:text-slate-300 text-[11px] leading-relaxed mt-0.5 font-medium">
                       {caseData.specialNotes.extensionNote}
                     </p>
                   </div>
@@ -715,9 +715,9 @@ export default function CaseDossierViewPage({
           {/* Quick Edit Footer Button */}
           <Link
             href={`/cases/new?id=${caseId}`}
-            className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 transition-colors print:hidden"
+            className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-[#cbb292] hover:bg-[#724916] hover:text-[#cca776] text-xs font-bold text-[#724916] border border-[#ab8c67] transition-colors dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 print:hidden shadow-sm"
           >
-            <Edit className="h-4 w-4 text-[#cca776]" />
+            <Edit className="h-4 w-4" />
             <span>Modify Case Details &amp; Brief</span>
           </Link>
         </div>
@@ -726,15 +726,15 @@ export default function CaseDossierViewPage({
       {/* Quick Record Hearing Modal */}
       {isHearingModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm animate-in fade-in">
-          <div className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="relative w-full max-w-lg rounded-2xl border border-[#ab8c67] bg-[#dfceb7] p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center justify-between border-b border-[#ab8c67]/60 dark:border-slate-800 pb-3">
               <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-[#cca776]" />
-                <h3 className="text-sm font-bold text-white">Record Court Proceeding / Hearing</h3>
+                <Clock className="h-5 w-5 text-[#724916] dark:text-[#cca776]" />
+                <h3 className="text-sm font-bold text-[#0F172B] dark:text-white">Record Court Proceeding / Hearing</h3>
               </div>
               <button
                 onClick={() => setIsHearingModalOpen(false)}
-                className="rounded-lg p-1 text-slate-400 hover:text-white"
+                className="rounded-lg p-1 text-[#724916] hover:bg-[#cbb292]/50 hover:text-[#0F172B] dark:text-slate-400 dark:hover:text-white"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -743,7 +743,7 @@ export default function CaseDossierViewPage({
             <form onSubmit={handleAddHearing} className="mt-4 space-y-3 text-xs">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">
+                  <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                     Date of Proceeding *
                   </label>
                   <LegalDatePicker
@@ -754,7 +754,7 @@ export default function CaseDossierViewPage({
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-semibold mb-1">
+                  <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                     Next Fixed Date
                   </label>
                   <LegalDatePicker
@@ -766,7 +766,7 @@ export default function CaseDossierViewPage({
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">
+                <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                   Court / Bench / Chamber Room
                 </label>
                 <input
@@ -774,12 +774,12 @@ export default function CaseDossierViewPage({
                   placeholder="e.g. Annex-14 / High Court Bench 09"
                   value={hearingForm.courtName}
                   onChange={(e) => setHearingForm({ ...hearingForm, courtName: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-[#cca776]"
+                  className="w-full px-3 py-2 bg-[#f3ebd9] border border-[#ab8c67] rounded-lg text-[#0F172B] placeholder-[#6e5a44] focus:outline-none focus:border-[#724916] dark:bg-slate-950 dark:border-slate-700 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">
+                <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                   Status Description / Order Summary *
                 </label>
                 <input
@@ -788,12 +788,12 @@ export default function CaseDossierViewPage({
                   placeholder="e.g. Rule and Stay granted for 06 Months"
                   value={hearingForm.statusRemarks}
                   onChange={(e) => setHearingForm({ ...hearingForm, statusRemarks: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-[#cca776]"
+                  className="w-full px-3 py-2 bg-[#f3ebd9] border border-[#ab8c67] rounded-lg text-[#0F172B] placeholder-[#6e5a44] focus:outline-none focus:border-[#724916] dark:bg-slate-950 dark:border-slate-700 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">
+                <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                   Detailed Order / Chamber Instructions
                 </label>
                 <textarea
@@ -801,18 +801,18 @@ export default function CaseDossierViewPage({
                   placeholder="Detailed notes, operative part of court order, or advocate instructions..."
                   value={hearingForm.orderDetails}
                   onChange={(e) => setHearingForm({ ...hearingForm, orderDetails: e.target.value })}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white focus:outline-none focus:border-[#cca776]"
+                  className="w-full px-3 py-2 bg-[#f3ebd9] border border-[#ab8c67] rounded-lg text-[#0F172B] placeholder-[#6e5a44] focus:outline-none focus:border-[#724916] dark:bg-slate-950 dark:border-slate-700 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-semibold mb-1">
+                <label className="block text-[#0F172B] dark:text-slate-300 font-bold mb-1">
                   Update Case Status
                 </label>
                 <select
                   value={hearingForm.caseStatus}
                   onChange={(e) => setHearingForm({ ...hearingForm, caseStatus: e.target.value as CaseStatus })}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-[#cca776] font-bold focus:outline-none focus:border-[#cca776]"
+                  className="w-full px-3 py-2 bg-[#f3ebd9] border border-[#ab8c67] rounded-lg text-[#724916] font-bold focus:outline-none focus:border-[#724916] dark:bg-slate-950 dark:border-slate-700 dark:text-[#cca776]"
                 >
                   <option value="running">Running (Active Litigation)</option>
                   <option value="stay_granted">Stay Granted / Injunction</option>
@@ -822,18 +822,18 @@ export default function CaseDossierViewPage({
                 </select>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#ab8c67]/60 dark:border-slate-800">
                 <button
                   type="button"
                   onClick={() => setIsHearingModalOpen(false)}
-                  className="px-3.5 py-1.5 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800"
+                  className="px-3.5 py-1.5 rounded-lg border border-[#ab8c67] bg-[#cbb292] text-[#724916] font-bold hover:bg-[#724916] hover:text-[#cca776] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmittingHearing}
-                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#cca776] text-slate-950 font-bold hover:bg-[#b89360] disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-[#724916] text-[#cca776] font-bold hover:bg-[#8b6028] disabled:opacity-50 dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b89360] transition-colors"
                 >
                   <Check className="h-3.5 w-3.5" />
                   <span>{isSubmittingHearing ? "Saving..." : "Save Proceeding"}</span>

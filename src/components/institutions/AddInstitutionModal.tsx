@@ -125,25 +125,25 @@ export function AddInstitutionModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-sm animate-in fade-in">
-      <div className="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900 max-h-[90vh] overflow-y-auto">
+      <div className="relative w-full max-w-xl rounded-2xl border border-[#ab8c67] bg-[#dfceb7] p-6 shadow-2xl dark:border-slate-800 dark:bg-slate-900 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-slate-800">
+        <div className="flex items-center justify-between border-b border-[#ab8c67]/60 pb-4 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#cca776]/15 text-[#cca776]">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#724916] text-[#cca776] dark:bg-[#cca776]/15 dark:text-[#cca776]">
               <Building2 className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-slate-900 dark:text-white">
+              <h2 className="text-base font-bold text-[#0F172B] dark:text-white">
                 {isEdit ? "Edit Bank / Institution" : "Add Bank / Institution"}
               </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-[#4a3e33] dark:text-slate-400">
                 {isEdit ? "Update corporate client profile and focal person" : "Register corporate client for litigation file tracking"}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+            className="rounded-lg p-1.5 text-[#724916] hover:bg-[#cbb292]/60 hover:text-[#0F172B] dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-200"
           >
             <X className="h-4 w-4" />
           </button>
@@ -153,13 +153,13 @@ export function AddInstitutionModal({
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           {/* Section 1: Institution Details */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#cca776]">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#724916] dark:text-[#cca776]">
               1. Institutional Details
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-2">
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Institution / Bank Name *
                 </label>
                 <input
@@ -170,12 +170,12 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, name: e.target.value })
                   }
                   placeholder="e.g. NRB Bank PLC"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                  className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] px-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Short Code *
                 </label>
                 <input
@@ -186,14 +186,14 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, shortCode: e.target.value.toUpperCase() })
                   }
                   placeholder="e.g. NRB"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none uppercase dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                  className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] px-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none uppercase dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Category
                 </label>
                 <select
@@ -204,7 +204,7 @@ export function AddInstitutionModal({
                       category: e.target.value as InstitutionCategory,
                     })
                   }
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                  className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] px-3 py-2 text-xs text-[#0F172B] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white"
                 >
                   {CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
@@ -215,7 +215,7 @@ export function AddInstitutionModal({
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Managing Branch / Division
                 </label>
                 <input
@@ -225,17 +225,17 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, branch: e.target.value })
                   }
                   placeholder="e.g. Principal Branch / SAMD Division"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                  className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] px-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                 Office / Head Office Address
               </label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                <MapPin className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#724916] dark:text-slate-400" />
                 <input
                   type="text"
                   value={formData.address}
@@ -243,25 +243,25 @@ export function AddInstitutionModal({
                     setFormData({ ...formData, address: e.target.value })
                   }
                   placeholder="e.g. 89 Gulshan Avenue, Dhaka-1212"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                  className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] pl-8 pr-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Section 2: Focal Person */}
-          <div className="space-y-3 pt-2 border-t border-slate-100 dark:border-slate-800">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#cca776]">
+          <div className="space-y-3 pt-2 border-t border-[#ab8c67]/60 dark:border-slate-800">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-[#724916] dark:text-[#cca776]">
               2. Bank Focal Person / Legal Officer
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Focal Person Name
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                  <User className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#724916] dark:text-slate-400" />
                   <input
                     type="text"
                     value={formData.focalPersonName}
@@ -272,13 +272,13 @@ export function AddInstitutionModal({
                       })
                     }
                     placeholder="e.g. Mr. Mahbubul Alam"
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] pl-8 pr-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Designation
                 </label>
                 <input
@@ -291,18 +291,18 @@ export function AddInstitutionModal({
                     })
                   }
                   placeholder="e.g. Head of SAMD / Legal Advisor"
-                  className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                  className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] px-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Contact Phone / Mobile
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                  <Phone className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#724916] dark:text-slate-400" />
                   <input
                     type="tel"
                     value={formData.focalPersonPhone}
@@ -313,17 +313,17 @@ export function AddInstitutionModal({
                       })
                     }
                     placeholder="+88017XXXXXXXX"
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] pl-8 pr-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1">
                   Official Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
+                  <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#724916] dark:text-slate-400" />
                   <input
                     type="email"
                     value={formData.focalPersonEmail}
@@ -334,7 +334,7 @@ export function AddInstitutionModal({
                       })
                     }
                     placeholder="legal@bank.com"
-                    className="w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 py-2 text-xs text-slate-900 focus:border-[#cca776] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                    className="w-full rounded-lg border border-[#ab8c67] bg-[#f3ebd9] pl-8 pr-3 py-2 text-xs text-[#0F172B] placeholder-[#6e5a44] focus:border-[#724916] focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:placeholder-slate-500"
                   />
                 </div>
               </div>
@@ -342,18 +342,18 @@ export function AddInstitutionModal({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-[#ab8c67]/60 dark:border-slate-800">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-lg border border-slate-200 px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+              className="rounded-lg border border-[#ab8c67] bg-[#cbb292] px-4 py-2 text-xs font-semibold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-4 py-2 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#724916] px-4 py-2 text-xs font-bold text-[#cca776] shadow-sm hover:bg-[#8b6028] disabled:opacity-50 dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f] transition-colors"
             >
               <Check className="h-3.5 w-3.5" />
               <span>{isSubmitting ? "Saving..." : isEdit ? "Update Institution" : "Save Institution"}</span>

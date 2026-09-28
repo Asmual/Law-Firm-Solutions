@@ -849,28 +849,28 @@ function CaseFormContent() {
   }, [institutions, searchInstQuery]);
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-transparent text-[#0F172B] dark:text-slate-100 flex flex-col font-sans">
       {/* Top Header - Normal static flow (NOT sticky) so scrolling feels natural */}
-      <header className="border-b border-slate-800 bg-slate-900/90 relative z-10 px-6 py-4">
+      <header className="border-b border-[#ab8c67]/40 bg-[#dfceb7] dark:bg-slate-900/90 dark:border-slate-800 relative z-10 px-6 py-4">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <Link
               href="/cases"
-              className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg border border-slate-800 bg-slate-800/80 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg border border-[#ab8c67] bg-[#cbb292] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:border-slate-800 dark:bg-slate-800/80 dark:hover:bg-slate-700 dark:text-slate-300 flex items-center justify-center transition-colors cursor-pointer shrink-0"
               title="Return to Case Registry"
             >
               <ArrowLeft className="h-4 w-4" />
             </Link>
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <h1 className="text-sm sm:text-lg font-bold tracking-tight text-white uppercase truncate">
+                <h1 className="text-sm sm:text-lg font-bold tracking-tight text-[#0F172B] dark:text-white uppercase truncate">
                   {editId ? `Edit Case • ${chamberFileNo || "Loading..."}` : "Add New Case File"}
                 </h1>
-                <span className="inline-flex items-center text-[9px] sm:text-xs px-2 py-0.5 rounded-full bg-[#cca776]/15 text-[#cca776] border border-[#cca776]/30 font-medium whitespace-nowrap">
+                <span className="inline-flex items-center text-[9px] sm:text-xs px-2.5 py-0.5 rounded-full bg-[#724916] text-[#cca776] border border-[#ab8c67] font-bold whitespace-nowrap">
                   Litigation Entry
                 </span>
               </div>
-              <p className="text-[10px] sm:text-xs text-slate-400 mt-0.5 truncate hidden sm:block">
+              <p className="text-[10px] sm:text-xs text-[#724916]/80 dark:text-slate-400 mt-0.5 truncate hidden sm:block">
                 All parameters integrated into one unified record • High Court &amp; Banking Practice
               </p>
             </div>
@@ -881,9 +881,9 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={() => window.print()}
-              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-bold rounded-lg border border-[#ab8c67] bg-[#cbb292] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
-              <Printer className="h-3.5 w-3.5 text-[#cca776]" />
+              <Printer className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
               <span className="hidden sm:inline">Print / Export PDF</span>
               <span className="sm:hidden">Print</span>
             </button>
@@ -891,9 +891,9 @@ function CaseFormContent() {
             {editId && (
               <Link
                 href={`/cases/${editId}`}
-                className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-200 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 text-xs font-bold rounded-lg border border-[#ab8c67] bg-[#cbb292] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
               >
-                <Eye className="h-3.5 w-3.5 text-blue-400" />
+                <Eye className="h-3.5 w-3.5 text-[#724916] dark:text-blue-400" />
                 <span className="hidden sm:inline">View Dossier</span>
                 <span className="sm:hidden">Dossier</span>
               </Link>
@@ -916,11 +916,11 @@ function CaseFormContent() {
       <main className="flex-1 max-w-6xl w-full mx-auto p-4 sm:p-6 space-y-6">
 
         {/* ================= SECTION 1: TOP INSTITUTION / CLIENT SELECTOR ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+              <Building2 className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
+              <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase">
                 1. Institution / Client
               </h2>
             </div>
@@ -931,7 +931,7 @@ function CaseFormContent() {
                   setSelectedInst(null);
                   setIsDropdownOpen(true);
                 }}
-                className="text-[11px] font-semibold text-[#cca776] hover:underline cursor-pointer"
+                className="text-[11px] font-bold text-[#724916] hover:underline dark:text-[#cca776] cursor-pointer"
               >
                 Change Selection
               </button>
@@ -940,12 +940,12 @@ function CaseFormContent() {
 
           {!selectedInst ? (
             <div ref={dropdownRef} className="relative">
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Select or Search Institution / Client <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
+                Select or Search Institution / Client <span className="text-rose-500">*</span>
               </label>
 
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-[#724916] dark:text-slate-400" />
                 <input
                   type="text"
                   placeholder="Type to search Bank, NBFI, Corporate Client, or Individual Litigant..."
@@ -955,26 +955,26 @@ function CaseFormContent() {
                     setSearchInstQuery(e.target.value);
                     setIsDropdownOpen(true);
                   }}
-                  className={`w-full pl-9 pr-3 py-2 text-xs bg-slate-950 border rounded-lg text-white placeholder-slate-500 focus:outline-none transition-colors ${
+                  className={`w-full pl-9 pr-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border rounded-lg text-[#0F172B] dark:text-white placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none transition-colors ${
                     formErrors.institution
-                      ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
-                      : "border-slate-700 focus:border-[#cca776]"
+                      ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-50 dark:bg-rose-950/20"
+                      : "border-[#ab8c67] focus:border-[#724916] dark:border-slate-700 dark:focus:border-[#cca776]"
                   }`}
                 />
               </div>
 
               {formErrors.institution && (
-                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1.5">
-                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                <div className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-medium mt-1.5">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
                   <span>{formErrors.institution}</span>
                 </div>
               )}
 
               {/* Searchable Dropdown Overlay */}
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1 z-30 max-h-72 overflow-y-auto bg-slate-900 border border-slate-700 rounded-xl shadow-2xl divide-y divide-slate-800">
+                <div className="absolute top-full left-0 right-0 mt-1 z-30 max-h-72 overflow-y-auto bg-[#dfceb7] border border-[#ab8c67] rounded-xl shadow-2xl divide-y divide-[#ab8c67]/30 dark:bg-slate-900 dark:border-slate-700 dark:divide-slate-800">
                   {filteredInstitutions.length === 0 ? (
-                    <div className="p-4 text-center text-xs text-slate-400">
+                    <div className="p-4 text-center text-xs text-[#724916] dark:text-slate-400">
                       No matching institution or client found.
                     </div>
                   ) : (
@@ -983,21 +983,21 @@ function CaseFormContent() {
                         key={inst._id || inst.id || inst.name}
                         type="button"
                         onClick={() => selectInstitution(inst)}
-                        className="w-full text-left px-4 py-3 hover:bg-slate-800 transition-colors flex items-center justify-between group cursor-pointer"
+                        className="w-full text-left px-4 py-3 bg-transparent hover:bg-[#cbb292] dark:hover:bg-slate-800 transition-colors flex items-center justify-between group cursor-pointer"
                       >
                         <div>
-                          <div className="text-xs font-bold text-white group-hover:text-[#cca776] transition-colors flex items-center gap-2">
+                          <div className="text-xs font-bold text-[#0F172B] group-hover:text-[#724916] dark:text-white dark:group-hover:text-[#cca776] transition-colors flex items-center gap-2">
                             <span>{inst.name}</span>
-                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-slate-800 text-[#cca776] border border-[#cca776]/20 font-mono">
+                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#cbb292] text-[#724916] border border-[#ab8c67] font-bold font-mono dark:bg-slate-800 dark:text-[#cca776] dark:border-[#cca776]/20">
                               {inst.shortCode}
                             </span>
                           </div>
-                          <div className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-2">
-                            <span className="text-slate-300 font-medium">{inst.category || "Institution"}</span>
+                          <div className="text-[11px] text-[#724916]/80 dark:text-slate-400 mt-0.5 flex items-center gap-2">
+                            <span className="text-[#0F172B] dark:text-slate-300 font-semibold">{inst.category || "Institution"}</span>
                             {inst.branch && <span>• {inst.branch}</span>}
                           </div>
                         </div>
-                        <span className="text-[10px] font-semibold text-slate-500 group-hover:text-white transition-colors">
+                        <span className="text-[10px] font-bold text-[#724916] group-hover:underline dark:text-slate-500 dark:group-hover:text-white transition-colors">
                           Select →
                         </span>
                       </button>
@@ -1008,26 +1008,26 @@ function CaseFormContent() {
             </div>
           ) : (
             /* Selected Institution / Client Card */
-            <div className="p-4 rounded-xl bg-slate-950/80 border border-[#cca776]/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="p-4 rounded-xl bg-[#cbb292]/30 dark:bg-slate-950/80 border border-[#ab8c67] dark:border-[#cca776]/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="space-y-1">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-sm font-bold text-white">
+                  <span className="text-sm font-bold text-[#0F172B] dark:text-white">
                     {selectedInst.name}
                   </span>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#cca776]/15 text-[#cca776] border border-[#cca776]/30 uppercase">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#724916] text-[#cca776] border border-[#ab8c67] dark:bg-[#cca776]/15 dark:text-[#cca776] dark:border-[#cca776]/30 uppercase">
                     {selectedInst.category}
                   </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#cbb292] text-[#724916] border border-[#ab8c67] dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
                     CODE: {selectedInst.shortCode}
                   </span>
                 </div>
                 {selectedInst.branch && (
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-[#724916] dark:text-slate-400 font-medium">
                     Branch: {selectedInst.branch}
                   </p>
                 )}
                 {selectedInst.address && (
-                  <p className="text-[11px] text-slate-500">
+                  <p className="text-[11px] text-[#724916]/80 dark:text-slate-500">
                     Address: {selectedInst.address}
                   </p>
                 )}
@@ -1043,9 +1043,9 @@ function CaseFormContent() {
           )}
 
           {/* Focal Person Contact Details (Associated with this Institution/Client) */}
-          <div className="pt-2 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="pt-2 border-t border-[#ab8c67]/40 dark:border-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+              <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                 Focal Contact Person
               </label>
               <input
@@ -1053,11 +1053,11 @@ function CaseFormContent() {
                 placeholder="Officer / Representative Name"
                 value={contactName}
                 onChange={(e) => setContactName(e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+              <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                 Designation / Department
               </label>
               <input
@@ -1065,11 +1065,11 @@ function CaseFormContent() {
                 placeholder="e.g. AGM (Legal) / Director"
                 value={contactDesignation}
                 onChange={(e) => setContactDesignation(e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+              <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                 Direct Phone / WhatsApp
               </label>
               <input
@@ -1077,11 +1077,11 @@ function CaseFormContent() {
                 placeholder="+88017XXXXXXXX"
                 value={contactPhone}
                 onChange={(e) => setContactPhone(e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-medium text-slate-400 mb-1">
+              <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                 Official Email
               </label>
               <input
@@ -1089,17 +1089,17 @@ function CaseFormContent() {
                 placeholder="contact@client.com"
                 value={contactEmail}
                 onChange={(e) => setContactEmail(e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
           </div>
         </div>
 
         {/* ================= SECTION 2: FILE & MATTER DETAILS ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
-            <FileText className="h-4 w-4 text-[#cca776]" />
-            <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center gap-2 pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800">
+            <FileText className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
+            <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase">
               2. Chamber File &amp; Subject Matter
             </h2>
           </div>
@@ -1107,11 +1107,11 @@ function CaseFormContent() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div className="md:col-span-4 space-y-1">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-semibold text-slate-300">
-                  Chamber File No. <span className="text-rose-400">*</span>
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300">
+                  Chamber File No. <span className="text-rose-500">*</span>
                 </label>
                 {currentUserRole === "associate" && !!editId && (
-                  <span className="text-[10px] font-semibold text-amber-400 bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-800/40">
+                  <span className="text-[10px] font-bold text-[#724916] bg-[#cbb292] px-1.5 py-0.5 rounded border border-[#ab8c67] dark:text-amber-400 dark:bg-amber-950/40 dark:border-amber-800/40">
                     Chamber Ledger Locked
                   </span>
                 )}
@@ -1127,19 +1127,19 @@ function CaseFormContent() {
                     setFormErrors((prev) => ({ ...prev, chamberFileNo: "" }));
                   }
                 }}
-                className={`w-full px-3 py-2 text-sm bg-slate-950 border rounded-lg text-white font-mono font-bold placeholder-slate-500 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
+                className={`w-full px-3 py-2 text-sm bg-[#f3ebd9] dark:bg-slate-950 border rounded-lg text-[#0F172B] dark:text-white font-mono font-bold placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                   formErrors.chamberFileNo
-                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
-                    : "border-slate-700 focus:border-[#cca776]"
+                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-50 dark:bg-rose-950/20"
+                    : "border-[#ab8c67] focus:border-[#724916] dark:border-slate-700 dark:focus:border-[#cca776]"
                 }`}
               />
               {formErrors.chamberFileNo ? (
-                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1">
-                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                <div className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-medium mt-1">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
                   <span>{formErrors.chamberFileNo}</span>
                 </div>
               ) : (
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-[#724916]/80 dark:text-slate-400">
                   {currentUserRole === "associate" && !!editId
                     ? "Chamber File number is restricted to Partners & Lead Advocates."
                     : "Unique chamber file binder number."}
@@ -1148,8 +1148,8 @@ function CaseFormContent() {
             </div>
 
             <div className="md:col-span-8 space-y-1">
-              <label className="block text-xs font-semibold text-slate-300">
-                Matter / Subject Description <span className="text-rose-400">*</span>
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300">
+                Matter / Subject Description <span className="text-rose-500">*</span>
               </label>
               <input
                 type="text"
@@ -1161,19 +1161,19 @@ function CaseFormContent() {
                     setFormErrors((prev) => ({ ...prev, matter: "" }));
                   }
                 }}
-                className={`w-full px-3 py-2 text-sm bg-slate-950 border rounded-lg text-white placeholder-slate-500 focus:outline-none transition-colors ${
+                className={`w-full px-3 py-2 text-sm bg-[#f3ebd9] dark:bg-slate-950 border rounded-lg text-[#0F172B] dark:text-white placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none transition-colors ${
                   formErrors.matter
-                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
-                    : "border-slate-700 focus:border-[#cca776]"
+                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-50 dark:bg-rose-950/20"
+                    : "border-[#ab8c67] focus:border-[#724916] dark:border-slate-700 dark:focus:border-[#cca776]"
                 }`}
               />
               {formErrors.matter ? (
-                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1">
-                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                <div className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-medium mt-1">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
                   <span>{formErrors.matter}</span>
                 </div>
               ) : (
-                <p className="text-[11px] text-slate-400">
+                <p className="text-[11px] text-[#724916]/80 dark:text-slate-400">
                   Litigation subject, relief sought, and legal issue summary.
                 </p>
               )}
@@ -1182,11 +1182,11 @@ function CaseFormContent() {
         </div>
 
         {/* ================= SECTION 3: CASE NUMBER(S) & COURTS ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-4 sm:p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800 gap-2">
             <div className="flex items-center gap-2 min-w-0">
-              <Scale className="h-4 w-4 text-[#cca776] shrink-0" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
+              <Scale className="h-4 w-4 text-[#724916] dark:text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase truncate">
                 3. Case Number(s) &amp; Court Filings
               </h2>
             </div>
@@ -1205,7 +1205,7 @@ function CaseFormContent() {
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                <tr className="border-b border-[#ab8c67]/40 dark:border-slate-800 text-[10px] uppercase font-bold text-[#724916] dark:text-slate-400">
                   <th className="py-2 px-2 text-center w-10">SL</th>
                   <th className="py-2 px-2">Case Number</th>
                   <th className="py-2 px-2">Case Type</th>
@@ -1215,24 +1215,24 @@ function CaseFormContent() {
                   <th className="py-2 px-2 text-center w-12">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-[#ab8c67]/30 dark:divide-slate-800/60">
                 {caseNumbers.map((cn, idx) => (
                   <tr key={idx}>
-                    <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
+                    <td className="py-2.5 px-2 text-center font-mono font-bold text-[#724916] dark:text-slate-400">{idx + 1}</td>
                     <td className="py-2 px-2">
                       <input
                         type="text"
                         placeholder="e.g. C.P. No. 3727/2023"
                         value={cn.caseNumber}
                         onChange={(e) => updateCaseNumber(idx, "caseNumber", e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-100 font-medium placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2">
                       <select
                         value={cn.caseType}
                         onChange={(e) => updateCaseNumber(idx, "caseType", e.target.value)}
-                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       >
                         <option value="Civil Petition">Civil Petition</option>
                         <option value="Writ Petition">Writ Petition</option>
@@ -1248,7 +1248,7 @@ function CaseFormContent() {
                         type="text"
                         value={cn.year}
                         onChange={(e) => updateCaseNumber(idx, "year", e.target.value)}
-                        className="w-full px-2 py-1.5 text-xs text-center bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 font-mono focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2 py-1.5 text-xs text-center bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 font-mono font-bold focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2">
@@ -1257,7 +1257,7 @@ function CaseFormContent() {
                         placeholder="Appellate / High Court / Artha Rin Adalat"
                         value={cn.courtDivision}
                         onChange={(e) => updateCaseNumber(idx, "courtDivision", e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2">
@@ -1266,14 +1266,14 @@ function CaseFormContent() {
                         placeholder="e.g. Arising out of W.P. No. 1220"
                         value={cn.remarks || ""}
                         onChange={(e) => updateCaseNumber(idx, "remarks", e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2 text-center">
                       <button
                         type="button"
                         onClick={() => promptRemoveCaseNumberRow(idx)}
-                        className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
+                        className="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 cursor-pointer"
                         title="Remove row"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1288,10 +1288,10 @@ function CaseFormContent() {
           {/* Mobile View: Stacked Cards for Case Numbers */}
           <div className="md:hidden space-y-3">
             {caseNumbers.map((cn, idx) => (
-              <div key={idx} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5 shadow-sm">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
-                  <span className="text-xs font-bold text-[#cca776] flex items-center gap-1.5">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#cca776]/15 text-[11px] font-mono text-[#cca776]">
+              <div key={idx} className="p-3.5 rounded-xl bg-[#cbb292]/30 border border-[#ab8c67] dark:bg-slate-950 dark:border-slate-800 space-y-2.5 shadow-sm">
+                <div className="flex items-center justify-between pb-2 border-b border-[#ab8c67]/40 dark:border-slate-800/80">
+                  <span className="text-xs font-bold text-[#724916] dark:text-[#cca776] flex items-center gap-1.5">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#724916] text-[#cca776] dark:bg-[#cca776]/15 dark:text-[#cca776] text-[11px] font-mono font-bold">
                       {idx + 1}
                     </span>
                     Case Record #{idx + 1}
@@ -1299,7 +1299,7 @@ function CaseFormContent() {
                   <button
                     type="button"
                     onClick={() => promptRemoveCaseNumberRow(idx)}
-                    className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
+                    className="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
                     title="Remove entry"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -1309,27 +1309,27 @@ function CaseFormContent() {
 
                 <div className="space-y-2.5">
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      Case Number <span className="text-rose-400">*</span>
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
+                      Case Number <span className="text-rose-500">*</span>
                     </label>
                     <input
                       type="text"
                       placeholder="e.g. C.P. No. 3727/2023"
                       value={cn.caseNumber}
                       onChange={(e) => updateCaseNumber(idx, "caseNumber", e.target.value)}
-                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                      className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-100 font-medium placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                     />
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                         Case Type
                       </label>
                       <select
                         value={cn.caseType}
                         onChange={(e) => updateCaseNumber(idx, "caseType", e.target.value)}
-                        className="w-full px-2 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       >
                         <option value="Civil Petition">Civil Petition</option>
                         <option value="Writ Petition">Writ Petition</option>
@@ -1342,20 +1342,20 @@ function CaseFormContent() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                         Filing Year
                       </label>
                       <input
                         type="text"
                         value={cn.year}
                         onChange={(e) => updateCaseNumber(idx, "year", e.target.value)}
-                        className="w-full px-2 py-1.5 text-xs text-center bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 font-mono focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2 py-1.5 text-xs text-center bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 font-mono font-bold focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                       Court / Division / Bench
                     </label>
                     <input
@@ -1363,12 +1363,12 @@ function CaseFormContent() {
                       placeholder="Appellate / High Court / Artha Rin Adalat"
                       value={cn.courtDivision}
                       onChange={(e) => updateCaseNumber(idx, "courtDivision", e.target.value)}
-                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                       Remarks / Notes
                     </label>
                     <input
@@ -1376,7 +1376,7 @@ function CaseFormContent() {
                       placeholder="e.g. Arising out of W.P. No. 1220"
                       value={cn.remarks || ""}
                       onChange={(e) => updateCaseNumber(idx, "remarks", e.target.value)}
-                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                     />
                   </div>
                 </div>
@@ -1386,11 +1386,11 @@ function CaseFormContent() {
         </div>
 
         {/* ================= SECTION 4: LITIGATING PARTIES ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-4 sm:p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800 gap-2">
             <div className="flex items-center gap-2 min-w-0">
-              <User className="h-4 w-4 text-[#cca776] shrink-0" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
+              <User className="h-4 w-4 text-[#724916] dark:text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase truncate">
                 4. Litigating Parties
               </h2>
             </div>
@@ -1409,7 +1409,7 @@ function CaseFormContent() {
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                <tr className="border-b border-[#ab8c67]/40 dark:border-slate-800 text-[10px] uppercase font-bold text-[#724916] dark:text-slate-400">
                   <th className="py-2 px-2 text-center w-10">SL</th>
                   <th className="py-2 px-2 w-32">Party Type</th>
                   <th className="py-2 px-2">Party Name &amp; Address Details</th>
@@ -1418,17 +1418,17 @@ function CaseFormContent() {
                   <th className="py-2 px-2 text-center w-16">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-[#ab8c67]/30 dark:divide-slate-800/60">
                 {parties.map((p, idx) => (
                   <tr key={idx}>
-                    <td className="py-2 px-2 text-center font-mono font-bold text-slate-400">
+                    <td className="py-2 px-2 text-center font-mono font-bold text-[#724916] dark:text-slate-400">
                       {p.partyNo || idx + 1}
                     </td>
                     <td className="py-2 px-2">
                       <select
                         value={p.partyType || "Petitioner"}
                         onChange={(e) => updateParty(idx, "partyType", e.target.value)}
-                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       >
                         <option value="Petitioner">Petitioner</option>
                         <option value="Appellant">Appellant</option>
@@ -1446,7 +1446,7 @@ function CaseFormContent() {
                         placeholder="e.g. M/S Bengal Agro Trade Ltd. Represented by MD, 45 Dilkusha C/A, Dhaka"
                         value={p.partyNameDetails}
                         onChange={(e) => updateParty(idx, "partyNameDetails", e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2 min-w-[140px]">
@@ -1462,14 +1462,14 @@ function CaseFormContent() {
                         placeholder="SL-12345/23"
                         value={p.searchListEntry || ""}
                         onChange={(e) => updateParty(idx, "searchListEntry", e.target.value)}
-                        className="w-full px-2 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-300 font-mono focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-300 font-mono font-bold placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2 text-center">
                       <button
                         type="button"
                         onClick={() => promptRemovePartyRow(idx)}
-                        className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
+                        className="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 cursor-pointer"
                         title="Remove row"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1484,10 +1484,10 @@ function CaseFormContent() {
           {/* Mobile View: Stacked Cards for Litigating Parties */}
           <div className="md:hidden space-y-3">
             {parties.map((p, idx) => (
-              <div key={idx} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5 shadow-sm">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
-                  <span className="text-xs font-bold text-[#cca776] flex items-center gap-1.5">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#cca776]/15 text-[11px] font-mono text-[#cca776]">
+              <div key={idx} className="p-3.5 rounded-xl bg-[#cbb292]/30 border border-[#ab8c67] dark:bg-slate-950 dark:border-slate-800 space-y-2.5 shadow-sm">
+                <div className="flex items-center justify-between pb-2 border-b border-[#ab8c67]/40 dark:border-slate-800/80">
+                  <span className="text-xs font-bold text-[#724916] dark:text-[#cca776] flex items-center gap-1.5">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#724916] text-[#cca776] dark:bg-[#cca776]/15 dark:text-[#cca776] text-[11px] font-mono font-bold">
                       {p.partyNo || idx + 1}
                     </span>
                     Party #{p.partyNo || idx + 1}
@@ -1495,7 +1495,7 @@ function CaseFormContent() {
                   <button
                     type="button"
                     onClick={() => promptRemovePartyRow(idx)}
-                    className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
+                    className="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
                     title="Remove party"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -1506,13 +1506,13 @@ function CaseFormContent() {
                 <div className="space-y-2.5">
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                         Party Type
                       </label>
                       <select
                         value={p.partyType || "Petitioner"}
                         onChange={(e) => updateParty(idx, "partyType", e.target.value)}
-                        className="w-full px-2 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       >
                         <option value="Petitioner">Petitioner</option>
                         <option value="Appellant">Appellant</option>
@@ -1526,7 +1526,7 @@ function CaseFormContent() {
                     </div>
 
                     <div>
-                      <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                      <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                         Received Date
                       </label>
                       <LegalDatePicker
@@ -1538,7 +1538,7 @@ function CaseFormContent() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                       Party Name &amp; Full Address Details
                     </label>
                     <textarea
@@ -1546,12 +1546,12 @@ function CaseFormContent() {
                       placeholder="e.g. M/S Bengal Agro Trade Ltd. Represented by MD, 45 Dilkusha C/A, Dhaka"
                       value={p.partyNameDetails}
                       onChange={(e) => updateParty(idx, "partyNameDetails", e.target.value)}
-                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                      className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                       Search List / SL Entry
                     </label>
                     <input
@@ -1559,7 +1559,7 @@ function CaseFormContent() {
                       placeholder="SL-12345/23"
                       value={p.searchListEntry || ""}
                       onChange={(e) => updateParty(idx, "searchListEntry", e.target.value)}
-                      className="w-full px-2.5 py-1.5 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-300 font-mono focus:outline-none focus:border-[#cca776]"
+                      className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-300 font-mono font-bold placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                     />
                   </div>
                 </div>
@@ -1569,15 +1569,15 @@ function CaseFormContent() {
         </div>
 
         {/* ================= SECTION 5: ASSIGNED ADVOCATE & CASE STATUS ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <Scale className="h-4 w-4 text-[#cca776]" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+              <Scale className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
+              <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase">
                 5. Assigned Advocate &amp; Chamber Status
               </h2>
             </div>
-            <span className="text-[10px] px-2.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 font-medium">
+            <span className="text-[10px] px-2.5 py-0.5 rounded bg-[#cbb292] text-[#724916] border border-[#ab8c67] font-bold dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
               Internal Chamber Assignment
             </span>
           </div>
@@ -1585,21 +1585,21 @@ function CaseFormContent() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-slate-300">
-                  Assigned Advocate (Counsel) <span className="text-rose-400">*</span>
+                <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300">
+                  Assigned Advocate (Counsel) <span className="text-rose-500">*</span>
                 </label>
                 {currentUserRole === "associate" && (
-                  <span className="text-[10px] text-amber-400/90 font-mono">Lead Counsel</span>
+                  <span className="text-[10px] text-[#724916] dark:text-amber-400/90 font-mono font-bold">Lead Counsel</span>
                 )}
               </div>
               <select
                 value={assignedAdvocateId || assignedAdvocateName}
                 onChange={handleAdvocateChange}
                 disabled={currentUserRole === "associate"}
-                className={`w-full px-3 py-2 text-xs bg-slate-950 border rounded-lg text-slate-100 font-medium focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
+                className={`w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border rounded-lg text-[#0F172B] dark:text-slate-100 font-medium focus:outline-none transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
                   formErrors.assignedAdvocate
-                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-950/20"
-                    : "border-slate-700 focus:border-[#cca776]"
+                    ? "border-rose-500 ring-1 ring-rose-500/40 bg-rose-50 dark:bg-rose-950/20"
+                    : "border-[#ab8c67] focus:border-[#724916] dark:border-slate-700 dark:focus:border-[#cca776]"
                 }`}
               >
                 <option value="Unassigned">Unassigned (Chamber Pool)</option>
@@ -1610,15 +1610,15 @@ function CaseFormContent() {
                 ))}
               </select>
               {formErrors.assignedAdvocate && (
-                <div className="flex items-center gap-1.5 text-xs text-rose-400 font-medium mt-1">
-                  <AlertCircle className="h-3.5 w-3.5 text-rose-400 shrink-0" />
+                <div className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-medium mt-1">
+                  <AlertCircle className="h-3.5 w-3.5 text-rose-600 dark:text-rose-400 shrink-0" />
                   <span>{formErrors.assignedAdvocate}</span>
                 </div>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
                 Assisting Associate (Optional)
               </label>
               <select
@@ -1630,7 +1630,7 @@ function CaseFormContent() {
                   setAssignedAssociateName(found ? found.name : "");
                   setAssignedAssociateCode(found?.associateId || "");
                 }}
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-100 font-medium focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-100 font-medium focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               >
                 <option value="">None Assigned</option>
                 {advocates.map((u) => (
@@ -1642,7 +1642,7 @@ function CaseFormContent() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
                 Date Assigned
               </label>
               <LegalDatePicker
@@ -1653,7 +1653,7 @@ function CaseFormContent() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
                 Litigation Status
               </label>
               <select
@@ -1668,7 +1668,7 @@ function CaseFormContent() {
                       | "decreed"
                   )
                 }
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-[#cca776] font-bold focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#724916] dark:text-[#cca776] font-bold focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               >
                 <option value="running">Running (Active Litigation)</option>
                 <option value="stay_granted">Stay Granted / Injunction</option>
@@ -1681,10 +1681,10 @@ function CaseFormContent() {
 
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-medium text-slate-400">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-400">
                 Internal Remarks / Instructions
               </label>
-              <span className="text-[10px] text-slate-500 font-medium">Quick Law Presets</span>
+              <span className="text-[10px] text-[#724916] dark:text-slate-500 font-bold">Quick Law Presets</span>
             </div>
             {/* Quick Preset Buttons */}
             <div className="flex flex-wrap gap-1.5 pb-1">
@@ -1701,10 +1701,10 @@ function CaseFormContent() {
                   key={preset}
                   type="button"
                   onClick={() => setInternalRemarks(preset)}
-                  className={`text-[11px] px-2 py-0.5 rounded-full border transition-colors cursor-pointer ${
+                  className={`text-[11px] px-2.5 py-0.5 rounded-full border transition-colors cursor-pointer ${
                     internalRemarks === preset
-                      ? "bg-[#cca776] text-black border-[#cca776] font-semibold"
-                      : "bg-slate-950 border-slate-700/80 text-slate-300 hover:border-[#cca776]/60 hover:text-white"
+                      ? "bg-[#724916] text-[#cca776] border-[#ab8c67] font-bold dark:bg-[#cca776] dark:text-black dark:border-[#cca776]"
+                      : "bg-[#cbb292]/50 border-[#ab8c67] text-[#724916] font-medium hover:bg-[#724916] hover:text-[#cca776] dark:bg-slate-950 dark:border-slate-700/80 dark:text-slate-300 dark:hover:border-[#cca776]/60 dark:hover:text-white"
                   }`}
                 >
                   {preset}
@@ -1716,17 +1716,17 @@ function CaseFormContent() {
               placeholder="e.g. Drafting rejoinder and hearing before High Court Bench 14"
               value={internalRemarks}
               onChange={(e) => setInternalRemarks(e.target.value)}
-              className="w-full px-3 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+              className="w-full px-3 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
             />
           </div>
         </div>
 
         {/* ================= SECTION 6: PROCEEDINGS & CHRONOLOGICAL STATUS ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-4 sm:p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800 gap-2">
             <div className="flex items-center gap-2 min-w-0">
-              <Clock className="h-4 w-4 text-[#cca776] shrink-0" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
+              <Clock className="h-4 w-4 text-[#724916] dark:text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase truncate">
                 6. Court Proceedings &amp; Status Updates
               </h2>
             </div>
@@ -1745,7 +1745,7 @@ function CaseFormContent() {
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                <tr className="border-b border-[#ab8c67]/40 dark:border-slate-800 text-[10px] uppercase font-bold text-[#724916] dark:text-slate-400">
                   <th className="py-2 px-2 w-36">Date</th>
                   <th className="py-2 px-2">Order / Step / Status Description</th>
                   <th className="py-2 px-2 w-48">Court / Bench</th>
@@ -1753,7 +1753,7 @@ function CaseFormContent() {
                   <th className="py-2 px-2 text-center w-16">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-[#ab8c67]/30 dark:divide-slate-800/60">
                 {statusUpdates.map((su, idx) => (
                   <tr key={idx}>
                     <td className="py-2 px-2">
@@ -1769,7 +1769,7 @@ function CaseFormContent() {
                         placeholder="e.g. First Order: Rule and Stay for 06 Months on 12.08.2024 before Bijoy-09"
                         value={su.statusRemarks}
                         onChange={(e) => updateStatus(idx, "statusRemarks", e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-100 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2">
@@ -1778,7 +1778,7 @@ function CaseFormContent() {
                         placeholder="e.g. Annex-14 / Court 03"
                         value={su.courtName || ""}
                         onChange={(e) => updateStatus(idx, "courtName", e.target.value)}
-                        className="w-full px-2.5 py-1.5 text-xs bg-slate-950 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                        className="w-full px-2.5 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                       />
                     </td>
                     <td className="py-2 px-2">
@@ -1792,7 +1792,7 @@ function CaseFormContent() {
                       <button
                         type="button"
                         onClick={() => promptRemoveStatusRow(idx)}
-                        className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer"
+                        className="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 cursor-pointer"
                         title="Remove status update"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -1809,11 +1809,11 @@ function CaseFormContent() {
             {statusUpdates.map((su, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 shadow-md"
+                className="p-4 rounded-xl bg-[#cbb292]/30 border border-[#ab8c67] dark:bg-slate-950 dark:border-slate-800 space-y-3 shadow-sm"
               >
-                <div className="flex items-center justify-between pb-2.5 border-b border-slate-800/80">
-                  <span className="text-xs font-bold text-[#cca776] flex items-center gap-2">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#cca776]/15 text-[11px] font-mono text-[#cca776]">
+                <div className="flex items-center justify-between pb-2.5 border-b border-[#ab8c67]/40 dark:border-slate-800/80">
+                  <span className="text-xs font-bold text-[#724916] dark:text-[#cca776] flex items-center gap-2">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#724916] text-[#cca776] dark:bg-[#cca776]/15 dark:text-[#cca776] text-[11px] font-mono font-bold">
                       {idx + 1}
                     </span>
                     Proceeding Entry #{idx + 1}
@@ -1821,7 +1821,7 @@ function CaseFormContent() {
                   <button
                     type="button"
                     onClick={() => promptRemoveStatusRow(idx)}
-                    className="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-950/40 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
+                    className="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 cursor-pointer flex items-center gap-1 text-xs whitespace-nowrap"
                     title="Remove status update"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -1831,7 +1831,7 @@ function CaseFormContent() {
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                       Date of Proceeding / Hearing
                     </label>
                     <LegalDatePicker
@@ -1842,20 +1842,20 @@ function CaseFormContent() {
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
-                      Order / Step / Status Description <span className="text-rose-400">*</span>
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
+                      Order / Step / Status Description <span className="text-rose-500">*</span>
                     </label>
                     <textarea
                       rows={2}
                       placeholder="e.g. First Order: Rule and Stay for 06 Months on 12.08.2024 before Bijoy-09"
                       value={su.statusRemarks}
                       onChange={(e) => updateStatus(idx, "statusRemarks", e.target.value)}
-                      className="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                      className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                       Court / Bench / Chamber Room
                     </label>
                     <input
@@ -1863,12 +1863,12 @@ function CaseFormContent() {
                       placeholder="e.g. Annex-14 / Court 03 / Bench 22"
                       value={su.courtName || ""}
                       onChange={(e) => updateStatus(idx, "courtName", e.target.value)}
-                      className="w-full px-3 py-2 text-xs bg-slate-900 border border-slate-700/80 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                      className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700/80 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                    <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                       Next Fixed Hearing Date
                     </label>
                     <LegalDatePicker
@@ -1884,17 +1884,17 @@ function CaseFormContent() {
         </div>
 
         {/* ================= SECTION 7: SPECIAL CHAMBER NOTES ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
-          <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
-            <FileText className="h-4 w-4 text-[#cca776]" />
-            <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-4 sm:p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center gap-2 pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800">
+            <FileText className="h-4 w-4 text-[#724916] dark:text-[#cca776]" />
+            <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase">
               7. Special Chamber Notes &amp; Filings
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
                 Wokalatnama / Power Note
               </label>
               <input
@@ -1902,12 +1902,12 @@ function CaseFormContent() {
                 placeholder="e.g. Available with bank / Filed on 12.02.2024"
                 value={wokalatnamaNote}
                 onChange={(e) => setWokalatnamaNote(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
                 Main Petition Note
               </label>
               <input
@@ -1915,12 +1915,12 @@ function CaseFormContent() {
                 placeholder="e.g. Main petition filed by the bank"
                 value={mainPetitionNote}
                 onChange={(e) => setMainPetitionNote(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
                 Extension / Stay Note
               </label>
               <input
@@ -1928,12 +1928,12 @@ function CaseFormContent() {
                 placeholder="e.g. Extension granted till 30.12.2024"
                 value={extensionNote}
                 onChange={(e) => setExtensionNote(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172B] dark:text-slate-300 mb-1.5">
                 General Chamber Remarks
               </label>
               <input
@@ -1941,31 +1941,31 @@ function CaseFormContent() {
                 placeholder="e.g. Confidential client instructions / file notes"
                 value={generalRemarks}
                 onChange={(e) => setGeneralRemarks(e.target.value)}
-                className="w-full px-3 py-2 text-xs bg-slate-950 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                className="w-full px-3 py-2 text-xs bg-[#f3ebd9] dark:bg-slate-950 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-200 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
               />
             </div>
           </div>
         </div>
 
         {/* ================= SECTION 8: LEGAL DOCUMENTS & EVIDENCE MANAGEMENT ================= */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-4 sm:p-5 shadow-lg space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800 gap-2">
+        <div className="bg-[#dfceb7] border border-[#ab8c67] text-[#0F172B] dark:bg-slate-900/90 dark:border-slate-800 dark:text-white rounded-xl p-4 sm:p-5 shadow-sm dark:shadow-lg space-y-4">
+          <div className="flex items-center justify-between pb-3 border-b border-[#ab8c67]/40 dark:border-slate-800 gap-2">
             <div className="flex items-center gap-2 min-w-0">
-              <UploadCloud className="h-4 w-4 text-[#cca776] shrink-0" />
-              <h2 className="text-xs font-bold tracking-wider text-slate-200 uppercase truncate">
+              <UploadCloud className="h-4 w-4 text-[#724916] dark:text-[#cca776] shrink-0" />
+              <h2 className="text-xs font-bold tracking-wider text-[#0F172B] dark:text-white uppercase truncate">
                 8. Case Documents &amp; Evidence Files ({documents.length})
               </h2>
             </div>
-            <span className="text-[10px] px-2.5 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700 font-medium">
+            <span className="text-[10px] px-2.5 py-0.5 rounded bg-[#cbb292] text-[#724916] border border-[#ab8c67] font-bold dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
               PDF, DOCX, Evidence (Max 15MB)
             </span>
           </div>
 
           {/* Upload Input & Category Selector */}
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+          <div className="p-3.5 rounded-xl bg-[#cbb292]/30 border border-[#ab8c67] dark:bg-slate-950 dark:border-slate-800/80 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
               <div className="sm:col-span-5">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                   Document Title / Description
                 </label>
                 <input
@@ -1973,18 +1973,18 @@ function CaseFormContent() {
                   placeholder="e.g. Certified Copy of High Court Order"
                   value={newDocTitle}
                   onChange={(e) => setNewDocTitle(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-100 placeholder-slate-500 focus:outline-none focus:border-[#cca776]"
+                  className="w-full px-3 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-100 placeholder-[#6e5a44] dark:placeholder-slate-500 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                 />
               </div>
 
               <div className="sm:col-span-4">
-                <label className="block text-[11px] font-medium text-slate-400 mb-1">
+                <label className="block text-[11px] font-semibold text-[#0F172B] dark:text-slate-400 mb-1">
                   Category
                 </label>
                 <select
                   value={newDocCategory}
                   onChange={(e) => setNewDocCategory(e.target.value)}
-                  className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-slate-200 focus:outline-none focus:border-[#cca776]"
+                  className="w-full px-3 py-1.5 text-xs bg-[#f3ebd9] dark:bg-slate-900 border border-[#ab8c67] dark:border-slate-700 rounded-lg text-[#0F172B] dark:text-slate-200 focus:outline-none focus:border-[#724916] dark:focus:border-[#cca776]"
                 >
                   <option value="Main Petition / Plaint">Main Petition / Plaint</option>
                   <option value="Wokalatnama / Power of Attorney">Wokalatnama / Power of Attorney</option>
@@ -2018,14 +2018,14 @@ function CaseFormContent() {
 
           {/* Uploaded Documents List */}
           {documents.length === 0 ? (
-            <div className="p-6 text-center rounded-lg border border-dashed border-slate-800 text-xs text-slate-500">
+            <div className="p-6 text-center rounded-lg border border-dashed border-[#ab8c67] dark:border-slate-800 text-xs text-[#724916] dark:text-slate-500 font-medium">
               No documents attached yet. Click Browse &amp; Attach above to archive petitions, certified orders, or evidence.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                  <tr className="border-b border-[#ab8c67]/40 dark:border-slate-800 text-[10px] uppercase font-bold text-[#724916] dark:text-slate-400">
                     <th className="py-2 px-2 w-10 text-center">SL</th>
                     <th className="py-2 px-2">Document Title &amp; Category</th>
                     <th className="py-2 px-2 w-28 text-center">Type</th>
@@ -2033,22 +2033,22 @@ function CaseFormContent() {
                     <th className="py-2 px-2 text-right w-28">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-[#ab8c67]/30 dark:divide-slate-800/60">
                   {documents.map((doc, idx) => (
-                    <tr key={idx} className="hover:bg-slate-950/60">
-                      <td className="py-2.5 px-2 text-center font-mono text-slate-400">{idx + 1}</td>
+                    <tr key={idx} className="hover:bg-[#cbb292]/20 dark:hover:bg-slate-950/60">
+                      <td className="py-2.5 px-2 text-center font-mono font-bold text-[#724916] dark:text-slate-400">{idx + 1}</td>
                       <td className="py-2 px-2">
                         <div className="flex items-center gap-2">
-                          <Paperclip className="h-3.5 w-3.5 text-[#cca776] shrink-0" />
-                          <span className="font-semibold text-slate-200">{doc.title}</span>
+                          <Paperclip className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776] shrink-0" />
+                          <span className="font-bold text-[#0F172B] dark:text-slate-200">{doc.title}</span>
                         </div>
                       </td>
                       <td className="py-2 px-2 text-center">
-                        <span className="uppercase font-mono text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                        <span className="uppercase font-mono text-[10px] px-2 py-0.5 rounded bg-[#cbb292] text-[#724916] border border-[#ab8c67] font-bold dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700">
                           {doc.fileType || "doc"}
                         </span>
                       </td>
-                      <td className="py-2 px-2 text-slate-400 text-[11px]">
+                      <td className="py-2 px-2 text-[#724916] dark:text-slate-400 text-[11px] font-medium">
                         {doc.uploadedAt ? new Date(doc.uploadedAt).toLocaleDateString("en-GB") : "Just now"}
                       </td>
                       <td className="py-2 px-2 text-right">
@@ -2057,7 +2057,7 @@ function CaseFormContent() {
                             href={doc.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 font-semibold text-[#cca776] hover:underline"
+                            className="inline-flex items-center gap-1 font-bold text-[#724916] hover:underline dark:text-[#cca776]"
                             title="Open document in new tab"
                           >
                             <span>Open</span>
@@ -2066,7 +2066,7 @@ function CaseFormContent() {
                           <button
                             type="button"
                             onClick={() => removeDocument(idx)}
-                            className="text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-950/40 cursor-pointer"
+                            className="text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 cursor-pointer"
                             title="Remove document"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -2082,15 +2082,15 @@ function CaseFormContent() {
         </div>
 
         {/* ================= FORM FOOTER ACTIONS ================= */}
-        <div className="p-4 bg-slate-900/90 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 shadow-xl">
-          <div className="text-xs text-slate-400">
+        <div className="p-4 bg-[#dfceb7] border border-[#ab8c67] rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 shadow-sm dark:bg-slate-900/90 dark:border-slate-800 dark:shadow-xl">
+          <div className="text-xs">
             {selectedInst ? (
-              <span className="truncate block">
+              <span className="truncate block text-[#724916] dark:text-slate-400 font-medium">
                 Case enrolled under{" "}
-                <strong className="text-[#cca776]">{selectedInst.name}</strong>
+                <strong className="text-[#0F172B] dark:text-[#cca776]">{selectedInst.name}</strong>
               </span>
             ) : (
-              <span className="text-amber-400 flex items-center gap-1 text-xs">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#724916]/15 text-[#724916] border border-[#ab8c67] font-bold text-xs dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800/60">
                 ⚠️ Select Institution / Client above to save
               </span>
             )}
@@ -2100,7 +2100,7 @@ function CaseFormContent() {
             <button
               type="button"
               onClick={() => setShowDiscardConfirmModal(true)}
-              className="px-3 sm:px-4 py-2 text-xs font-semibold rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
+              className="px-3 sm:px-4 py-2 text-xs font-bold rounded-lg border border-[#ab8c67] bg-[#cbb292] text-[#724916] hover:bg-[#724916] hover:text-[#cca776] dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white transition-colors cursor-pointer whitespace-nowrap shrink-0"
             >
               Cancel &amp; Discard
             </button>
@@ -2149,10 +2149,10 @@ export default function CaseFormPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-400">
+        <div className="min-h-screen bg-transparent flex items-center justify-center text-[#724916] dark:text-slate-400">
           <div className="flex flex-col items-center gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-solid border-[#cca776] border-r-transparent"></div>
-            <p className="text-xs">Loading Case Entry Engine...</p>
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-solid border-[#724916] dark:border-[#cca776] border-r-transparent"></div>
+            <p className="text-xs font-bold">Loading Case Entry Engine...</p>
           </div>
         </div>
       }

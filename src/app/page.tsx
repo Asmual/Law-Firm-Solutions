@@ -138,7 +138,7 @@ export default function HomePage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginEmail || !loginPassword) {
-      toast.error("Please enter email and password.");
+      toast.error("Please enter email address or username, and password.");
       return;
     }
 
@@ -147,7 +147,11 @@ export default function HomePage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+        body: JSON.stringify({
+          email: loginEmail,
+          username: loginEmail,
+          password: loginPassword,
+        }),
       });
 
       const data = await res.json();
@@ -182,7 +186,12 @@ export default function HomePage() {
 
       const data = await res.json();
       if (data.success) {
-        toast.success(`Account created successfully as ${signupData.role}!`);
+        const usernameMsg = data.user?.username
+          ? ` (Username: @${data.user.username})`
+          : "";
+        toast.success(
+          `Account created successfully as ${signupData.role}!${usernameMsg}`
+        );
         router.replace("/dashboard");
       } else {
         toast.error(data.error || "Registration failed.");
@@ -344,47 +353,50 @@ export default function HomePage() {
             </button>
 
             {/* LEFT PANEL: Login-bg.jpg Image & Chamber Identity (Hidden on Mobile, Displayed on md+) */}
-            <div className="hidden md:flex md:w-5/12 relative min-h-[460px] p-5 sm:p-6 flex-col justify-between text-white overflow-hidden shrink-0 border-r border-white/10">
+            <div className="hidden md:flex md:w-5/12 relative min-h-[460px] p-5 sm:p-6 flex-col justify-center text-white overflow-hidden shrink-0 border-r border-white/10">
               <img
                 src="/images/Login-bg.jpg"
                 alt="Law Firm Solutions Authentication"
                 className="absolute inset-0 w-full h-full object-cover object-center"
               />
               {/* Atmospheric Overlay for maximum text contrast */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-950/40 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-slate-950/45 pointer-events-none" />
 
-              {/* Top: Dari-palla Logo & Seal */}
-              <div className="relative z-10 space-y-1.5">
-                <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/25 text-[#cca776] ring-1 ring-[#cca776]/50 shadow-lg backdrop-blur-md">
-                  <Scale className="h-5 w-5" />
-                </div>
-                <h3 className="text-base font-black tracking-wide text-white uppercase">
-                  {BRANDING.brandName}
-                </h3>
-                <p className="text-[11px] text-[#cca776] font-medium">
-                  {BRANDING.tagline}
-                </p>
-              </div>
-
-              {/* Bottom: Chamber Quote & Pillars */}
-              <div className="relative z-10 space-y-2.5 pt-4">
-                <div className="p-3 rounded-xl bg-slate-950/60 border border-white/15 backdrop-blur-md space-y-1">
-                  <p className="text-[10px] text-slate-200 italic">
-                    &ldquo;Fiat Justitia Ruat Caelum — Let justice be done though the heavens fall.&rdquo;
-                  </p>
-                  <p className="text-[9px] text-[#cca776] font-semibold uppercase tracking-wider">
-                    High Court & Supreme Court Chambers
-                  </p>
-                </div>
-
-                <div className="space-y-1.5 text-[10px] text-slate-200">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-[#cca776] shrink-0" />
-                    <span>Bank & Financial Litigation Management</span>
+              {/* Centered Identity & Pillars Content Wrapper */}
+              <div className="relative z-10 flex flex-col justify-center space-y-6 my-auto">
+                {/* Dari-palla Logo & Seal */}
+                <div className="space-y-1.5">
+                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#cca776]/25 text-[#cca776] ring-1 ring-[#cca776]/50 shadow-lg backdrop-blur-md">
+                    <Scale className="h-5 w-5" />
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="h-3.5 w-3.5 text-[#cca776] shrink-0" />
-                    <span>Automated Cause Lists & Court Proceedings</span>
+                  <h3 className="text-base font-black tracking-wide text-white uppercase">
+                    {BRANDING.brandName}
+                  </h3>
+                  <p className="text-[11px] text-[#cca776] font-medium">
+                    {BRANDING.tagline}
+                  </p>
+                </div>
+
+                {/* Chamber Quote & Pillars */}
+                <div className="space-y-2.5">
+                  <div className="p-3 rounded-xl bg-slate-950/60 border border-white/15 backdrop-blur-md space-y-1">
+                    <p className="text-[10px] text-slate-200 italic">
+                      &ldquo;Fiat Justitia Ruat Caelum — Let justice be done though the heavens fall.&rdquo;
+                    </p>
+                    <p className="text-[9px] text-[#cca776] font-semibold uppercase tracking-wider">
+                      High Court & Supreme Court Chambers
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5 text-[10px] text-slate-200">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-[#cca776] shrink-0" />
+                      <span>Bank & Financial Litigation Management</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-[#cca776] shrink-0" />
+                      <span>Automated Cause Lists & Court Proceedings</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -436,16 +448,17 @@ export default function HomePage() {
                 <form onSubmit={handleLogin} className="space-y-2.5 animate-in fade-in duration-200">
                   <div>
                     <label className="block text-[11px] sm:text-xs font-semibold text-slate-200 mb-1">
-                      Official Email Address *
+                      Official Email Address or Username *
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-400" />
                       <input
-                        type="email"
+                        type="text"
                         required
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
-                        placeholder="advocate@chamber.com"
+                        placeholder="Enter your email address"
+                        autoComplete="username"
                         className="w-full rounded-xl border border-white/20 bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] backdrop-blur-md pl-9 pr-3 py-1.5 sm:py-2 text-xs text-white placeholder-slate-300 focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]/50 focus:outline-none transition-all shadow-inner"
                       />
                     </div>
@@ -462,7 +475,7 @@ export default function HomePage() {
                         required
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
-                        placeholder="••••••••"
+                        placeholder="Enter your password"
                         className="w-full rounded-xl border border-white/20 bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] backdrop-blur-md pl-9 pr-8 py-1.5 sm:py-2 text-xs text-white placeholder-slate-300 focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]/50 focus:outline-none transition-all shadow-inner"
                       />
                       {/* Password Show/Hide Toggle Icon */}
@@ -533,7 +546,7 @@ export default function HomePage() {
                         onChange={(e) =>
                           setSignupData({ ...signupData, name: e.target.value })
                         }
-                        placeholder="Advocate / Associate Name"
+                        placeholder="Enter your full legal name"
                         className="w-full rounded-xl border border-white/20 bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] backdrop-blur-md pl-9 pr-3 py-1.5 sm:py-2 text-xs text-white placeholder-slate-300 focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]/50 focus:outline-none transition-all shadow-inner"
                       />
                     </div>
@@ -553,7 +566,7 @@ export default function HomePage() {
                           onChange={(e) =>
                             setSignupData({ ...signupData, email: e.target.value })
                           }
-                          placeholder="name@chamber.com"
+                          placeholder="Enter your email address"
                           className="w-full rounded-xl border border-white/20 bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] backdrop-blur-md pl-9 pr-3 py-1.5 sm:py-2 text-xs text-white placeholder-slate-300 focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]/50 focus:outline-none transition-all shadow-inner"
                         />
                       </div>
@@ -573,7 +586,7 @@ export default function HomePage() {
                           onChange={(e) =>
                             setSignupData({ ...signupData, password: e.target.value })
                           }
-                          placeholder="••••••••"
+                          placeholder="Enter your password"
                           className="w-full rounded-xl border border-white/20 bg-white/[0.08] hover:bg-white/[0.12] focus:bg-white/[0.15] backdrop-blur-md pl-9 pr-8 py-1.5 sm:py-2 text-xs text-white placeholder-slate-300 focus:border-[#cca776] focus:ring-1 focus:ring-[#cca776]/50 focus:outline-none transition-all shadow-inner"
                         />
                         {/* Password Show/Hide Toggle Icon */}

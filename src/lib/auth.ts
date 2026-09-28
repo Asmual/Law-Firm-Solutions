@@ -10,6 +10,7 @@ export interface SessionPayload {
   userId: string;
   name: string;
   email: string;
+  username?: string;
   role: UserRole;
   chamberDesignation?: string;
   exp: number;
@@ -35,7 +36,7 @@ export function verifyPassword(password: string, storedHash: string): boolean {
 
 // 2. Token Signing & Verification
 export function signSessionToken(payload: Omit<SessionPayload, "exp">): string {
-  const exp = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days
+  const exp = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days active session
   const data: SessionPayload = { ...payload, exp };
   const jsonStr = JSON.stringify(data);
   const base64Data = Buffer.from(jsonStr).toString("base64url");

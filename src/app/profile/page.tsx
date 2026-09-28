@@ -49,6 +49,7 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState({
     name: "",
     email: "",
+    username: "",
     phone: "",
     role: "associate",
     chamberDesignation: "",
@@ -94,6 +95,7 @@ export default function ProfilePage() {
         setProfileData({
           name: u.name || "",
           email: u.email || "",
+          username: u.username || "",
           phone: u.phone || "",
           role: u.role || "associate",
           chamberDesignation: u.chamberDesignation || "",
@@ -613,6 +615,12 @@ export default function ProfilePage() {
 
             {/* Contact & Bar roll badges */}
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-1 text-xs">
+              {profileData.username && (
+                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#724916] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-bold" title="Your unique chamber username">
+                  <span className="text-[#724916] dark:text-[#cca776] font-mono">@</span>
+                  <span className="font-mono">{profileData.username}</span>
+                </span>
+              )}
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#cbb292]/50 text-[#724916] border border-[#ab8c67]/60 dark:bg-slate-950/60 dark:text-slate-300 dark:border-slate-800 font-bold">
                 <Mail className="h-3.5 w-3.5 text-[#724916] dark:text-[#cca776]" />
                 {profileData.email}

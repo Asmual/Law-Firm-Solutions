@@ -78,13 +78,17 @@ export async function POST(req: NextRequest) {
       userId: adminUser._id.toString(),
       name: adminUser.name || "Barrister Rafiqul Islam",
       email: adminUser.email || "admin@chamber.com",
+      username: adminUser.username || "admin",
       role: (adminUser.role || "admin") as UserRole,
       chamberDesignation: adminUser.chamberDesignation || "Managing Partner & Senior Counsel",
     });
 
     // 5. Update last active timestamp (safely)
     try {
-      await UserModel.findByIdAndUpdate(adminUser._id, { lastActiveAt: new Date() });
+      await UserModel.findByIdAndUpdate(adminUser._id, {
+        lastActiveAt: new Date(),
+        ...(!adminUser.username ? { username: "admin" } : {}),
+      });
     } catch (updateErr) {
       console.warn("Failed to update lastActiveAt:", updateErr);
     }
@@ -98,6 +102,7 @@ export async function POST(req: NextRequest) {
           userId: adminUser._id.toString(),
           name: adminUser.name,
           email: adminUser.email,
+          username: adminUser.username || "admin",
           role: adminUser.role as UserRole,
           chamberDesignation: adminUser.chamberDesignation,
           exp: 0,
@@ -121,6 +126,7 @@ export async function POST(req: NextRequest) {
         id: adminUser._id.toString(),
         name: adminUser.name,
         email: adminUser.email,
+        username: adminUser.username || "admin",
         role: adminUser.role,
         chamberDesignation: adminUser.chamberDesignation,
       },
@@ -132,7 +138,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       path: "/",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60,
+      maxAge: 30 * 24 * 60 * 60, // 30 days active session
     });
 
     return response;

@@ -3,6 +3,7 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { UserModel } from "@/models/User";
 import { hashPassword, signSessionToken } from "@/lib/auth";
 import { UserRole } from "@/types";
+import { generateUniqueUsername } from "@/lib/username";
 
 export async function POST(req: NextRequest) {
   try {
@@ -40,9 +41,20 @@ export async function POST(req: NextRequest) {
 
     const passwordHash = hashPassword(password);
 
+    // Automatically generate unique username based on full name (e.g., "tanvir" + number)
+    const username = await generateUniqueUsername(
+      name,
+      assignedRole,
+      async (candidate) => {
+        const found = await UserModel.findOne({ username: candidate });
+        return !!found;
+      }
+    );
+
     const user = await UserModel.create({
       name: name.trim(),
       email: normalizedEmail,
+      username,
       passwordHash,
       phone: phone?.trim() || "",
       role: assignedRole,
@@ -56,6 +68,7 @@ export async function POST(req: NextRequest) {
       userId: user._id.toString(),
       name: user.name,
       email: user.email,
+      username: user.username,
       role: user.role as UserRole,
       chamberDesignation: user.chamberDesignation,
     });
@@ -67,19 +80,20 @@ export async function POST(req: NextRequest) {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
+        username: user.username,
         role: user.role,
         chamberDesignation: user.chamberDesignation,
       },
     });
 
-    // Set secure HTTP-only cookie
+    // Set secure HTTP-only cookie with 30-day persistence
     response.cookies.set({
       name: "law_firm_session",
       value: token,
       httpOnly: true,
       path: "/",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      maxAge: 30 * 24 * 60 * 60, // 30 days active session
     });
 
     return response;

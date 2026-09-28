@@ -5,6 +5,7 @@ export type UserRole = "admin" | "advocate" | "associate";
 export interface IUserDocument extends Document {
   name: string;
   email: string;
+  username?: string;
   passwordHash?: string;
   phone?: string;
   role: UserRole;
@@ -29,6 +30,14 @@ const UserSchema = new Schema<IUserDocument>(
   {
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    username: {
+      type: String,
+      unique: true,
+      sparse: true,
+      lowercase: true,
+      trim: true,
+      index: true,
+    },
     passwordHash: { type: String, select: false },
     phone: { type: String, default: "" },
     role: {

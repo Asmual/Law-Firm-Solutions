@@ -9,24 +9,24 @@ export async function POST(req: NextRequest) {
   try {
     await connectToDatabase();
     const body = await req.json();
-    const { email, password } = body;
+    const { email, username, password } = body;
+    const identifier = (email || username || "").toLowerCase().trim();
 
-    if (!email || !password) {
+    if (!identifier || !password) {
       return NextResponse.json(
-        { success: false, error: "Email and password are required." },
+        { success: false, error: "Email or username, and password are required." },
         { status: 400 }
       );
     }
 
-    const normalizedEmail = email.toLowerCase().trim();
-    // Select passwordHash explicitly since it's select: false by default
-    const user = await UserModel.findOne({ email: normalizedEmail }).select(
-      "+passwordHash"
-    );
+    // Support login via either email OR username
+    const user = await UserModel.findOne({
+      $or: [{ email: identifier }, { username: identifier }],
+    }).select("+passwordHash");
 
     if (!user) {
       return NextResponse.json(
-        { success: false, error: "Invalid email or password." },
+        { success: false, error: "Invalid email/username or password." },
         { status: 401 }
       );
     }
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     // Check password
     if (!user.passwordHash || !verifyPassword(password, user.passwordHash)) {
       return NextResponse.json(
-        { success: false, error: "Invalid email or password." },
+        { success: false, error: "Invalid email/username or password." },
         { status: 401 }
       );
     }
@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
       userId: user._id.toString(),
       name: user.name,
       email: user.email,
+      username: user.username,
       role: user.role as UserRole,
       chamberDesignation: user.chamberDesignation,
     });
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
         userId: user._id.toString(),
         name: user.name,
         email: user.email,
+        username: user.username,
         role: user.role as UserRole,
         chamberDesignation: user.chamberDesignation,
         exp: 0,
@@ -85,6 +87,7 @@ export async function POST(req: NextRequest) {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
+        username: user.username,
         role: user.role,
         chamberDesignation: user.chamberDesignation,
       },
@@ -96,7 +99,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       path: "/",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60,
+      maxAge: 30 * 24 * 60 * 60, // 30 days active session
     });
 
     return response;

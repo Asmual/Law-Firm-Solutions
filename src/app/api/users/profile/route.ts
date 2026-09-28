@@ -29,6 +29,7 @@ export async function GET() {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
+        username: user.username || "",
         phone: user.phone || "",
         role: user.role,
         chamberDesignation: user.chamberDesignation || "",
@@ -100,6 +101,7 @@ export async function PUT(req: NextRequest) {
       userId: user._id.toString(),
       name: user.name,
       email: user.email,
+      username: user.username,
       role: user.role,
       chamberDesignation: user.chamberDesignation,
     });
@@ -111,6 +113,7 @@ export async function PUT(req: NextRequest) {
         id: user._id.toString(),
         name: user.name,
         email: user.email,
+        username: user.username || "",
         phone: user.phone,
         role: user.role,
         chamberDesignation: user.chamberDesignation,
@@ -120,14 +123,14 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    // Set updated cookie
+    // Set updated cookie with 30-day lifetime
     response.cookies.set({
       name: "law_firm_session",
       value: newToken,
       httpOnly: true,
       path: "/",
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60,
+      maxAge: 30 * 24 * 60 * 60, // 30 days active session
     });
 
     return response;

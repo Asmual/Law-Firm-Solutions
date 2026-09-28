@@ -5,6 +5,7 @@ export interface User {
   _id?: string;
   name: string;
   email: string;
+  username?: string;
   phone?: string;
   role: UserRole;
   chamberDesignation: string;

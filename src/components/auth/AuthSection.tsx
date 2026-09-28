@@ -46,7 +46,7 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginEmail || !loginPassword) {
-      toast.error("Please provide both email and password.");
+      toast.error("Please provide both email/username and password.");
       return;
     }
 
@@ -55,7 +55,11 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+        body: JSON.stringify({
+          email: loginEmail,
+          username: loginEmail,
+          password: loginPassword,
+        }),
       });
 
       const data = await res.json();
@@ -89,7 +93,8 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
 
       const data = await res.json();
       if (data.success) {
-        toast.success(`Account created successfully as ${signupData.role}!`);
+        const usernameMsg = data.user?.username ? ` (Username: @${data.user.username})` : "";
+        toast.success(`Account created successfully as ${signupData.role}!${usernameMsg}`);
         onSuccess(data.user);
       } else {
         toast.error(data.error || "Registration failed.");
@@ -104,9 +109,9 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
   return (
     <div className="min-h-[85vh] flex items-center justify-center p-4">
       <div className="w-full max-w-5xl overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/90 shadow-2xl backdrop-blur-xl grid grid-cols-1 lg:grid-cols-12">
-        {/* Left Branding Showcase (5 Cols) */}
-        <div className="lg:col-span-5 relative flex flex-col justify-between p-8 sm:p-10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border-b lg:border-b-0 lg:border-r border-slate-800 text-slate-100 overflow-hidden">
-          <div className="relative z-10 space-y-6">
+        {/* Left Branding Showcase (5 Cols) - Centered Layout */}
+        <div className="lg:col-span-5 relative flex flex-col justify-center p-8 sm:p-10 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 border-b lg:border-b-0 lg:border-r border-slate-800 text-slate-100 overflow-hidden">
+          <div className="relative z-10 space-y-6 my-auto">
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#cca776]/15 text-[#cca776] ring-1 ring-[#cca776]/30 shadow-inner">
                 <Scale className="h-6 w-6" />
@@ -121,7 +126,7 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
               </div>
             </div>
 
-            <div className="space-y-2 pt-4">
+            <div className="space-y-2 pt-2">
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
                 Enterprise Legal & Bank Litigation Platform
               </h2>
@@ -130,7 +135,7 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
               </p>
             </div>
 
-            <div className="space-y-3 pt-4">
+            <div className="space-y-3 pt-2">
               <div className="flex items-center gap-3 text-xs text-slate-300">
                 <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#cca776]/15 text-[#cca776]">
                   <ShieldCheck className="h-3.5 w-3.5" />
@@ -150,10 +155,10 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                 <span>Automated Letterhead Reporting & Daily Cause Lists</span>
               </div>
             </div>
-          </div>
 
-          <div className="relative z-10 pt-8 border-t border-slate-800/80 text-[11px] text-slate-500">
-            Enterprise Grade Security • 256-Bit SSL Encrypted
+            <div className="pt-4 border-t border-slate-800/80 text-[11px] text-slate-500">
+              Enterprise Grade Security • 256-Bit SSL Encrypted
+            </div>
           </div>
 
           {/* Ambient Glow */}
@@ -194,16 +199,17 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
             <form onSubmit={handleLogin} className="space-y-4 animate-in fade-in">
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Official Email Address
+                  Official Email Address or Username
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
                   <input
-                    type="email"
+                    type="text"
                     required
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
-                    placeholder="advocate@chamber.com"
+                    placeholder="Enter your email address"
+                    autoComplete="username"
                     className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
                   />
                 </div>
@@ -220,7 +226,7 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="••••••••"
+                    placeholder="Enter your password"
                     className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
                   />
                 </div>
@@ -254,7 +260,7 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                       onChange={(e) =>
                         setSignupData({ ...signupData, name: e.target.value })
                       }
-                      placeholder="e.g. Barrister / Advocate Name"
+                      placeholder="Enter your full legal name"
                       className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
                     />
                   </div>
@@ -273,7 +279,7 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                       onChange={(e) =>
                         setSignupData({ ...signupData, email: e.target.value })
                       }
-                      placeholder="advocate@chamber.com"
+                      placeholder="Enter your email address"
                       className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
                     />
                   </div>
@@ -295,7 +301,7 @@ export function AuthSection({ onSuccess }: AuthSectionProps) {
                       onChange={(e) =>
                         setSignupData({ ...signupData, password: e.target.value })
                       }
-                      placeholder="••••••••"
+                      placeholder="Enter your password"
                       className="w-full rounded-xl border border-slate-700 bg-slate-950 pl-8 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:border-[#cca776] focus:outline-none"
                     />
                   </div>

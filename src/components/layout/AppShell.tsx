@@ -1,37 +1,22 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { GlobalSearchModal } from "../common/GlobalSearchModal";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import { useTheme } from "@/context/ThemeContext";
 
 interface AppShellProps {
   children: React.ReactNode;
 }
 
-// Inactivity timeout default: 30 minutes (1800000 ms)
-const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000;
-
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const lastActivityRef = useRef(0);
-
-  // Inactivity auto-logout handler
-  const handleAutoLogout = useCallback(async () => {
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-      toast.info("Session expired due to 30 minutes of inactivity.");
-      router.replace("/");
-    } catch {
-      router.replace("/");
-    }
-  }, [router]);
 
   // Auth gate check: Ensure unauthenticated users cannot see any interface
   useEffect(() => {
@@ -48,35 +33,6 @@ export function AppShell({ children }: AppShellProps) {
         router.replace("/");
       });
   }, [pathname, router]);
-
-  // Inactivity timeout handler (30 min)
-  useEffect(() => {
-    if (pathname === "/") return;
-    lastActivityRef.current = Date.now();
-
-    const resetTimer = () => {
-      lastActivityRef.current = Date.now();
-    };
-
-    const interval = setInterval(() => {
-      if (Date.now() - lastActivityRef.current > INACTIVITY_TIMEOUT_MS) {
-        handleAutoLogout();
-      }
-    }, 60000);
-
-    window.addEventListener("mousemove", resetTimer);
-    window.addEventListener("keydown", resetTimer);
-    window.addEventListener("click", resetTimer);
-    window.addEventListener("scroll", resetTimer);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener("mousemove", resetTimer);
-      window.removeEventListener("keydown", resetTimer);
-      window.removeEventListener("click", resetTimer);
-      window.removeEventListener("scroll", resetTimer);
-    };
-  }, [pathname, handleAutoLogout]);
 
   const { theme } = useTheme();
 

@@ -3,12 +3,13 @@
 import React, { useState } from "react";
 import { X, Building2, User, Phone, Mail, MapPin, Check } from "lucide-react";
 import { toast } from "sonner";
-import { InstitutionCategory } from "@/types";
+import { Institution, InstitutionCategory } from "@/types";
 
 interface AddInstitutionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  institutionToEdit?: Institution | null;
 }
 
 const CATEGORIES: InstitutionCategory[] = [
@@ -24,6 +25,7 @@ export function AddInstitutionModal({
   isOpen,
   onClose,
   onSuccess,
+  institutionToEdit,
 }: AddInstitutionModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -38,7 +40,37 @@ export function AddInstitutionModal({
     focalPersonEmail: "",
   });
 
+  React.useEffect(() => {
+    if (institutionToEdit) {
+      setFormData({
+        name: institutionToEdit.name || "",
+        shortCode: institutionToEdit.shortCode || "",
+        category: (institutionToEdit.category as InstitutionCategory) || "Private Commercial Bank",
+        branch: institutionToEdit.branch || "",
+        address: institutionToEdit.address || "",
+        focalPersonName: institutionToEdit.focalPerson?.name || "",
+        focalPersonDesignation: institutionToEdit.focalPerson?.designation || "Head of Legal & Recovery",
+        focalPersonPhone: institutionToEdit.focalPerson?.phone || "",
+        focalPersonEmail: institutionToEdit.focalPerson?.email || "",
+      });
+    } else {
+      setFormData({
+        name: "",
+        shortCode: "",
+        category: "Private Commercial Bank",
+        branch: "",
+        address: "",
+        focalPersonName: "",
+        focalPersonDesignation: "Head of Legal & Recovery",
+        focalPersonPhone: "",
+        focalPersonEmail: "",
+      });
+    }
+  }, [institutionToEdit, isOpen]);
+
   if (!isOpen) return null;
+
+  const isEdit = Boolean(institutionToEdit);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,8 +81,13 @@ export function AddInstitutionModal({
 
     setIsSubmitting(true);
     try {
-      const res = await fetch("/api/institutions", {
-        method: "POST",
+      const url = isEdit
+        ? `/api/institutions/${institutionToEdit?.id || institutionToEdit?._id}`
+        : "/api/institutions";
+      const method = isEdit ? "PUT" : "POST";
+
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: formData.name.trim(),
@@ -69,11 +106,15 @@ export function AddInstitutionModal({
 
       const data = await res.json();
       if (data.success) {
-        toast.success(`"${formData.name}" added to Client Directory`);
+        toast.success(
+          isEdit
+            ? `"${formData.name}" updated successfully`
+            : `"${formData.name}" added to Client Directory`
+        );
         onSuccess();
         onClose();
       } else {
-        toast.error(data.error || "Failed to add institution");
+        toast.error(data.error || `Failed to ${isEdit ? "update" : "add"} institution`);
       }
     } catch {
       toast.error("Network error. Please try again.");
@@ -93,10 +134,10 @@ export function AddInstitutionModal({
             </div>
             <div>
               <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                Add Bank / Institution
+                {isEdit ? "Edit Bank / Institution" : "Add Bank / Institution"}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Register corporate client for litigation file tracking
+                {isEdit ? "Update corporate client profile and focal person" : "Register corporate client for litigation file tracking"}
               </p>
             </div>
           </div>
@@ -315,7 +356,7 @@ export function AddInstitutionModal({
               className="inline-flex items-center gap-1.5 rounded-lg bg-[#cca776] px-4 py-2 text-xs font-bold text-slate-950 shadow-sm hover:bg-[#b8935f] disabled:opacity-50 transition-colors"
             >
               <Check className="h-3.5 w-3.5" />
-              <span>{isSubmitting ? "Saving..." : "Save Institution"}</span>
+              <span>{isSubmitting ? "Saving..." : isEdit ? "Update Institution" : "Save Institution"}</span>
             </button>
           </div>
         </form>

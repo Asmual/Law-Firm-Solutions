@@ -15,8 +15,11 @@ import {
   Users,
   Grid,
   List,
+  Eye,
+  Edit,
 } from "lucide-react";
 import { AddInstitutionModal } from "@/components/institutions/AddInstitutionModal";
+import { InstitutionDetailModal } from "@/components/institutions/InstitutionDetailModal";
 import { Institution, InstitutionCategory } from "@/types";
 
 const CATEGORY_TABS: (InstitutionCategory | "All")[] = [
@@ -35,6 +38,8 @@ export default function InstitutionsPage() {
   const [selectedCategory, setSelectedCategory] = useState<InstitutionCategory | "All">("All");
   const [viewMode, setViewMode] = useState<"grid" | "table">("grid");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [institutionToEdit, setInstitutionToEdit] = useState<Institution | null>(null);
+  const [viewInstitutionId, setViewInstitutionId] = useState<string | null>(null);
 
   const fetchInstitutions = useCallback(async () => {
     setLoading(true);
@@ -92,7 +97,10 @@ export default function InstitutionsPage() {
         </div>
 
         <button
-          onClick={() => setIsAddModalOpen(true)}
+          onClick={() => {
+            setInstitutionToEdit(null);
+            setIsAddModalOpen(true);
+          }}
           className="inline-flex items-center gap-1.5 rounded-xl bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f] px-4 py-2.5 text-xs font-bold shadow-sm transition-all cursor-pointer"
         >
           <Plus className="h-4 w-4" />
@@ -215,7 +223,10 @@ export default function InstitutionsPage() {
             Try adjusting your search criteria or register a new bank.
           </p>
           <button
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={() => {
+              setInstitutionToEdit(null);
+              setIsAddModalOpen(true);
+            }}
             className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-[#724916] text-[#cca776] hover:bg-[#8b6028] dark:bg-[#cca776] dark:text-slate-950 dark:hover:bg-[#b8935f] px-3.5 py-1.5 text-xs font-bold transition-all cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5 text-[#cca776] dark:text-slate-950" />
@@ -244,7 +255,10 @@ export default function InstitutionsPage() {
                 </div>
 
                 {/* Institution Name */}
-                <h3 className="mt-3 text-sm font-bold text-slate-900 dark:text-white">
+                <h3
+                  onClick={() => setViewInstitutionId(inst.id || inst._id || "")}
+                  className="mt-3 text-sm font-bold text-slate-900 dark:text-white cursor-pointer hover:text-[#724916] dark:hover:text-[#cca776] transition-colors"
+                >
                   {inst.name}
                 </h3>
 
@@ -314,16 +328,39 @@ export default function InstitutionsPage() {
                   </span>
                 </div>
 
-                <Link
-                  href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
-                    inst.name
-                  )}`}
-                  className="inline-flex items-center gap-1 rounded-md bg-[#dfceb7]/60 border border-[#ab8c67]/40 px-2 py-1 text-[11px] font-semibold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] transition-colors dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-[#cca776] dark:hover:text-slate-950"
-                  title="Add new case file for this institution"
-                >
-                  <FilePlus2 className="h-3 w-3" />
-                  <span>+ Case</span>
-                </Link>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setViewInstitutionId(inst.id || inst._id || "")}
+                    className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition-colors"
+                    title="View institution profile and linked cases"
+                  >
+                    <Eye className="h-3 w-3" />
+                    <span>View</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setInstitutionToEdit(inst);
+                      setIsAddModalOpen(true);
+                    }}
+                    className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 transition-colors"
+                    title="Edit institution profile"
+                  >
+                    <Edit className="h-3 w-3" />
+                    <span>Edit</span>
+                  </button>
+
+                  <Link
+                    href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
+                      inst.name
+                    )}`}
+                    className="inline-flex items-center gap-1 rounded-md bg-[#dfceb7]/60 border border-[#ab8c67]/40 px-2 py-1 text-[11px] font-semibold text-[#724916] hover:bg-[#724916] hover:text-[#cca776] transition-colors dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-[#cca776] dark:hover:text-slate-950"
+                    title="Add new case file for this institution"
+                  >
+                    <FilePlus2 className="h-3 w-3" />
+                    <span>+ Case</span>
+                  </Link>
+                </div>
               </div>
             </div>
           ))}
@@ -356,7 +393,10 @@ export default function InstitutionsPage() {
                     <td className="px-4 py-3 font-bold text-slate-900 dark:text-white">
                       {inst.shortCode}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-slate-900 dark:text-white">
+                    <td
+                      onClick={() => setViewInstitutionId(inst.id || inst._id || "")}
+                      className="px-4 py-3 font-semibold text-slate-900 dark:text-white cursor-pointer hover:text-[#724916] dark:hover:text-[#cca776] transition-colors"
+                    >
                       {inst.name}
                     </td>
                     <td className="px-4 py-3">
@@ -388,14 +428,35 @@ export default function InstitutionsPage() {
                       {inst.disposedCases || 0}
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <Link
-                        href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
-                          inst.name
-                        )}`}
-                        className="font-bold text-[#724916] dark:text-[#cca776] hover:underline"
-                      >
-                        + New Case
-                      </Link>
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          onClick={() => setViewInstitutionId(inst.id || inst._id || "")}
+                          className="font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
+                          title="View Details"
+                        >
+                          View
+                        </button>
+                        <span className="text-slate-300 dark:text-slate-700">•</span>
+                        <button
+                          onClick={() => {
+                            setInstitutionToEdit(inst);
+                            setIsAddModalOpen(true);
+                          }}
+                          className="font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
+                          title="Edit Institution"
+                        >
+                          Edit
+                        </button>
+                        <span className="text-slate-300 dark:text-slate-700">•</span>
+                        <Link
+                          href={`/cases/new?institutionId=${inst.id || inst._id}&institutionName=${encodeURIComponent(
+                            inst.name
+                          )}`}
+                          className="font-bold text-[#724916] dark:text-[#cca776] hover:underline"
+                        >
+                          + Case
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -405,11 +466,27 @@ export default function InstitutionsPage() {
         </div>
       )}
 
-      {/* Add Modal */}
+      {/* Add / Edit Modal */}
       <AddInstitutionModal
         isOpen={isAddModalOpen}
-        onClose={() => setIsAddModalOpen(false)}
+        onClose={() => {
+          setIsAddModalOpen(false);
+          setInstitutionToEdit(null);
+        }}
+        institutionToEdit={institutionToEdit}
         onSuccess={fetchInstitutions}
+      />
+
+      {/* Institution Detail & Mapped Cases Modal */}
+      <InstitutionDetailModal
+        institutionId={viewInstitutionId}
+        isOpen={Boolean(viewInstitutionId)}
+        onClose={() => setViewInstitutionId(null)}
+        onEdit={(inst) => {
+          setViewInstitutionId(null);
+          setInstitutionToEdit(inst);
+          setIsAddModalOpen(true);
+        }}
       />
     </div>
   );
